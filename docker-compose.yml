@@ -1,0 +1,37 @@
+version: '2'
+
+services:
+  web:
+    build: ./nginx
+    links:
+      - app
+    ports:
+      - "8080:80"
+      - "443:443"
+  app:
+    build: ./app
+    links:
+      - redis
+      - mariadb
+    volumes:
+      - ./app:/var/www/app
+    environment:
+        - "DB_PORT=3306"
+        - "DB_HOST=mysqldb"
+        - "REDIS_PORT=6379"
+        - "REDIS_HOST=redis"
+  redis:
+    image: redis:3.0
+    ports:
+      - "63791:6379"
+  mariadb:
+    image: mariadb
+    volumes:
+      - "./mariadb:/var/lib/mysql:rw"
+    environment:
+      - "MYSQL_ROOT_PASSWORD=si55le101"
+      - "MYSQL_DATABASE=digit_hemidal"
+      - "MYSQL_USER=hemidal"
+      - "MYSQL_PASSWORD=Asgard1an5"
+    ports:
+      - "33061:3306"
