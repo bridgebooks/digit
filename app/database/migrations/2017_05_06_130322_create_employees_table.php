@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOrgsTable extends Migration
+class CreateEmployeesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,16 @@ class CreateOrgsTable extends Migration
      */
     public function up()
     {
-        Schema::create('orgs', function(Blueprint $table) {
+        Schema::create('employees', function (Blueprint $table) {
 
             $table->uuid('id');
-            $table->string('name');
-            $table->string('business_name')->nullable();
-            $table->string('business_reg_no')->nullable();
-            $table->integer('industry_id')->unsigned();
-            $table->foreign('industry_id')->references('id')->on('industries');
-            $table->string('description', 300)->nullable();
-            $table->string('logo_url')->nullable();
+            $table->uuid('org_id');
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->string('role')->nullable();
+
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
 
             $table->string('address_line_1')->nullable();
             $table->string('address_line_2')->nullable();
@@ -34,8 +34,9 @@ class CreateOrgsTable extends Migration
             $table->uuid('bank_id')->nullable();
             $table->string('bank_account_no', 20)->nullable();
             $table->string('bank_account_name')->nullable();
-            
+
             $table->timestamps();
+            $table->softDeletes();
             $table->primary('id');
         });
     }
@@ -47,6 +48,6 @@ class CreateOrgsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orgs');
+        Schema::dropIfExists('employees');
     }
 }
