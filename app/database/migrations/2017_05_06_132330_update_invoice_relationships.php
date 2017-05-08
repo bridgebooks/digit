@@ -17,7 +17,6 @@ class UpdateInvoiceRelationships extends Migration
 
         $table->foreign('org_id')->references('id')->on('orgs');
         $table->foreign('user_id')->references('id')->on('users');
-        $table->foreign('contact_id')->references('id')->on('contacts');
       });
   }
 
@@ -33,7 +32,6 @@ class UpdateInvoiceRelationships extends Migration
         Schema::table('invoices', function (Blueprint $table) {
           $table->dropForeign('invoices_org_id_foreign');
           $table->dropForeign('invoices_user_id_foreign');
-          $table->dropForeign('invoices_contact_id_foreign');
         });
     }
   }

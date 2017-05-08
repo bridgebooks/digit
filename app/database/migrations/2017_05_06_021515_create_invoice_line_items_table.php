@@ -23,7 +23,9 @@ class CreateInvoiceLineItemsTable extends Migration
           $table->integer('quantity')->default(1);
           $table->decimal('unit_price', 11, 2);
           $table->float('discount_rate')->nullable();
+          $table->uuid('account_id');
           $table->uuid('tax_rate_id');
+          $table->decimal('amount', 11, 2);
           $table->timestamps();
           $table->primary('id');
         });
