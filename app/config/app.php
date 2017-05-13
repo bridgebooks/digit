@@ -177,8 +177,6 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
-        Mrfoh\Mulla\MullaServiceProvider::class,
-
         JeroenG\Packager\PackagerServiceProvider::class,
 
     ],
