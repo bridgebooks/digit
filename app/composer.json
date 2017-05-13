@@ -22,13 +22,11 @@
             "database"
         ],
         "psr-4": {
-            "Mrfoh\\Mulla\\": "packages/Mrfoh/Mulla/src",
             "App\\": "app/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Mrfoh\\Mulla\\": "packages/Mrfoh/Mulla/src",
             "Tests\\": "tests/"
         }
     },
