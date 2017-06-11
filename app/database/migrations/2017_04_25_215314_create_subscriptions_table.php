@@ -13,16 +13,17 @@ class CreateUserSubscriptionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_subscriptions', function (Blueprint $table) {
+        Schema::create('subscriptions', function (Blueprint $table) {
 
             $table->uuid('id');
             $table->uuid('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->uuid('plan_id');
-            $table->foreign('plan_id')->references('id')->on('subscription_plans');
+            $table->foreign('plan_id')->references('id')->on('plans');
             $table->string('paystack_subscription_code', 20);
             $table->string('paystack_subscription_token', 20);
             $table->integer('quantity');
+            $table->timestamp('trial_ends_at')->nullable();
             $table->timestamp('ends_at')->nullable();
             $table->timestamps();
 
@@ -37,6 +38,6 @@ class CreateUserSubscriptionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_subscriptions');
+        Schema::dropIfExists('subscriptions');
     }
 }

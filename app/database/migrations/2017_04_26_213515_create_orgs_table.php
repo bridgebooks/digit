@@ -19,7 +19,7 @@ class CreateOrgsTable extends Migration
             $table->string('name');
             $table->string('business_name')->nullable();
             $table->string('business_reg_no')->nullable();
-            $table->integer('industry_id')->unsigned();
+            $table->integer('industry_id')->unsigned()->nullable();
             $table->foreign('industry_id')->references('id')->on('industries');
             $table->string('description', 300)->nullable();
             $table->string('logo_url')->nullable();
@@ -34,7 +34,7 @@ class CreateOrgsTable extends Migration
             $table->uuid('bank_id')->nullable();
             $table->string('bank_account_no', 20)->nullable();
             $table->string('bank_account_name')->nullable();
-            
+
             $table->timestamps();
             $table->primary('id');
         });

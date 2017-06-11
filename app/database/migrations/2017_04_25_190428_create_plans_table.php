@@ -13,7 +13,7 @@ class CreateSubscriptionsPlansTable extends Migration
      */
     public function up()
     {
-        Schema::create('subscription_plans', function (Blueprint $table) {
+        Schema::create('plans', function (Blueprint $table) {
 
             $table->uuid('id');
             $table->string('name', 255);
@@ -32,6 +32,6 @@ class CreateSubscriptionsPlansTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('subscription_plans');
+        Schema::dropIfExists('plans');
     }
 }
