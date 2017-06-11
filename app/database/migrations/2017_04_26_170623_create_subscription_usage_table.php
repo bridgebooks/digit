@@ -17,13 +17,12 @@ class CreateSubscriptionUsageTable extends Migration
 
           $table->uuid('id');
           $table->uuid('subscription_id');
-          $table->uuid('plan_id');
+          $table->uuid('feature_id');
           $table->smallInteger('used')->unsigned();
           $table->timestamps();
 
           $table->primary('id');
 
-          $table->foreign('plan_id')->references('id')->on('plans');
           $table->foreign('subscription_id')->references('id')->on('subscriptions')->onDelete('cascade');
       });
     }
