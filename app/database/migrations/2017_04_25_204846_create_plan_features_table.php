@@ -13,7 +13,7 @@ class CreatePlanFeaturesTable extends Migration
      */
     public function up()
     {
-       Schema::create('subscription_features', function (Blueprint $table) {
+       Schema::create('plan_features', function (Blueprint $table) {
 
          $table->uuid('id');
          $table->uuid('plan_id');
