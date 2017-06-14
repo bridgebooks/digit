@@ -17,6 +17,13 @@ class RouteServiceProvider extends ServiceProvider
     protected $namespace = 'App\Http\Controllers';
 
     /**
+    * Namespace for API controller routes
+    */
+    protected $apiBaseNamespace = 'App\Http\Controllers\V1';
+
+    protected $apiNamespaces = [ 'Users', 'Orgs' ];
+
+    /**
      * Define your route model bindings, pattern filters, etc.
      *
      * @return void
@@ -35,7 +42,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
-        $this->mapApiRoutes();
+        $this->mapRoutes();
 
         $this->mapWebRoutes();
 
@@ -63,11 +70,15 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function mapApiRoutes()
+    protected function mapRoutes()
     {
-        Route::prefix('api')
-             ->middleware('api')
-             ->namespace($this->namespace)
-             ->group(base_path('routes/api.php'));
+      foreach($this->apiNamespaces as $namespace) {
+        $prefix = strtolower($namespace);
+
+        Route::prefix('v1/'.$prefix)
+            ->middleware('api')
+            ->namespace($this->apiBaseNamespace.'\\'.$namespace)
+            ->group(base_path('routes/api/'.$prefix.'.php'));
+      }
     }
 }
