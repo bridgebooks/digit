@@ -17,7 +17,7 @@ services:
       - ./app:/var/www/app
     environment:
         - "DB_PORT=3306"
-        - "DB_HOST=mysqldb"
+        - "DB_HOST=mariadb"
         - "REDIS_PORT=6379"
         - "REDIS_HOST=redis"
   redis:
