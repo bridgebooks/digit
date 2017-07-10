@@ -10,6 +10,7 @@
         "jeroen-g/laravel-packager": "^1.5",
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
+        "mrfoh/mulla": "^1.0",
         "predis/predis": "^1.1",
         "tymon/jwt-auth": "^0.5.12",
         "webpatser/laravel-uuid": "^2.0"
