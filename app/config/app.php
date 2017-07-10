@@ -178,6 +178,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         JeroenG\Packager\PackagerServiceProvider::class,
+        Mrfoh\Mulla\MullaServiceProvider::class,
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
 
 
