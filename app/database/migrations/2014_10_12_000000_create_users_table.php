@@ -18,16 +18,16 @@ class CreateUsersTable extends Migration
             $table->uuid('id');
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
-            $table->string('email');
-            $table->string('phone', 13)->nullable();
-            $table->string('password');
+            $table->string('email')->unique();
+            $table->string('phone', 13)->nullable()->unique();
+            $table->string('password')->nullable();
             $table->string('paystack_customer_code', 25)->nullable();
             $table->string('card_brand', 4)->nullable();
             $table->string('card_last_four', 4)->nullable();
             $table->string('card_exp_month', 2)->nullable();
             $table->string('card_exp_year', 4)->nullable();
             $table->string('authorization_code', 20)->nullable();
-            $table->rememberToken();
+            $table->boolean('is_verified')->default(false);
             $table->timestamps();
 
             $table->primary('id');
