@@ -25,8 +25,24 @@ class CreateUser extends FormRequest
     {
         return [
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8',
-            'org_name' => 'unique:orgs,name'
+            'password' => 'required|min:6',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'phone' => 'required|unique:users,phone'
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'email.unique' => 'Email address is already in use.',
+            'password.min'  => 'Passord must have a least 6 characters',
+            'phone.unique' => 'Phone is already in user'
         ];
     }
 }
