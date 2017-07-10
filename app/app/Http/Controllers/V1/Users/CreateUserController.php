@@ -9,6 +9,6 @@ class CreateUserController extends Controller
 {
   public function create(CreateUser $request)
   {
-    
+    dd($request->all());
   }
 }
