@@ -25,7 +25,7 @@ class Org extends Model
 
     public function users()
     {
-      return $this->belongsToMany('App\Models\Users', 'org_users');
+      return $this->belongsToMany('App\Models\User', 'org_users');
     }
 
     public function employees()

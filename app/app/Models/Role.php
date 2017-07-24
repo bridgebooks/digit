@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\Uuids;
 
@@ -18,8 +17,35 @@ class Role extends Model
 
     protected $guarded = [];
 
+    protected $fillable = ['name', 'description', 'permissions'];
+
     public function users()
     {
       return $this->belongsToMany('App\Models\User', 'user_roles');
+    }
+
+    public function parent()
+    {
+        return $this->hasOne('App\Models\Role', 'parent_id', 'id');
+    }
+
+    /**
+     * Get permissions attribute
+     * @param string $value
+     * @return object
+     */
+    public function getPermissionsAttribute($value)
+    {
+        return json_decode($value);
+    }
+
+    /**
+     * set permissions attribute
+     * @param string $value
+     * @return void
+     */
+    public function setPermissionsAttribute($value)
+    {   
+        $this->attributes['permissions'] = json_encode($value);
     }
 }

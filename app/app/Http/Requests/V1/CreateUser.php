@@ -25,10 +25,10 @@ class CreateUser extends FormRequest
     {
         return [
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
             'first_name' => 'required',
             'last_name' => 'required',
-            'phone' => 'required|unique:users,phone'
+            'phone' => 'required|unique:users,phone',
+            'primary_user' => 'required|boolean'
         ];
     }
 
@@ -40,9 +40,9 @@ class CreateUser extends FormRequest
     public function messages()
     {
         return [
-            'email.unique' => 'Email address is already in use.',
-            'password.min'  => 'Passord must have a least 6 characters',
-            'phone.unique' => 'Phone is already in user'
+            'email.unique' => 'email address is already in use.',
+            'phone.unique' => 'phone is already in user',
+            'primary_user.required' => 'specify if user is primary'
         ];
     }
 }

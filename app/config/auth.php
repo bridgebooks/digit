@@ -67,7 +67,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\User::class,
+            'model' => App\Models\User::class,
         ],
 
         // 'users' => [
@@ -99,4 +99,7 @@ return [
         ],
     ],
 
+    'reset_token_ttl' => env('PASSWORD_RESETTOKEN_TTL', 60),
+
+    'reset_url' => env('PASSSWORD_RESET_URL', 'http://localhost:4040/password/create'),
 ];

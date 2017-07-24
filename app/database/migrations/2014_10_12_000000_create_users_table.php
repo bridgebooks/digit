@@ -27,6 +27,7 @@ class CreateUsersTable extends Migration
             $table->string('card_exp_month', 2)->nullable();
             $table->string('card_exp_year', 4)->nullable();
             $table->string('authorization_code', 20)->nullable();
+            $table->string('verification_token', 32)->nullable();
             $table->boolean('is_verified')->default(false);
             $table->timestamps();
 

@@ -53,6 +53,8 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'validate_account_url' => env('ACCOUNT_VALIDATE_URL', 'http://localhost'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
@@ -180,6 +182,7 @@ return [
         JeroenG\Packager\PackagerServiceProvider::class,
         Mrfoh\Mulla\MullaServiceProvider::class,
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
+        Prettus\Repository\Providers\RepositoryServiceProvider::class,
 
 
     ],
@@ -232,6 +235,8 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Uuid' => Webpatser\Uuid\Uuid::class,
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
+        'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
+
     ],
 
 ];
