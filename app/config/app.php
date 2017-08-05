@@ -12,7 +12,7 @@ return [
     | any other location as required by the application or its packages.
     */
 
-    'name' => 'DigIT',
+    'name' => 'ZenBooks',
 
     /*
     |--------------------------------------------------------------------------
@@ -183,6 +183,7 @@ return [
         Mrfoh\Mulla\MullaServiceProvider::class,
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
         Prettus\Repository\Providers\RepositoryServiceProvider::class,
+        Barryvdh\Cors\ServiceProvider::class,
 
 
     ],
