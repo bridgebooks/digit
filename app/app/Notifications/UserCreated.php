@@ -15,15 +15,17 @@ class UserCreated extends Notification implements ShouldQueue
     use Queueable;
 
     protected $user;
+    protected $token;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct(User $user, String $token)
     {
         $this->user = $user;
+        $this->token = $token;
     }
 
     /**
@@ -44,9 +46,8 @@ class UserCreated extends Notification implements ShouldQueue
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
-    {
-        $url = config('app.validate_account_url') ."/". $this->user->id;
-        $url += "?token=". $this->user->verification_token;
+    {        
+        $url = config('app.validate_account_url') ."/". $this->user->id ."?token=". $this->token;
         
         $mail = new UserWelcome($this->user, $url);
         $mail->to($notifiable->email);

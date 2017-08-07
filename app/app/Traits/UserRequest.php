@@ -20,4 +20,22 @@ trait UserRequest
     		return false;
     	}
     }
+
+    public function isOwner(String $id) {
+	     $user = JWTAuth::parseToken()->authenticate();
+
+	     return $user->id === $id;
+    }
+
+    public function getUserRoles() {
+
+        $payload = JWTAuth::parseToken()->getPayload();
+        return $payload->get('acl');
+    }
+
+    public function getUserOrgs() {
+        
+        $payload = JWTAuth::parseToken()->getPayload();
+        return $payload->get('orgs');
+    }
 }

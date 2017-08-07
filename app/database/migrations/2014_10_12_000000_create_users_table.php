@@ -30,7 +30,7 @@ class CreateUsersTable extends Migration
             $table->string('verification_token', 32)->nullable();
             $table->boolean('is_verified')->default(false);
             $table->timestamps();
-
+            $table->timestamp('trial_ends_at')->nullable();
             $table->primary('id');
         });
     }

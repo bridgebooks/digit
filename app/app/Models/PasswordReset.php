@@ -26,7 +26,7 @@ class PasswordReset extends Model
     	$this->token = $resetToken;
     	$this->used = false;
 
-    	if($this->save()) return $tokenString;
+    	if($this->save()) return $resetToken;
 
     	return false;
     }

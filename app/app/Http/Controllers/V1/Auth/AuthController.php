@@ -69,7 +69,7 @@ class AuthController extends Controller
 					'status' => 'success',
 					'data' => [
 						'token' => $token,
-						'user' => $this->userRepository->find($user->id)
+						'user' => $this->userRepository->find($user->id)['data']
 					]
 				]);
 
@@ -87,5 +87,17 @@ class AuthController extends Controller
 				'message' => 'Invalid login credentials. Email/Password incorrect'
 			], 403);
 		}
+	}
+
+	public function logout()
+	{
+		$token = JWTAuth::getToken();
+
+		JWTAuth::invalidate($token);
+
+		return response()->json([
+			'status' => 'success',
+			'message' => 'Logout successful'
+		]);
 	}
 }

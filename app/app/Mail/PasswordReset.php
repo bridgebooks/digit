@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -20,11 +21,11 @@ class PasswordReset extends Mailable implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(\App\Models\User $user, String $token)
+    public function __construct(User $user, String $token)
     {
-        $this->token = $token;
         $this->user = $user;
-        $this->url = config('auth.reset_url') . '?=' . $this->token;
+        $this->token = $token;
+        $this->url = config('auth.reset_url') . '?token=' . $this->token;
     }
 
     /**
@@ -35,6 +36,10 @@ class PasswordReset extends Mailable implements ShouldQueue
     public function build()
     {
         return $this->subject('Reset your password')
-            ->view('emails.auth.password-reset');
+            ->view('emails.auth.password-reset')
+            ->with([
+                'user' => $this->user,
+                'url' => $this->url
+            ]);
     }
 }

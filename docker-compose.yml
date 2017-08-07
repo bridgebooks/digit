@@ -23,7 +23,7 @@ services:
   redis:
     image: redis:3.0
     ports:
-      - "63791:6379"
+      - "6379:6379"
   mariadb:
     image: mariadb
     volumes:

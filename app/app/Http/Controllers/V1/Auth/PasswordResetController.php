@@ -86,7 +86,7 @@ class PasswordResetController extends Controller
 		} else {
 			return response()->json([
 				'status' => 'error',
-				'message' => 'Invalid reset token'
+				'message' => 'This reset link is no longer valid. Please request another password reset'
 			], 400);
 		}
 	}

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\V1\Users;
 
+use App\Events\PrimaryUserCreated;
 use Notification;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\V1\Controller;
 use App\Notifications\UserCreated;
 use App\Http\Requests\V1\CreateUser;
@@ -54,11 +54,14 @@ class CreateUserController extends Controller
 
      	if($request->input('primary_user')) {
      		// Add user to 'org_admin'
-        $role = $this->roleRepository->skipPresenter(true)
-          ->findWhere(['name' => 'org_admin'])
-          ->first();
+            $role = $this->roleRepository->skipPresenter(true)
+              ->findWhere(['name' => 'org_admin'])
+              ->first();
 
-        $user->roles()->attach($role->id);
+            $user->roles()->attach($role->id);
+
+            // Trigger 'OnUserCreated' event
+            event(new PrimaryUserCreated($user, config('app.trial_duration')));
      	} else {
         // Add user to 'org_member'
         $role = $this->roleRepository->skipPresenter(true)
@@ -69,9 +72,9 @@ class CreateUserController extends Controller
       }
 
       // Send welcome email
-      Notification::send($user, new UserCreated($user));
+      Notification::send( $user, new UserCreated($user, $user->getVerificationToken()) );
 
-      return $user->presenter();
+      return $user;
   	}
 
     /**
@@ -89,6 +92,7 @@ class CreateUserController extends Controller
 
       try {
         $user = $this->userRepository->skipPresenter(true)->validateUser($id, $password, $token);
+        $validatedUser = $this->userRepository->skipPresenter(false)->find($id);
         // login user
         try {
           
@@ -99,7 +103,7 @@ class CreateUserController extends Controller
             'status' => 'success',
             'data' => [
               'token' => $token,
-              'user' => $this->userRepository->find($id)
+              'user' => $validatedUser['data']
             ]
           ]);
 

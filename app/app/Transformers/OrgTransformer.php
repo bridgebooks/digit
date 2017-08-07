@@ -24,7 +24,6 @@ class OrgTansformer extends TransformerAbstract
             'id' => $model->id,
             'name' => $model->name,
             'business_name' => $model->business_name,
-            'permissions' => $model->permissions,
             'created_at' => $model->created_at,
             'updated_at' => $model->updated_at
         ];
