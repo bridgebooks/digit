@@ -15,7 +15,9 @@ class UpdateUserEmail extends FormRequest
      */
     public function authorize()
     {
-        return $this->requestUser()->verifyPassword($this->request->get('password'));
+        if ($this->requestUser()) return true;
+
+        return false;
     }
 
     /**
