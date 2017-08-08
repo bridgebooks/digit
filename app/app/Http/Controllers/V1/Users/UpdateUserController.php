@@ -32,11 +32,20 @@ class UpdateUserController extends Controller
 
     public function updateEmail(UpdateUserEmail $request)
     {
-        $attrs = $request->only(['email']);
+        $user_ = $this->requestUser();
 
-        $user = $this->userRepository->update($attrs, $this->requestUser()->id);
+        if ($user_->verifyPassword($request->password)) {
+            $attrs = $request->only(['email']);
 
-        return $user;
+            $user = $this->userRepository->update($attrs, $this->requestUser()->id);
+
+            return $user;
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Current password invalid'
+            ], 400);
+        }
     }
 
     public function updatePassword(UserUpdatePassword $request)
