@@ -65,4 +65,15 @@ class User extends Authenticatable
     {
         return Hash::check($password, $this->password);
     }
+
+    /**
+     * Update user passsword
+     * @param String $password
+     * @return bool
+     */
+    public function updatePassword(String $password)
+    {
+        $this->password = Hash::make($password);
+        return $this->save();
+    }
 }

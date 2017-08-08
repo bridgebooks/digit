@@ -5,3 +5,4 @@ Route::put('/{id}', 'UpdateUserController@update');
 Route::post('/{id}/validate', 'CreateUserController@validateUser');
 
 Route::post('/email', 'UpdateUserController@updateEmail');
+Route::post('/password', 'UpdateUserController@updatePassword');
