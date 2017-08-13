@@ -202,7 +202,7 @@ return [
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
         Prettus\Repository\Providers\RepositoryServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
-
+        BrocardJr\Cloudinary\CloudinaryServiceProvider::class,
 
     ],
 
@@ -255,6 +255,7 @@ return [
         'Uuid' => Webpatser\Uuid\Uuid::class,
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
         'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
+        'CloudinaryImage' => BrocardJr\Cloudinary\Facades\ImageFacade::class
 
     ],
 
