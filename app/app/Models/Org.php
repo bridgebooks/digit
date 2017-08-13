@@ -18,9 +18,28 @@ class Org extends Model
 
     protected $guarded = [];
 
+    protected $fillable = [
+        'name',
+        'business_name',
+        'business_reg_no',
+        'logo_url',
+        'description',
+        'business_reg_no',
+        'industry_id',
+        'address_line_1',
+        'address_line_2',
+        'city_town',
+        'country',
+        'state_region',
+        'postal_zip',
+        'phone',
+        'email',
+        'website'
+    ];
+
     public function industry()
     {
-      return $this->belongsTo('App\Models\Org');
+      return $this->belongsTo('App\Models\Industry');
     }
 
     public function users()
