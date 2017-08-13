@@ -31,9 +31,9 @@ class CreateOrgsTable extends Migration
             $table->string('postal_zip')->nullable();
             $table->string('country')->nullable();
 
-            $table->uuid('bank_id')->nullable();
-            $table->string('bank_account_no', 20)->nullable();
-            $table->string('bank_account_name')->nullable();
+            $table->string('phone', 15)->nullable();
+            $table->string('email')->nullable();
+            $table->string('website')->nullable();
 
             $table->timestamps();
             $table->primary('id');
