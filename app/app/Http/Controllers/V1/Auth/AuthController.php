@@ -57,28 +57,35 @@ class AuthController extends Controller
 		{
 			$user = Auth::user();
 
-			try {
-				$customTokenClaims = [
-					'orgs' => $this->getUserOrgs($user),
-					'acl' => $this->getUserRoles($user)
-				];
+			if ($user->is_verified) {
+                try {
+                    $customTokenClaims = [
+                        'orgs' => $this->getUserOrgs($user),
+                        'acl' => $this->getUserRoles($user)
+                    ];
 
-				$token = JWTAuth::fromUser($user, $customTokenClaims);
+                    $token = JWTAuth::fromUser($user, $customTokenClaims);
 
-				return response()->json([
-					'status' => 'success',
-					'data' => [
-						'token' => $token,
-						'user' => $this->userRepository->find($user->id)['data']
-					]
-				]);
+                    return response()->json([
+                        'status' => 'success',
+                        'data' => [
+                            'token' => $token,
+                            'user' => $this->userRepository->find($user->id)['data']
+                        ]
+                    ]);
 
-			} catch (JWTException $e) {
-				return response()->json([
-					'status' => 'error',
-					'message' => 'Unable to create token'
-				], 500);
-			}
+                } catch (JWTException $e) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Unable to create token'
+                    ], 500);
+                }
+            } else {
+			    return response()->json([
+			        'status' => 'error',
+                    'message' => 'Account is not verified. Please click the verification link in the welcome email sent to you'
+                ], 403);
+            }
 		} 
 		else
 		{

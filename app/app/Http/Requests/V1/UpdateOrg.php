@@ -2,10 +2,12 @@
 
 namespace App\Http\Requests\V1;
 
+use App\Traits\UserRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateOrg extends FormRequest
 {
+    use UserRequest;
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -13,7 +15,7 @@ class UpdateOrg extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return $this->userHasRole('org_admin');
     }
 
     /**
@@ -24,7 +26,8 @@ class UpdateOrg extends FormRequest
     public function rules()
     {
         return [
-            //
+            'email' => 'email|unique:orgs,email',
+            'website' => 'url'
         ];
     }
 }
