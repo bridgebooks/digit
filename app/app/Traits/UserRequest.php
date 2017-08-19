@@ -21,6 +21,17 @@ trait UserRequest
     	}
     }
 
+    public function belongsToOrg(String $id) {
+
+        $payload = JWTAuth::parseToken()->getPayload();
+        $orgs = $payload->get('orgs');
+
+        foreach ($orgs as $org) {
+            if($org['id'] == $id) return true;
+            return false;
+        }
+    }
+
     public function isOwner(String $id) {
 	     $user = JWTAuth::parseToken()->authenticate();
 
@@ -38,4 +49,6 @@ trait UserRequest
         $payload = JWTAuth::parseToken()->getPayload();
         return $payload->get('orgs');
     }
+
+
 }

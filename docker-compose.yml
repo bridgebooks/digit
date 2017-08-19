@@ -8,11 +8,14 @@ services:
     ports:
       - "8080:80"
       - "443:443"
+
   app:
     build: ./app
     links:
       - redis
       - mariadb
+      - elasticsearch_1
+      - elasticsearch_2
     volumes:
       - ./app:/var/www/app
     environment:
@@ -20,10 +23,14 @@ services:
         - "DB_HOST=mariadb"
         - "REDIS_PORT=6379"
         - "REDIS_HOST=redis"
+        - "ELASTICSEARCH_HOST=elasticsearch_1"
+        - "ELASTICSEARCH_PORT=9200"
+
   redis:
     image: redis:3.0
     ports:
       - "6379:6379"
+
   mariadb:
     image: mariadb
     volumes:
@@ -35,3 +42,46 @@ services:
       - "MYSQL_PASSWORD=Asgard1an5"
     ports:
       - "33061:3306"
+
+  elasticsearch_1:
+    image: elasticsearch
+    environment:
+      - "cluster.name=zb-cluster"
+      - "bootstrap.memory_lock=true"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    mem_limit: 1g
+    volumes:
+      - "./esdata1:/usr/share/elasticsearch/data"
+    ports:
+      - 9200:9200
+    
+  elasticsearch_2:
+    image: elasticsearch
+    environment:
+      - "cluster.name=zb-cluster"
+      - "bootstrap.memory_lock=true"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "discovery.zen.ping.unicast.hosts=elasticsearch_1"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    mem_limit: 1g
+    volumes:
+      - "./esdata2:/usr/share/elasticsearch/data"
+
+  kibana:
+    build: kibana/
+    volumes:
+      - ./kibana/config/:/opt/kibana/config/
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch_1:9200
+    ports:
+      - "5601:5601"
+    links:
+      - elasticsearch_1
+      - elasticsearch_2

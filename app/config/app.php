@@ -203,7 +203,8 @@ return [
         Prettus\Repository\Providers\RepositoryServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
         BrocardJr\Cloudinary\CloudinaryServiceProvider::class,
-
+        Laravel\Scout\ScoutServiceProvider::class,
+        ScoutEngines\Elasticsearch\ElasticsearchProvider::class,
     ],
 
     /*

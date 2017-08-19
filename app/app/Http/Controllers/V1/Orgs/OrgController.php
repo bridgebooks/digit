@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\V1\Orgs;
 
+use App\Http\Requests\V1\GetOrgContacts;
 use App\Http\Requests\V1\OrgLogoUpload;
+use App\Repositories\ContactRepository;
 use JWTAuth;
 use CloudinaryImage;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Http\Controllers\V1\Controller;
 use App\Traits\UserRequest;
+use App\Http\Controllers\Traits\Pageable;
 use App\Http\Requests\V1\CreateOrg;
 use App\Http\Requests\V1\UpdateOrg;
 use App\Repositories\OrgRepository;
@@ -15,10 +18,12 @@ use App\Repositories\UserRepository;
 
 class OrgController extends Controller
 {
-  use UserRequest;
+  use UserRequest, Pageable;
 
   protected $orgRepository;
   protected $userRepository;
+  protected $contactRepository;
+
   protected $attributes = [
       'name',
       'business_name',
@@ -37,11 +42,12 @@ class OrgController extends Controller
       'website'
   ];
 
-  public function __construct(OrgRepository $orgRepository, UserRepository $userRepository) {
+  public function __construct(OrgRepository $orgRepository, UserRepository $userRepository, ContactRepository $contactRepository) {
 
   	$this->middleware('jwt.auth');
     $this->orgRepository = $orgRepository;
     $this->userRepository = $userRepository;
+    $this->contactRepository = $contactRepository;
   }
 
   private function addOrg(\App\Models\Org $org) {
@@ -120,5 +126,21 @@ class OrgController extends Controller
     $path = $request->file('file')->store('logos', 'cloudinary');
 
     return response()->json(['status' => 'success', 'url' => CloudinaryImage::url($path) ]);
+  }
+
+  public function contacts(GetOrgContacts $request, String $id)
+  {
+      //models per page
+      $perPage = $request->input('perPage', 30);
+      //current page
+      $page = $request->input('page', 1);
+
+      $contacts = $this->contactRepository->findWhere(['org_id' => $id]);
+
+      return $this->paginate($contacts['data'], count($contacts['data']), $page, $perPage, [
+          'path' => $request->url(),
+          'query' => $request->query()
+      ]);
+
   }
 }
