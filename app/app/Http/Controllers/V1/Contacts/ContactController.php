@@ -4,6 +4,7 @@ namespace App\Http\Controllers\V1\Contacts;
 
 use App\Http\Controllers\V1\Controller;
 use App\Http\Requests\V1\CreateContact;
+use App\Http\Requests\V1\UpdateContact;
 use App\Repositories\ContactRepository;
 use App\Traits\UserRequest;
 
@@ -35,7 +36,11 @@ class ContactController extends Controller
         $this->contactRepository = $contactRepository;
 	}
 
-	public function create(CreateContact $request)
+    /**
+     * @param CreateContact $request
+     * @return mixed
+     */
+    public function create(CreateContact $request)
     {
         $attributes = $request->only($this->attributes);
 
@@ -44,5 +49,51 @@ class ContactController extends Controller
         $contact = $this->contactRepository->create($attributes);
 
         return $contact;
+    }
+
+    /**
+     * @param string $id
+     * @return mixed
+     */
+    public function one(string $id)
+    {
+        $contact = $this->contactRepository->skipPresenter()->find($id);
+
+        $this->authorize('view', $contact);
+
+        return $this->contactRepository->find($id);
+    }
+
+    /**
+     * @param UpdateContact $request
+     * @param string $id
+     * @return mixed
+     */
+    public function update(UpdateContact $request, string $id)
+    {
+        $contact = $this->contactRepository->skipPresenter()->find($id);
+
+        $this->authorize('update', $contact);
+
+        return $this->contactRepository->skipPresenter(false)
+            ->update($request->all(), $id);
+    }
+
+    /**
+     * @param string $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function delete(string $id)
+    {
+        $contact = $this->contactRepository->skipPresenter()->find($id);
+
+        $this->authorize('delete', $contact);
+
+        $this->contactRepository->skipPresenter(false)->delete($id);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Contact deleted'
+        ]);
     }
 }

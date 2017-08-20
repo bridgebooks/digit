@@ -5,6 +5,7 @@ namespace App\Http\Controllers\V1\Orgs;
 use App\Http\Requests\V1\GetOrgContacts;
 use App\Http\Requests\V1\OrgLogoUpload;
 use App\Repositories\ContactRepository;
+use Illuminate\Http\Request;
 use JWTAuth;
 use CloudinaryImage;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -63,17 +64,33 @@ class OrgController extends Controller
     return $currentOrgs;
   }
 
-  public function index()
+    /**
+     * @param Request $request
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function index(Request $request)
   {
-      return $this->orgRepository->all();
+      //models per page
+      $perPage = $request->input('perPage', 30);
+      //current page
+      $page = $request->input('page', 1);
+      //contact type
+      $type = $request->input('type');
+
+      $orgs = $this->orgRepository->all();
+
+      return $this->paginate($orgs['data'], count($orgs['data']), $page, $perPage, [
+          'path' => $request->url(),
+          'query' => $request->query()
+      ]);
   }
 
     /**
      * Fetch Org
-     * @param String $id
+     * @param string $id
      * @return mixed
      */
-    public function one(String $id)
+    public function one(string $id)
   {
       return $this->orgRepository->with(['industry'])->find($id);
   }
@@ -114,28 +131,50 @@ class OrgController extends Controller
     }
   }
 
-  public function update(UpdateOrg $request, String $id)
+    /**
+     * @param UpdateOrg $request
+     * @param string $id
+     * @return mixed
+     */
+    public function update(UpdateOrg $request, string $id)
   {
       $org = $this->orgRepository->update($request->all(), $id);
 
       return $org;
   }
 
-  public function uploadLogo(OrgLogoUpload $request)
+    /**
+     * @param OrgLogoUpload $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function uploadLogo(OrgLogoUpload $request)
   {
     $path = $request->file('file')->store('logos', 'cloudinary');
 
     return response()->json(['status' => 'success', 'url' => CloudinaryImage::url($path) ]);
   }
 
-  public function contacts(GetOrgContacts $request, String $id)
+
+    /**
+     * @param GetOrgContacts $request
+     * @param string $id
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function contacts(GetOrgContacts $request, string $id)
   {
       //models per page
       $perPage = $request->input('perPage', 30);
       //current page
       $page = $request->input('page', 1);
+      //contact type
+      $type = $request->input('type');
 
-      $contacts = $this->contactRepository->findWhere(['org_id' => $id]);
+      //fields
+      $fields = ['org_id' => $id];
+
+      if ($type) $fields['type'] = $type;
+
+      $contacts = $this->contactRepository->findWhere($fields);
 
       return $this->paginate($contacts['data'], count($contacts['data']), $page, $perPage, [
           'path' => $request->url(),
