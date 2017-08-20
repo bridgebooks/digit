@@ -18,5 +18,7 @@ class Bank extends Model
 
     protected $guarded = [];
 
+    protected $fillable = [ 'name', 'identifier' ];
+
     protected $dates = ['deleted_at'];
 }

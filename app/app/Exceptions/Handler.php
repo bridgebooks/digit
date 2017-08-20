@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -52,6 +53,10 @@ class Handler extends ExceptionHandler
             return response()->json(['status' => 'error', 'message' => 'token not provided'], 400);
         } else if ($e instanceof \Illuminate\Auth\Access\AuthorizationException) {
             return response()->json(['status' => 'error', 'message' => 'action not authorized'], 403);
+        }
+
+        if ($e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
+            return response()->json(['status' => 'error', 'message' => 'Resource not found'], 404);
         }
 
         return parent::render($request, $e);

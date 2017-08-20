@@ -10,7 +10,7 @@ trait UserRequest
     	return JWTAuth::parseToken()->authenticate();
     }
 
-    public function userHasRole(String $name) {
+    public function userHasRole(string $name) {
     	
     	$payload = JWTAuth::parseToken()->getPayload();
     	$roles = $payload->get('acl');
@@ -21,7 +21,7 @@ trait UserRequest
     	}
     }
 
-    public function belongsToOrg(String $id) {
+    public function belongsToOrg(string $id) {
 
         $payload = JWTAuth::parseToken()->getPayload();
         $orgs = $payload->get('orgs');
@@ -32,7 +32,7 @@ trait UserRequest
         }
     }
 
-    public function isOwner(String $id) {
+    public function isOwner(string $id) {
 	     $user = JWTAuth::parseToken()->authenticate();
 
 	     return $user->id === $id;
