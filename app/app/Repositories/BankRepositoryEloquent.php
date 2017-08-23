@@ -6,14 +6,15 @@ use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Contracts\CacheableInterface;
 use Prettus\Repository\Traits\CacheableRepository;
-use App\Presenters\ContactPresenter;
-use App\Models\Contact;
+use App\Repositories\BankRepository;
+use App\Presenters\BankPresenter;
+use App\Models\Bank;
 
 /**
- * Class ContactRepositoryEloquent
+ * Class RoleRepositoryEloquent
  * @package namespace App\Repositories;
  */
-class ContactRepositoryEloquent extends BaseRepository implements ContactRepository, CacheableInterface
+class BankRepositoryEloquent extends BaseRepository implements BankRepository, CacheableInterface
 {
     use CacheableRepository;
     /**
@@ -23,7 +24,7 @@ class ContactRepositoryEloquent extends BaseRepository implements ContactReposit
      */
     public function model()
     {
-        return Contact::class;
+        return Bank::class;
     }
 
     /**
@@ -33,7 +34,7 @@ class ContactRepositoryEloquent extends BaseRepository implements ContactReposit
      */
     public function presenter()
     {
-        return ContactPresenter::class;
+        return BankPresenter::class;
     }
 
     /**
@@ -46,6 +47,6 @@ class ContactRepositoryEloquent extends BaseRepository implements ContactReposit
 
     public function search(string $query)
     {
-        return Contact::search($query)->paginate(20);
+        return Bank::search($query)->paginate(20);
     }
 }

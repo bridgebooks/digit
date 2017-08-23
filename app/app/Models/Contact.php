@@ -35,6 +35,9 @@ class Contact extends Model
         'state_region',
         'postal_zip',
         'country',
+        'bank_id',
+        'bank_account_no',
+        'bank_account_name'
     ];
 
     public function org()

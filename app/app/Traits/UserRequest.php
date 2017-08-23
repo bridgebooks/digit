@@ -47,7 +47,7 @@ trait UserRequest
     public function getUserOrgs() {
         
         $payload = JWTAuth::parseToken()->getPayload();
-        return $payload->get('orgs');
+        return $payload->get('orgs') || [];
     }
 
 

@@ -153,33 +153,4 @@ class OrgController extends Controller
 
     return response()->json(['status' => 'success', 'url' => CloudinaryImage::url($path) ]);
   }
-
-
-    /**
-     * @param GetOrgContacts $request
-     * @param string $id
-     * @return \Illuminate\Pagination\LengthAwarePaginator
-     */
-    public function contacts(GetOrgContacts $request, string $id)
-  {
-      //models per page
-      $perPage = $request->input('perPage', 30);
-      //current page
-      $page = $request->input('page', 1);
-      //contact type
-      $type = $request->input('type');
-
-      //fields
-      $fields = ['org_id' => $id];
-
-      if ($type) $fields['type'] = $type;
-
-      $contacts = $this->contactRepository->findWhere($fields);
-
-      return $this->paginate($contacts['data'], count($contacts['data']), $page, $perPage, [
-          'path' => $request->url(),
-          'query' => $request->query()
-      ]);
-
-  }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\V1\Contacts;
 use App\Http\Controllers\V1\Controller;
 use App\Http\Requests\V1\CreateContact;
 use App\Http\Requests\V1\UpdateContact;
+use App\Repositories\ContactPersonRepository;
 use App\Repositories\ContactRepository;
 use App\Traits\UserRequest;
 
@@ -13,6 +14,7 @@ class ContactController extends Controller
     use UserRequest;
 
     protected $contactRepository;
+    protected $contactPersonRepository;
 
     protected $attributes = [
         'org_id',
@@ -30,10 +32,11 @@ class ContactController extends Controller
         'country',
     ];
 
-	public function __construct(ContactRepository $contactRepository)
+	public function __construct(ContactRepository $contactRepository, ContactPersonRepository $contactPersonRepository)
 	{
         $this->middleware('jwt.auth');
         $this->contactRepository = $contactRepository;
+        $this->contactPersonRepository = $contactPersonRepository;
 	}
 
     /**
@@ -61,7 +64,16 @@ class ContactController extends Controller
 
         $this->authorize('view', $contact);
 
-        return $this->contactRepository->find($id);
+        return $this->contactRepository->skipPresenter(false)->find($id);
+    }
+
+    public function people(string $id)
+    {
+        $contact = $this->contactRepository->skipPresenter()->find($id);
+
+        $this->authorize('view', $contact);
+
+        return $this->contactPersonRepository->findWhere(['contact_id' => $id ]);
     }
 
     /**
@@ -85,7 +97,7 @@ class ContactController extends Controller
      */
     public function delete(string $id)
     {
-        $contact = $this->contactRepository->skipPresenter()->find($id);
+        $contact = $this->contactRepository->skipCache()->skipPresenter()->find($id);
 
         $this->authorize('delete', $contact);
 

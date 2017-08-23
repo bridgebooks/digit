@@ -20,10 +20,17 @@ class ContactGroup extends Model
 
     protected $table = "contact_groups";
 
+    protected $fillable = ['org_id', 'name', 'description'];
+
     protected $dates = ['deleted_at'];
 
     public function org()
     {
       return $this->belongsTo('App\Models\Org');
+    }
+
+    public function contacts()
+    {
+        return $this->hasMany('App\Models\Contact', 'contact_group_id');
     }
 }
