@@ -106,14 +106,15 @@ class OrgController extends Controller
     $user = $this->requestUser();
     // create org
     $org = $this->orgRepository->skipPresenter()->create($request->only($this->attributes));
-    // associate user with org
-    $org->users()->attach($user->id);
     // create update token
     try {
       $customTokenClaims['acl'] = $this->getUserRoles();
       $customTokenClaims['orgs'] = $this->addOrg($org);
 
       $token = JWTAuth::fromUser($user, $customTokenClaims);
+
+      // associate user with org
+      $org->users()->attach($user->id);
 
       return response()->json([
         'status' => 'success',
