@@ -50,8 +50,13 @@ class Contact extends Model
       return $this->belongsTo('App\Models\ContactGroup', 'contact_group_id');
     }
 
-    public function contactPeople()
+    public function people()
     {
       return $this->hasMany('App\Models\ContactPerson');
+    }
+
+    public function bank()
+    {
+        return $this->belongsTo('App\Models\Bank');
     }
 }

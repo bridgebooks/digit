@@ -11,6 +11,36 @@ use App\Models\Contact;
  */
 class ContactTransformer extends TransformerAbstract
 {
+    protected $availableIncludes = ['people', 'bank', 'group'];
+
+    /**
+     * @param Contact $contact
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includePeople(Contact $contact)
+    {
+        $people = $contact->people;
+
+        return $this->collection($people, new ContactPersonTransformer);
+    }
+
+    /**
+     * @param Contact $contact
+     * @return \League\Fractal\Resource\Item
+     */
+    public function includeBank(Contact $contact)
+    {
+        $bank = $contact->bank;
+
+        if ($bank) return $this->item($bank, new BankTransformer);
+    }
+
+    public function includeGroup(Contact $contact)
+    {
+        $group = $contact->group;
+
+        if($group) return $this->item($group, new ContactGroupTransformer);
+    }
 
     /**
      * Transform the \contact entity
@@ -23,7 +53,7 @@ class ContactTransformer extends TransformerAbstract
         return [
             'id' => $model->id,
             'org_id' => $model->org_id,
-            //'user_id' => $model->user_id,
+            'user_id' => $model->user_id,
             'type' => $model->type,
             'name' => $model->name,
             'email' => $model->email,

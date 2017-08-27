@@ -4,6 +4,7 @@ namespace App\Http\Controllers\V1\Contacts;
 
 use App\Http\Controllers\V1\Controller;
 use App\Http\Requests\V1\CreateContact;
+use App\Http\Requests\V1\GetContact;
 use App\Http\Requests\V1\UpdateContact;
 use App\Repositories\ContactPersonRepository;
 use App\Repositories\ContactRepository;
@@ -55,16 +56,13 @@ class ContactController extends Controller
     }
 
     /**
+     * @param GetContact $request
      * @param string $id
      * @return mixed
      */
-    public function one(string $id)
+    public function one(GetContact $request, string $id)
     {
-        $contact = $this->contactRepository->skipPresenter()->find($id);
-
-        $this->authorize('view', $contact);
-
-        return $this->contactRepository->skipPresenter(false)->find($id);
+        return $this->contactRepository->find($id);
     }
 
     public function people(string $id)
