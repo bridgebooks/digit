@@ -55,19 +55,14 @@ class OrgContactsController extends Controller
         //current page
         $page = $request->input('page', 1);
         //contact type
-        $type = $request->input('type');
+        $type = $request->input('type', 'customer');
 
-        //fields
-        $fields = ['org_id' => $id];
-
-        if ($type) $fields['type'] = $type;
-
-        $contacts = $this->contactRepository->findWhere($fields);
-
-        return $this->paginate($contacts['data'], count($contacts['data']), $page, $perPage, [
-            'path' => $request->url(),
-            'query' => $request->query()
+        $contacts = $this->contactRepository->findWhere([
+            'org_id' => $id,
+            'type' => $type
         ]);
+
+        return $this->paginate($contacts['data'], $perPage, []);
     }
 
     public function contactGroups(string $id)

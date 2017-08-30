@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Traits;
 
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 trait Pageable
 {
     /**
-     * @param Array $data
+     * @param array $data
      * data to be paginated
      * @param integer $total
      * count of items in $data
@@ -18,13 +19,16 @@ trait Pageable
      * @access public
      * @return LengthAwarePaginator
      */
-    public function paginate(Array $data, $total, int $page, int $perPage, Array $options)
+    public function paginate(array $data, int $perPage, array $options)
     {
-        //calculate offset
-        $offset = ($page * $perPage) - $perPage;
-        //process data
-        $processedData = array_slice($data, $offset, $perPage, true);
-        //return paginated items
-        return new LengthAwarePaginator($processedData, $total, $perPage, $page, $options);
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+
+        $collection = collect($data);
+
+        $currrentPageData = $collection->forPage($currentPage, $perPage)->values();
+
+        \Log::info('collection', [$currentPage]);
+
+        return new LengthAwarePaginator($currrentPageData, $collection->count(), $perPage, $currentPage);
     }
 }

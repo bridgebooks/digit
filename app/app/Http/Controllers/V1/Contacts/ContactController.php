@@ -24,6 +24,7 @@ class ContactController extends Controller
         'type',
         'name',
         'phone',
+        'email',
         'website',
         'address_line_1',
         'address_line_2',
@@ -81,12 +82,11 @@ class ContactController extends Controller
      */
     public function update(UpdateContact $request, string $id)
     {
-        $contact = $this->contactRepository->skipPresenter()->find($id);
+        $contact = \App\Models\Contact::find($id);
 
         $this->authorize('update', $contact);
 
-        return $this->contactRepository->skipPresenter(false)
-            ->update($request->all(), $id);
+        return $this->contactRepository->update($request->all(), $id);
     }
 
     /**
@@ -95,7 +95,7 @@ class ContactController extends Controller
      */
     public function delete(string $id)
     {
-        $contact = $this->contactRepository->skipCache()->skipPresenter()->find($id);
+        $contact = \App\Models\Contact::find($id);
 
         $this->authorize('delete', $contact);
 

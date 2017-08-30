@@ -27,6 +27,7 @@ class Contact extends Model
         'contact_group_id',
         'type',
         'name',
+        'email',
         'phone',
         'website',
         'address_line_1',
