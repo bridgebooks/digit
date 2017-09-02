@@ -52,6 +52,11 @@ class Org extends Model
       return $this->hasMany('App\Models\Employee', 'org_id');
     }
 
+    public function bankAccounts()
+    {
+        return $this->hasMany('App\Models\OrgBankAccount', 'org_id');
+    }
+
     public function contacts()
     {
       return $this->hasMany('App\Models\Contact');

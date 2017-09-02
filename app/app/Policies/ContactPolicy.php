@@ -70,4 +70,14 @@ class ContactPolicy
 
         return false;
     }
+
+    public function bulk(User $user)
+    {
+        $isOrgAdmin = $this->userHasRole('org_admin');
+        $isOrgMember = $this->userHasRole('org_member');
+
+        if ($isOrgAdmin || $isOrgMember) return true;
+
+        return false;
+    }
 }

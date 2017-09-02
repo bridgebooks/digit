@@ -7,8 +7,11 @@ Route::put('/{id}', 'ContactController@update');
 Route::delete('/{id}', 'ContactController@delete');
 Route::get('/{id}/people', 'ContactController@people');
 
+Route::post('/delete/bulk', 'ContactController@bulkDelete');
+
 Route::delete('/groups/{id}', 'ContactGroupController@delete');
 Route::put('/groups/{id}', 'ContactGroupController@update');
+Route::post('/groups/{id}/bulk', 'ContactGroupController@addMany');
 
 Route::post('/people', 'ContactPersonController@create');
 Route::put('/people/{id}', 'ContactPersonController@update');

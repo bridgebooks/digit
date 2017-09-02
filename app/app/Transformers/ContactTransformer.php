@@ -65,6 +65,14 @@ class ContactTransformer extends TransformerAbstract
             'state_region' => $model->state_region,
             'postal_zip' => $model->postal_zip,
             'country' => $model->country,
+            'group' => $model->group ? [
+                'id' => $model->group->id,
+                'name' => $model->group->name,
+                'description' => $model->group->description
+            ] ? []
+            'bank_id' => $model->bank_id,
+            'bank_account_name' => $model->bank_account_name,
+            'bank_account_no' =>$model->bank_account_no,
             'created_at' => $model->created_at
         ];
     }

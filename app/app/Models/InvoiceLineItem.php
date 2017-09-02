@@ -20,6 +20,10 @@ class InvoiceLineItem extends Model
 
     protected $guarded = [];
 
+    protected $fillable = [
+        'invoice_id'       
+    ];
+
     public function invoice() {
       return $this->belongsTo('App\Models\Invoice');
     }

@@ -6,6 +6,7 @@ use App\Http\Controllers\V1\Controller;
 use App\Http\Requests\V1\CreateContact;
 use App\Http\Requests\V1\GetContact;
 use App\Http\Requests\V1\UpdateContact;
+use App\Http\Requests\V1\BulkDeleteContacts;
 use App\Repositories\ContactPersonRepository;
 use App\Repositories\ContactRepository;
 use App\Traits\UserRequest;
@@ -32,6 +33,9 @@ class ContactController extends Controller
         'state_region',
         'postal_zip',
         'country',
+        'bank_id',
+        'bank_account_name',
+        'bank_account_no'
     ];
 
 	public function __construct(ContactRepository $contactRepository, ContactPersonRepository $contactPersonRepository)
@@ -104,6 +108,22 @@ class ContactController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Contact deleted'
+        ]);
+    }
+
+    public function bulkDelete(BulkDeleteContacts $request)
+    {
+        $ids = $request->get('contacts');
+
+        $contacts = $this->contactRepository->skipPresenter()->findWhereIn('id', $ids);
+
+        $this->authorize('bulk', \App\Models\Contact::class);
+
+        $this->contactRepository->deleteMany($ids);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Models successfully deleted'
         ]);
     }
 }

@@ -57,9 +57,10 @@ class OrgContactsController extends Controller
         //contact type
         $type = $request->input('type', 'customer');
 
-        $contacts = $this->contactRepository->findWhere([
+        $contacts = $this->contactRepository->skipCache()->findWhere([
             'org_id' => $id,
-            'type' => $type
+            'type' => $type,
+            'deleted_at' => null
         ]);
 
         return $this->paginate($contacts['data'], $perPage, []);

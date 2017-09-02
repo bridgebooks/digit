@@ -22,6 +22,7 @@ class ContactGroupTransformer extends TransformerAbstract
     {
         return [
             'id' => $model->id,
+            'org_id' => $model->org_id,
             'name' => $model->name,
             'description' => $model->description
         ];

@@ -30,7 +30,10 @@ class ContactGroupPolicy
      */
     public function create(User $user)
     {
-        //
+        $isOrgAdmin = $this->userHasRole('org_admin');
+        $isOrgMember = $this->userHasRole('org_member');
+
+        return $isOrgAdmin || $isOrgMember;
     }
 
     /**

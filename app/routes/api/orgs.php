@@ -12,3 +12,6 @@ Route::get('/{id}/contacts', 'OrgContactsController@contacts');
 
 Route::post('/{id}/contact_groups', 'OrgContactsController@createContactGroup');
 Route::get('/{id}/contact_groups', 'OrgContactsController@contactGroups');
+
+Route::post('/{id}/bank_accounts', 'OrgBankAccountController@add');
+Route::get('/{id}/bank_accounts', 'OrgBankAccountController@index');

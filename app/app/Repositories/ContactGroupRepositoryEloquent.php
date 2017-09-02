@@ -8,6 +8,7 @@ use Prettus\Repository\Contracts\CacheableInterface;
 use Prettus\Repository\Traits\CacheableRepository;
 use App\Presenters\ContactGroupPresenter;
 use App\Models\ContactGroup;
+use App\Models\Contact;
 
 /**
  * Class RoleRepositoryEloquent
@@ -42,5 +43,14 @@ class ContactGroupRepositoryEloquent extends BaseRepository implements ContactGr
     public function boot()
     {
         $this->pushCriteria(app(RequestCriteria::class));
+    }
+
+    public function toGroup(string $id, Contact...$contacts)
+    {
+        $model = $this->model->find($id);
+
+        if (!$model) return false;
+
+        if ($model->contacts()->attach($contacts)) return true;
     }
 }

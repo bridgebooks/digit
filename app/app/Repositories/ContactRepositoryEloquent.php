@@ -48,4 +48,11 @@ class ContactRepositoryEloquent extends BaseRepository implements ContactReposit
     {
         return Contact::search($query)->paginate(20);
     }
+
+    public function deleteMany(array $ids) {
+
+        $models = $this->model->whereIn('id', $ids)->delete();
+
+        return true;
+    }
 }
