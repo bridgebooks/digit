@@ -69,7 +69,7 @@ class ContactTransformer extends TransformerAbstract
                 'id' => $model->group->id,
                 'name' => $model->group->name,
                 'description' => $model->group->description
-            ] ? []
+            ] : null,
             'bank_id' => $model->bank_id,
             'bank_account_name' => $model->bank_account_name,
             'bank_account_no' =>$model->bank_account_no,

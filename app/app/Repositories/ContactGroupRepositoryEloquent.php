@@ -45,12 +45,16 @@ class ContactGroupRepositoryEloquent extends BaseRepository implements ContactGr
         $this->pushCriteria(app(RequestCriteria::class));
     }
 
-    public function toGroup(string $id, Contact...$contacts)
+    public function toGroup(string $id, $contacts)
     {
         $model = $this->model->find($id);
 
         if (!$model) return false;
 
-        if ($model->contacts()->attach($contacts)) return true;
+        foreach ($contacts as $contact) {
+            $model->contacts()->save($contact);
+        }
+
+        return true;
     }
 }

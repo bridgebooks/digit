@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('email')->unique();
-            $table->string('phone', 13)->nullable()->unique();
+            $table->string('phone', 15)->nullable()->unique();
             $table->string('password')->nullable();
             $table->string('paystack_customer_code', 25)->nullable();
             $table->string('card_brand', 4)->nullable();

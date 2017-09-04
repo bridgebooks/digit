@@ -120,7 +120,8 @@ class OrgController extends Controller
         'status' => 'success',
         'data' => [
           'token' => $token,
-          'org' => $org
+          'org' => $org,
+            'user' => $user
         ]
       ]);
 

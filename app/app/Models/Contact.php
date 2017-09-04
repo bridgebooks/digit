@@ -56,6 +56,11 @@ class Contact extends Model
       return $this->hasMany('App\Models\ContactPerson');
     }
 
+    public function invoices()
+    {
+        return $this->hasMany('App\Models\Invoice');
+    }
+
     public function bank()
     {
         return $this->belongsTo('App\Models\Bank');

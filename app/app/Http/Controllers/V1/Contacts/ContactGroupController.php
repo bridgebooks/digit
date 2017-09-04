@@ -25,7 +25,7 @@ class ContactGroupController extends Controller
 
         $contacts = $this->contactRepository->skipPresenter()->findWhereIn('id', $ids);
 
-        $this->authorize('create', \App\Models\Contact::class);
+        $this->authorize('create', \App\Models\ContactGroup::class);
 
         $this->repository->toGroup($id, $contacts);
 

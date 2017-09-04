@@ -21,6 +21,10 @@ class Invoice extends Model
 
     protected $dates = ['deleted_at'];
 
+    protected $fillable = [
+      'org_id', 'user_id', 'type','contact_id','invoice_no','reference','due_at','line_amount_type', 'currency_id', 'status'
+    ];
+
     public function items() {
       return $this->hasMany('App\Models\InvoiceLineItem');
     }
