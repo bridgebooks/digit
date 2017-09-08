@@ -15,7 +15,6 @@ class CreateContact extends FormRequest
      */
     public function authorize()
     {
-        if ($_REQUEST)
         return $this->userHasRole('org_admin') && $this->belongsToOrg($this->request->get('org_id'));
     }
 
