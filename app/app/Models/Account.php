@@ -18,6 +18,16 @@ class Account extends Model
 
     protected $guarded = [];
 
+    protected $fillable = [
+    	'is_system',
+    	'account_type_id',
+    	'org_id',
+    	'code',
+    	'name',
+    	'description',
+    	'tax_rate_id'
+    ];
+
     public function type()
     {
       return $this->belongsTo('App\Models\AccountType', 'account_type_id');

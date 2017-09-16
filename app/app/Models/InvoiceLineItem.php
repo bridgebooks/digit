@@ -28,6 +28,10 @@ class InvoiceLineItem extends Model
       return $this->belongsTo('App\Models\Invoice');
     }
 
+    public function item() {
+      return $this->hasOne('App\Models\SalePurchaseItem', 'item_id');
+    }
+
     public function account() {
       return $this->belongsTo('App\Models\Account');
     }

@@ -9,6 +9,7 @@ Route::get('/{id}', 'OrgController@one');
 Route::put('/{id}', 'OrgController@update');
 
 Route::get('/{id}/contacts', 'OrgContactsController@contacts');
+Route::get('/{id}/items', 'OrgItemsController@all');
 
 Route::post('/{id}/contact_groups', 'OrgContactsController@createContactGroup');
 Route::get('/{id}/contact_groups', 'OrgContactsController@contactGroups');

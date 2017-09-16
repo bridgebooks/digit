@@ -16,6 +16,7 @@ class AuthServiceProvider extends ServiceProvider
         'App\Models\Contact' => 'App\Policies\ContactPolicy',
         'App\Models\ContactPerson' => 'App\Policies\ContactPersonPolicy',
         'App\Models\ContactGroup' => 'App\Policies\ContactGroupPolicy',
+        'App\Models\SalePurchaseItem' => 'App\Policies\SalePurchaseItemPolicy'
     ];
 
     /**

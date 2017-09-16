@@ -46,7 +46,8 @@ class SearchController extends Controller
     public function find(Request $request)
     {
         $index = $request->get('index', 'contacts');
+        $org_id = $request->get('org_id');
 
-        return $this->getRepository($index)->search($request->search);
+        return $this->getRepository($index)->search($request->search, $org_id);
     }
 }

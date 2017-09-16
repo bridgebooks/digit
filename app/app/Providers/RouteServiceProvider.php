@@ -22,6 +22,7 @@ class RouteServiceProvider extends ServiceProvider
     protected $apiBaseNamespace = 'App\Http\Controllers\V1';
 
     protected $apiNamespaces = [
+        'Accounts',
         'Users', 
         'Orgs', 
         'Roles', 
@@ -29,7 +30,8 @@ class RouteServiceProvider extends ServiceProvider
         'Industries', 
         'Banks', 
         'Contacts', 
-        'Search', 
+        'Search',
+        'Items', 
         'Invoices'
     ];
 

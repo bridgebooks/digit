@@ -61,4 +61,9 @@ class Org extends Model
     {
       return $this->hasMany('App\Models\Contact');
     }
+
+    public function inventory()
+    {
+        return $this->hasMany('App\Models\SalePurchaseItem');
+    }
 }

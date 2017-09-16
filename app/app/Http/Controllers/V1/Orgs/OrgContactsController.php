@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\V1\Orgs;
 
 use App\Http\Controllers\Traits\Pageable;
-use App\Http\Controllers\V1\Contacts\ContactGroupController;
 use App\Http\Controllers\V1\Controller;
 use App\Http\Requests\V1\GetOrgContacts;
 use App\Http\Requests\V1\CreateContactGroup;

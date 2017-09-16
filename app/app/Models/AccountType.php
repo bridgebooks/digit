@@ -11,6 +11,8 @@ class AccountType extends Model
 
     protected $guarded = [];
 
+    protected $fillable = ['name', 'parent_id'];
+
     public function accounts()
     {
       return $this->hasMany('App\Models\Account');
