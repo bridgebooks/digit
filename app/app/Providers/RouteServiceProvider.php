@@ -30,9 +30,12 @@ class RouteServiceProvider extends ServiceProvider
         'Industries', 
         'Banks', 
         'Contacts', 
+        'Employees',
         'Search',
         'Items', 
-        'Invoices'
+        'Invoices',
+        'Bills',
+        'TaxRates'
     ];
 
     /**
