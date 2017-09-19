@@ -35,6 +35,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(\App\Repositories\SalePurchaseItemRepository::class, \App\Repositories\SalePurchaseItemRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\AccountRepository::class, \App\Repositories\AccountRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\AccountTypeRepository::class, \App\Repositories\AccountTypeRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\TaxRateRepository::class, \App\Repositories\TaxRateRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\TaxRateComponentRepository::class, \App\Repositories\TaxRateComponentRepositoryEloquent::class);
         //:end-bindings:
     }
 }

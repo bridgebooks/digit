@@ -5,6 +5,7 @@ namespace App\Transformers;
 use League\Fractal\TransformerAbstract;
 use App\Models\Account;
 use App\Transformers\AccountTypeTransformer;
+use App\Transformers\TaxRateTransformer;
 
 /**
  * Class AccountTransformer
@@ -23,6 +24,17 @@ class AccountTransformer extends TransformerAbstract
         $type = $account->type;
 
         if ($type) return $this->item($type, new AccountTypeTransformer);
+    }
+
+    /**
+     * @param Account $account
+     * @return \League\Fractal\Resource\Item
+     */
+    public function includeTaxRate(Account $account)
+    {
+        $rate = $account->taxRate;
+
+        if ($rate) return $this->item($type, new TaxRateTransformer);
     }
     
     /**

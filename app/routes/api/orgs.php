@@ -8,6 +8,8 @@ Route::post('/logo','OrgController@uploadLogo');
 Route::get('/{id}', 'OrgController@one');
 Route::put('/{id}', 'OrgController@update');
 
+Route::get('/{id}/accounts', 'OrgAccountsController@all');
+Route::get('/{id}/tax_rates', 'OrgTaxRateController@all');
 Route::get('/{id}/contacts', 'OrgContactsController@contacts');
 Route::get('/{id}/items', 'OrgItemsController@all');
 

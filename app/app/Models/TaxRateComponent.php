@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\Uuids;
 
@@ -20,7 +19,8 @@ class TaxRateComponent extends Model
 
     protected $guarded = [];
 
-    public function taxRate() {
-      return $this->belongsTo('App\Models\TaxRate', 'tax_rate_id');
+    public function tax() 
+    {
+      return $this->belongsTo('App\Models\Tax', 'tax_rate_id');
     }
 }

@@ -4,18 +4,16 @@ namespace App\Repositories;
 
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use Prettus\Repository\Contracts\CacheableInterface;
-use Prettus\Repository\Traits\CacheableRepository;
-use App\Repositories\AccountRepository;
-use App\Models\Account;
-use App\Presenters\AccountPresenter;
+use App\Repositories\TaxRateComponentRepository;
+use App\Models\TaxRateComponent;
+use App\Presenters\TaxRateComponentPresenter;
+
 /**
- * Class AccountRepositoryEloquent
+ * Class TaxRateComponentRepositoryEloquent
  * @package namespace App\Repositories;
  */
-class AccountRepositoryEloquent extends BaseRepository implements AccountRepository, CacheableInterface
+class TaxRateComponentRepositoryEloquent extends BaseRepository implements TaxRateComponentRepository
 {
-    use CacheableRepository;
     /**
      * Specify Model class name
      *
@@ -23,7 +21,7 @@ class AccountRepositoryEloquent extends BaseRepository implements AccountReposit
      */
     public function model()
     {
-        return Account::class;
+        return TaxRateComponent::class;
     }
 
     /**
@@ -31,10 +29,12 @@ class AccountRepositoryEloquent extends BaseRepository implements AccountReposit
      *
      * @return string
      */
-    public function presenter()
+    public function model()
     {
-        return AccountPresenter::class;
-    }    
+        return TaxRateComponentPresenter::class;
+    }
+
+    
 
     /**
      * Boot up the repository, pushing criteria

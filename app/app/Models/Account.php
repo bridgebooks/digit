@@ -35,6 +35,6 @@ class Account extends Model
 
     public function taxRate()
     {
-      return $this->hasOne('App\Models\TaxRate', 'tax_rate_id');
+      return $this->belongsTo('App\Models\TaxRate');
     }
 }
