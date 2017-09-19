@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\V1\Orgs;
 
+use App\Http\Controllers\V1\Controller;
+use App\Events\OrgCreated;
 use App\Http\Requests\V1\GetOrgContacts;
 use App\Http\Requests\V1\OrgLogoUpload;
 use App\Repositories\ContactRepository;
@@ -9,7 +11,6 @@ use Illuminate\Http\Request;
 use JWTAuth;
 use CloudinaryImage;
 use Tymon\JWTAuth\Exceptions\JWTException;
-use App\Http\Controllers\V1\Controller;
 use App\Traits\UserRequest;
 use App\Http\Controllers\Traits\Pageable;
 use App\Http\Requests\V1\CreateOrg;
@@ -116,12 +117,15 @@ class OrgController extends Controller
       // associate user with org
       $org->users()->attach($user->id);
 
+      //fire OrgCreated Event
+      event(new OrgCreated($org));
+
       return response()->json([
         'status' => 'success',
         'data' => [
           'token' => $token,
           'org' => $org,
-            'user' => $user
+          'user' => $user
         ]
       ]);
 
@@ -139,20 +143,20 @@ class OrgController extends Controller
      * @return mixed
      */
     public function update(UpdateOrg $request, string $id)
-  {
-      $org = $this->orgRepository->update($request->all(), $id);
+    {
+        $org = $this->orgRepository->update($request->all(), $id);
 
-      return $org;
-  }
+        return $org;
+    }
 
     /**
      * @param OrgLogoUpload $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function uploadLogo(OrgLogoUpload $request)
-  {
-    $path = $request->file('file')->store('logos', 'cloudinary');
+    {
+      $path = $request->file('file')->store('logos', 'cloudinary');
 
-    return response()->json(['status' => 'success', 'url' => CloudinaryImage::url($path) ]);
-  }
+      return response()->json(['status' => 'success', 'url' => CloudinaryImage::url($path) ]);
+    }
 }
