@@ -51,7 +51,8 @@ class TaxRateTransformer extends TransformerAbstract
             'org_id' => $model->org_id,
             'name' => $model->name,
             'is_system' => (bool) $model->is_system,
-            'value' => $this->getValue($model)
+            'value' => $this->getValue($model),
+            'accounts' => count($model->accounts)
         ];
     }
 }
