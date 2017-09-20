@@ -64,4 +64,13 @@ class AccountPolicy
 
         return ($isOrgAdmin || $isOrgMember) && $belongsTo && !$account->is_system;
     }
+
+    public function bulk(User $user)
+    {
+        $isOrgAdmin = $this->userHasRole('org_admin');
+
+        if ($isOrgAdmin) return true;
+
+        return false;
+    }
 }

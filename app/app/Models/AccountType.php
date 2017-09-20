@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class AccountType extends Model
@@ -16,5 +15,15 @@ class AccountType extends Model
     public function accounts()
     {
       return $this->hasMany('App\Models\Account');
+    }
+
+    public function children()
+    {
+    	return $this->hasMany('App\Models\AccountType', 'parent_id');
+    }
+
+    public function scopeParent($query)
+    {
+    	return $query->where('parent_id', NULL);
     }
 }

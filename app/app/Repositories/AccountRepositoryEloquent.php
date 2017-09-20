@@ -43,4 +43,11 @@ class AccountRepositoryEloquent extends BaseRepository implements AccountReposit
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
+
+    public function deleteMany(array $ids) {
+
+        $models = $this->model->whereIn('id', $ids)->where('is_system', false)->delete();
+
+        return true;
+    }
 }

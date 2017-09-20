@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Traits\Uuids;
 
 class Account extends Model
 {
-    use Uuids;
+    use Uuids, SoftDeletes;
     /**
      * Indicates if the IDs are auto-incrementing.
      *
@@ -17,6 +17,8 @@ class Account extends Model
     public $incrementing = false;
 
     protected $guarded = [];
+
+    protected $dates = ['deleted_at'];
 
     protected $fillable = [
     	'is_system',

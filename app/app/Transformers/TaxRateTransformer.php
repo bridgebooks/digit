@@ -25,6 +25,19 @@ class TaxRateTransformer extends TransformerAbstract
         if ($components) return $this->collection($components, new TaxRateComponentTransformer);
     }
 
+    private function getValue(TaxRate $rate)
+    {
+        $total = 0;
+        
+        if ($rate->components) {
+            foreach ($rate->components as $component) {
+                $total = $total + $component->value;
+            }
+        }
+
+        return $total;
+    }
+
     /**
      * Transform the \TaxRate entity
      * @param \TaxRate $model
@@ -37,7 +50,8 @@ class TaxRateTransformer extends TransformerAbstract
             'id'  =>  $model->id,
             'org_id' => $model->org_id,
             'name' => $model->name,
-            'is_system' => (bool) $model->is_system
+            'is_system' => (bool) $model->is_system,
+            'value' => $this->getValue($model)
         ];
     }
 }

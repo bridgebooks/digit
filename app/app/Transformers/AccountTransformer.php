@@ -34,7 +34,7 @@ class AccountTransformer extends TransformerAbstract
     {
         $rate = $account->taxRate;
 
-        if ($rate) return $this->item($type, new TaxRateTransformer);
+        if ($rate) return $this->item($rate, new TaxRateTransformer);
     }
     
     /**
