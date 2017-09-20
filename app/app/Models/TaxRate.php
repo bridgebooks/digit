@@ -25,4 +25,9 @@ class TaxRate extends Model
     {
       return $this->hasMany('App\Models\TaxRateComponent', 'tax_rate_id');
     }
+
+    public function accounts()
+    {
+        return $this->hasMany('App\Models\Account', 'tax_rate_id');
+    }
 }
