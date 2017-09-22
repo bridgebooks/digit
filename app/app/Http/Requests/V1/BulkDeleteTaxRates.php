@@ -4,7 +4,7 @@ namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateTaxRate extends FormRequest
+class BulkDeleteTaxRates extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,7 @@ class CreateTaxRate extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'org_id' => 'required|exists:orgs,id',
-            'components' => 'required|array'
+            'rates' => 'required|array'
         ];
     }
 }

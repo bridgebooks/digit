@@ -19,6 +19,8 @@ class TaxRateComponent extends Model
 
     protected $guarded = [];
 
+    protected $fillable = [ 'name', 'compound', 'value' ];
+
     public function tax() 
     {
       return $this->belongsTo('App\Models\Tax', 'tax_rate_id');
