@@ -29,7 +29,7 @@ class TaxRateComponentRepositoryEloquent extends BaseRepository implements TaxRa
      *
      * @return string
      */
-    public function model()
+    public function presenter()
     {
         return TaxRateComponentPresenter::class;
     }

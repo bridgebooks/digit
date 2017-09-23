@@ -19,7 +19,7 @@ class TaxRate extends Model
 
     protected $guarded = [];
 
-    protected $fillable = [ 'name', 'org_id', 'is_system' ];
+    protected $fillable = [ 'name', 'org_id', 'is_system',  ];
 
     public function components() 
     {
