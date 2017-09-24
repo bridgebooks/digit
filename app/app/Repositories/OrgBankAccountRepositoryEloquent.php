@@ -8,7 +8,7 @@ use Prettus\Repository\Contracts\CacheableInterface;
 use Prettus\Repository\Traits\CacheableRepository;
 use App\Repositories\OrgBankAccountRepository;
 use App\Models\OrgBankAccount;
-use App\Validators\OrgBankAccountValidator;
+use App\Presenters\OrgBankAccountPresenter;
 
 /**
  * Class OrgBankAccountRepositoryEloquent
@@ -27,7 +27,14 @@ class OrgBankAccountRepositoryEloquent extends BaseRepository implements OrgBank
         return OrgBankAccount::class;
     }
 
-    
+    /**
+     * Specify Presenter class name
+     * @return string
+     */
+    public function presenter()
+    {
+        return OrgBankAccountPresenter::class;
+    }
 
     /**
      * Boot up the repository, pushing criteria

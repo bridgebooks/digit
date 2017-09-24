@@ -13,8 +13,13 @@ Route::get('/{id}/tax_rates', 'OrgTaxRateController@all');
 Route::get('/{id}/contacts', 'OrgContactsController@contacts');
 Route::get('/{id}/items', 'OrgItemsController@all');
 
+// Org Contact Groups
 Route::post('/{id}/contact_groups', 'OrgContactsController@createContactGroup');
 Route::get('/{id}/contact_groups', 'OrgContactsController@contactGroups');
 
-Route::post('/{id}/bank_accounts', 'OrgBankAccountController@add');
+// Org Bank Accounts
+Route::post('/{id}/bank_accounts', 'OrgBankAccountController@create');
 Route::get('/{id}/bank_accounts', 'OrgBankAccountController@index');
+Route::put('/{org_id}/bank_accounts/{id}', 'OrgBankAccountController@update');
+Route::delete('/{org_id}/bank_accounts/{id}', 'OrgBankAccountController@delete');
+

@@ -3,13 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Traits\Uuids;
-use Prettus\Repository\Contracts\Transformable;
-use Prettus\Repository\Traits\TransformableTrait;
 
-class OrgBankAccount extends Model implements Transformable
+class OrgBankAccount extends Model
 {
-    use TransformableTrait, SoftDeletes, Uuids;
+    use SoftDeletes, Uuids;
 
     /**
      * Indicates if the IDs are auto-incrementing.
@@ -20,7 +19,7 @@ class OrgBankAccount extends Model implements Transformable
 
     protected $table = 'org_bank_accounts';
 
-    protected $fillable = ['bank_id', 'org_id', 'account_name', 'account_number', 'is_default', 'notes' ];
+    protected $fillable = [ 'name', 'bank_id', 'org_id', 'user_id', 'account_name', 'account_number', 'is_default', 'notes' ];
 
     protected $dates = ['deleted_at'];
 
@@ -33,21 +32,4 @@ class OrgBankAccount extends Model implements Transformable
     {
       return $this->belongsTo('App\Models\Bank');
     }
-
-    public function transform()
-    {
-    	return [
-             'id' => $this->id,
-             'org_id' => $this->org_id,
-             'bank'   => [
-             	'id' => $this->bank->id,
-             	'name' => $this->bank->name,
-             	'identifier' => $this->bank->identifier
-             ]
-             'account_name' => $this->account_name,
-             'account_number' => $this->account_number,
-             'created_at' => $this->created_at
-         ];
-    }
-
 }
