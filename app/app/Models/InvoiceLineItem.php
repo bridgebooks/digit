@@ -20,8 +20,19 @@ class InvoiceLineItem extends Model
 
     protected $guarded = [];
 
+    protected $dates = ['deleted_at'];
+
     protected $fillable = [
-        'invoice_id'       
+        'invoice_id',
+        'row_order',
+        'unit_price',
+        'item_id',
+        'account_id',
+        'tax_rate_id',
+        'description',
+        'discount',
+        'amount',
+        'quantity'
     ];
 
     public function invoice() {
@@ -29,7 +40,7 @@ class InvoiceLineItem extends Model
     }
 
     public function item() {
-      return $this->hasOne('App\Models\SalePurchaseItem', 'item_id');
+      return $this->belongsTo('App\Models\SalePurchaseItem', 'item_id');
     }
 
     public function account() {
@@ -37,6 +48,6 @@ class InvoiceLineItem extends Model
     }
 
     public function taxRate() {
-      return $this->hasOne('App\Models\TaxRate', 'tax_rate_id');
+      return $this->belongsTo('App\Models\TaxRate', 'tax_rate_id');
     }
 }

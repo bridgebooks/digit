@@ -3,11 +3,9 @@
 namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Traits\UserRequest;
 
-class CreateSalePurchaseItem extends FormRequest
+class SendInvoice extends FormRequest
 {
-    use UserRequest;
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -15,9 +13,7 @@ class CreateSalePurchaseItem extends FormRequest
      */
     public function authorize()
     {
-        return $this->userHasRole('org_admin') || 
-        $this->userHasRole('org_member') && 
-        $this->belongsToOrg($this->request->get('org_id'));
+        return true;
     }
 
     /**
@@ -28,9 +24,10 @@ class CreateSalePurchaseItem extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:150',
-            'code' => 'required|max:10',
-            'org_id' => 'required|exists:orgs,id',
+            'to' => 'required',
+            'subject' => 'required',
+            'message' => 'required',
+            'send_copy' => 'boolean'
         ];
     }
 }

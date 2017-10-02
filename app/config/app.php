@@ -12,7 +12,7 @@ return [
     | any other location as required by the application or its packages.
     */
 
-    'name' => 'ZenBooks',
+    'name' => 'Bridge Books',
 
     /*
     |--------------------------------------------------------------------------
@@ -62,7 +62,18 @@ return [
     |
     */
 
-    'validate_account_url' => env('ACCOUNT_VALIDATE_URL', 'http://localhost'),
+    'validate_account_url' => env('ACCOUNT_VALIDATE_URL', 'http://localhost:4040'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Invoice View Url
+    |--------------------------------------------------------------------------
+    |
+    | This URL is used to view invoices without login
+    |
+    */
+
+    'invoice_viewer_url' => env('INVOICE_VIEWER_URL', 'http://localhost:4040/invoice-viewer'),
 
     /*
     |--------------------------------------------------------------------------

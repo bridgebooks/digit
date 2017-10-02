@@ -25,6 +25,8 @@ class SalePurchaseItemController extends Controller
 	public function create(CreateSalePurchaseItem $request)
 	{
 		$attrs = $request->all();
+		$attrs['is_purchased'] = is_null($attrs['is_purchased']) ? false : $attrs['is_purchased'];
+		$attrs['is_sold'] = is_null($attrs['is_sold']) ? false : $attrs['is_sold'];
 		$attrs['user_id'] = $this->requestUser()->id;
 
 		$item = $this->repository->create($attrs);

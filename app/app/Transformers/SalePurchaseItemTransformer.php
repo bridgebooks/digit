@@ -5,6 +5,7 @@ namespace App\Transformers;
 use League\Fractal\TransformerAbstract;
 use App\Models\SalePurchaseItem;
 use App\Transformers\AccountTransformer;
+use App\Transformers\TaxRateTransformer;
 
 /**
  * Class SaleItemTransformer
@@ -29,11 +30,33 @@ class SalePurchaseItemTransformer extends TransformerAbstract
      * @param SalePurchaseItem
      * @return \League\Fractal\Resource\Item
      */
+    public function includeSaleTax(SalePurchaseItem $item)
+    {
+        $tax = $item->saleTaxRate;
+
+        if ($tax) return $this->item($tax, new TaxRateTransformer);
+    }
+
+    /**
+     * @param SalePurchaseItem
+     * @return \League\Fractal\Resource\Item
+     */
     public function includePurchaseAccount(SalePurchaseItem $item)
     {
         $account = $item->purchaseAccount;
 
         if ($account) return $this->item($account, new AccountTransformer);
+    }
+
+    /**
+     * @param SalePurchaseItem
+     * @return \League\Fractal\Resource\Item
+     */
+    public function includePurchaseTax(SalePurchaseItem $item)
+    {
+        $tax = $item->purchaseTaxRate;
+
+        if ($tax) return $this->item($tax, new TaxRateTransformer);
     }
 
     /**

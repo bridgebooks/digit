@@ -33,7 +33,7 @@ class SalePurchaseItem extends Model
     	'sale_account_id',
     	'sale_tax_id',
     	'purchase_unit_price',
-    	'purchage_account_id',
+    	'purchase_account_id',
     	'purchase_tax_id',
     ];
 
@@ -46,21 +46,21 @@ class SalePurchaseItem extends Model
 
     public function saleAccount()
     {
-    	return $this->hasOne('App\Models\Account', 'sale_account_id');
+    	return $this->belongsTo('App\Models\Account', 'sale_account_id');
     }
 
     public function saleTaxRate()
     {
-    	return $this->hasOne('App\Models\TaxRate', 'sale_tax_id');
+    	return $this->belongsTo('App\Models\TaxRate', 'sale_tax_id');
     }
 
     public function purchaseAccount()
     {
-    	return $this->hasOne('App\Models\Account', 'purchase_account_id');
+    	return $this->belongsTo('App\Models\Account', 'purchase_account_id');
     }
 
     public function purchaseTaxRate()
     {
-    	return $this->hasOne('App\Models\TaxRate', 'purchase_tax_id');
+    	return $this->belongsTo('App\Models\TaxRate', 'purchase_tax_id');
     }
 }

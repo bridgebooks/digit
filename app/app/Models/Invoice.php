@@ -19,11 +19,36 @@ class Invoice extends Model
 
     protected $guarded = [];
 
-    protected $dates = ['deleted_at'];
+    protected $dates = ['deleted_at', 'due_at', 'raised_at'];
 
     protected $fillable = [
-      'org_id', 'user_id', 'type','contact_id','invoice_no','reference','due_at','line_amount_type', 'currency_id', 'status'
+      'org_id', 
+      'user_id', 
+      'type', 
+      'contact_id', 
+      'invoice_no', 
+      'reference',
+      'raised_at',  
+      'due_at',
+      'sub_total',
+      'tax_total',
+      'total',
+      'line_amount_type',
+      'currency_id',
+      'status'
     ];
+
+    public function user() {
+      return $this->belongsTo('App\Models\User');
+    }
+
+    public function org() {
+      return $this->belongsTo('App\Models\Org');
+    }
+
+    public function contact() {
+      return $this->belongsTo('App\Models\Contact');
+    }
 
     public function items() {
       return $this->hasMany('App\Models\InvoiceLineItem');

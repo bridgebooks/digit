@@ -29,7 +29,7 @@ class OrgBankAccountController extends Controller
         //current page
         $page = $request->input('page', 1);
 
-        $items = $this->repository->skipCache()->scopeQuery(function ($query) use ($id) {
+        $items = $this->repository->scopeQuery(function ($query) use ($id) {
         	return $query->where('org_id', $id);
         })->all();
 
@@ -62,7 +62,7 @@ class OrgBankAccountController extends Controller
 	{
 		$account = $this->repository->skipPresenter()->find($id);
 
-		$this->authorize('delete', $acount);
+		$this->authorize('delete', $account);
 
 		$this->repository->delete($id);
 

@@ -20,6 +20,7 @@ class AuthServiceProvider extends ServiceProvider
         'App\Models\ContactGroup' => 'App\Policies\ContactGroupPolicy',
         'App\Models\SalePurchaseItem' => 'App\Policies\SalePurchaseItemPolicy',
         'App\Models\OrgBankAccount' => 'App\Policies\OrgBankAccountPolicy',
+        'App\Models\Invoice' => 'App\Policies\InvoicePolicy',
     ];
 
     /**

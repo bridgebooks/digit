@@ -18,7 +18,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\OrgCreated' => [
             'App\Listeners\OrgCreatedListener'
-        ]
+        ],
+        'App\Events\SendInvoice' => [
+            'App\Listeners\SendInvoiceListener'
+        ],
     ];
 
     /**
