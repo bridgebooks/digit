@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\V1\Invoices;
 
-use App\Events\SendInvoice as SendInvoiceEvent;
+use App\Jobs\GenerateInvoicePDF;
+use App\Jobs\SendInvoiceEmail;
 use Illuminate\Http\Request;
 use App\Traits\UserRequest;
 use App\Repositories\InvoiceRepository;
 use App\Http\Controllers\V1\Controller;
 use App\Http\Requests\V1\CreateInvoice;
+use App\Http\Requests\V1\UpdateInvoice;
 use App\Http\Requests\V1\SendInvoice;
 
 class InvoiceController extends Controller
@@ -74,13 +76,30 @@ class InvoiceController extends Controller
 
 		$this->authorize('send', $invoice);
 
-		$params = $request->only(['to','message','subject','send_copy']);
+		$params = $request->only(['to','message','subject','send_copy', 'attach_pdf', 'mark_sent']);
 
-		event(new SendInvoiceEvent($invoice, $params));
+		if ($params['mark_sent']) $this->repository->update(['status' => 'sent'], $id);
+
+		GenerateInvoicePDF::dispatch($invoice)->chain([
+			new SendInvoiceEmail($invoice, $params)
+		]);
 
 		return response()->json([
 			'status' => 'success',
 			'message' => 'Invoice will be sent shortly'
+		]);
+	}
+
+	public function download(string $id)
+	{
+		$invoice = $this->repository->skipPresenter()->find($id);
+
+		$this->authorize('send', $invoice);
+
+		return response()->json([
+			'data' => [
+				'url' => $invoice->pdf_url
+			]
 		]);
 	}
 
@@ -89,8 +108,14 @@ class InvoiceController extends Controller
 		return $this->repository->find($id);
 	}
 
-	public function update()
+	public function update(UpdateInvoice $request, string $id)
 	{
+		$invoice = $this->repository->skipPresenter()->find($id);
 
+		$this->authorize('update', $invoice);
+
+		$attrs = $request->all();
+
+		return $this->repository->update($attrs, $id);
 	}
 }

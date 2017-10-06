@@ -22,7 +22,7 @@ class InvoicePolicy
     }
 
     /**
-     * Determine whether the user can create Account.
+     * Determine whether the user can create an invoice
      *
      * @param  \App\Models\User  $user
      * @return mixed
@@ -32,6 +32,20 @@ class InvoicePolicy
         $isOrgAdmin = $this->userHasRole('org_admin');
         $isOrgMember = $this->userHasRole('org_member');
 
+        return $isOrgAdmin || $isOrgMember;
+    }
+
+    /**
+     * Determine whether the user can update an invoice
+     *
+     * @param  \App\Models\User  $user
+     * @return mixed
+     */
+    public function update(User $user, Invoice $invoice)
+    {
+        $isOrgAdmin = $this->userHasRole('org_admin');
+        $isOrgMember = $this->userHasRole('org_member');
+        \Log::info('invoice', $invoice->toArray());
         return $isOrgAdmin || $isOrgMember;
     }
 

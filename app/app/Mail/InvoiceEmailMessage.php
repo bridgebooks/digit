@@ -27,6 +27,24 @@ class InvoiceEmailMessage extends Mailable implements ShouldQueue
         $this->params['url'] = config('app.invoice_viewer_url') .'/'. $this->invoice->id;
     }
 
+    private function sendWithAttachment() 
+    {
+
+        $attachment = file_get_contents($this->invoice->pdf_url);
+        $name = $this->invoice->invoice_no.'.pdf';
+
+        return $this->view('emails.invoices.message')
+            ->subject($this->params['subject'])
+            ->attachData($attachment, $name, [
+                'mime' => 'application/pdf'
+            ]);
+    }
+
+    private function sendWithoutAttachment()
+    {
+        return $this->view('emails.invoices.message')->subject($this->params['subject']);
+    }
+
     /**
      * Build the message.
      *
@@ -34,7 +52,10 @@ class InvoiceEmailMessage extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        return $this->view('emails.invoices.message')
-            ->subject($this->params['subject']);
+        if ($this->params['attach_pdf']) {
+            $this->sendWithAttachment();
+        } else {
+            $this->sendWithoutAttachment();
+        }
     }
 }

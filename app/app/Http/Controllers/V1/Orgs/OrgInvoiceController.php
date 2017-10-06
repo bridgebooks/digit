@@ -29,7 +29,7 @@ class OrgInvoiceController extends Controller
         // model type
         $type = $request->input('type', 'acc_rec'); 
 
-        $items = $this->repository->findWhere([
+        $items = $this->repository->with(['contact'])->findWhere([
             'org_id' => $id,
             'type' => $type
         ]);

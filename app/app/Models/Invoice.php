@@ -35,7 +35,8 @@ class Invoice extends Model
       'total',
       'line_amount_type',
       'currency_id',
-      'status'
+      'status',
+      'pdf_url'
     ];
 
     public function user() {

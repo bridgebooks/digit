@@ -69,6 +69,14 @@ return [
             'api_secret' => env('CLOUDINARY_SECRET'),
             'cloud_name' => env('CLOUDINARY_CLOUD_NAME')
         ],
+
+        'azure' => [
+            'driver' => 'azure',
+            'name' => env('AZURE_STORAGE_NAME'),
+            'key' => env('AZURE_STORAGE_KEY'),
+            'container' => env('AZURE_STORAGE_CONTAINER'),
+            'end_point' => env('AZURE_STORAGE_ENDPOINT')
+        ]
     ],
 
 ];

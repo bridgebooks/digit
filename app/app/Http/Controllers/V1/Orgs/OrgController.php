@@ -38,6 +38,7 @@ class OrgController extends Controller
       'address_line_2',
       'city_town',
       'state_region',
+      'country',
       'postal_zip',
       'phone',
       'email',

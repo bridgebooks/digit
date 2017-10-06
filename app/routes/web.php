@@ -12,5 +12,6 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+	$invoice = \App\Models\Invoice::with(['org','contact','items', 'items.item'])->find('5e76aea0-a988-11e7-a54e-4f1aff114730');
+    return view('invoices.standard', ['invoice' => $invoice]);
 });

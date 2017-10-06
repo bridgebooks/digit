@@ -207,6 +207,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\ModelServiceProvider::class,
 
         JeroenG\Packager\PackagerServiceProvider::class,
         Mrfoh\Mulla\MullaServiceProvider::class,
@@ -214,8 +215,10 @@ return [
         Prettus\Repository\Providers\RepositoryServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
         BrocardJr\Cloudinary\CloudinaryServiceProvider::class,
+        App\Providers\AzureStorageServiceProvider::class,
         Laravel\Scout\ScoutServiceProvider::class,
         ScoutEngines\Elasticsearch\ElasticsearchProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
     ],
 
     /*
@@ -267,8 +270,8 @@ return [
         'Uuid' => Webpatser\Uuid\Uuid::class,
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
         'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
-        'CloudinaryImage' => BrocardJr\Cloudinary\Facades\ImageFacade::class
-
+        'CloudinaryImage' => BrocardJr\Cloudinary\Facades\ImageFacade::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
     ],
 
 ];

@@ -14,18 +14,20 @@ class InvoiceTransformer extends TransformerAbstract
 {
     protected $availableIncludes = ['contact', 'items'];
 
+    //protected $defaultIncludes = ['contact'];
+
     public function includeContact(Invoice $invoice)
     {
         $contact = $invoice->contact;
 
-        if ($contact) return $this->item($contact, new ContactTransformer);
+        return $this->item($contact, new ContactTransformer);
     }
 
     public function includeItems(Invoice $invoice)
     {
         $items = $invoice->items;
 
-        if ($items) return $this->collection($items, new InvoiceLineItemTransformer);
+        return $this->collection($items, new InvoiceLineItemTransformer);
     }
 
     /**
@@ -52,6 +54,7 @@ class InvoiceTransformer extends TransformerAbstract
             'total' => $model->total,
             'raised_at' => $model->raised_at->getTimestamp() * 1000,
             'due_at' => $model->due_at->getTimestamp() * 1000,
+            'pdf_url' => $model->pdf_url,
             'created_at' =>$model->created_at->getTimestamp() * 1000,
             'updated_at' => $model->updated_at->getTimestamp() * 1000
         ];

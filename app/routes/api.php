@@ -16,4 +16,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/transaction','TestController@test');
+Route::get('/info', function() {
+	phpinfo();
+});
