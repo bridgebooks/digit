@@ -2,11 +2,12 @@
 
 namespace App\Providers;
 
+use App\Models\User;
+use App\Models\Invoice;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Schema;
 use App\Providers\RepositoryServiceProvider;
 
-class AppServiceProvider extends ServiceProvider
+class ModelServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any application services.
@@ -15,7 +16,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Schema::defaultStringLength(191);
+        // Model Observers
+        User::observe(\App\Models\Observers\UserObserver::class);
     }
 
     /**
@@ -25,6 +27,5 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->register(RepositoryServiceProvider::class);
     }
 }
