@@ -206,7 +206,7 @@
                 </div><!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;"><![endif]-->
                 <div style="color:#555555;line-height:120%;font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif; padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;">
                   <div style="font-size:12px;line-height:14px;font-family:Lato, Tahoma, Verdana, Segoe, sans-serif;color:#555555;text-align:left;">
-                    <p style="margin: 0;font-size: 12px;line-height: 14px"><span style="font-size: 14px; line-height: 16px;">If you have any questions you can contact us at <a href="mailto:support@zenbooks.ng">support@zenbooks.ng</a></span></p>
+                    <p style="margin: 0;font-size: 12px;line-height: 14px"><span style="font-size: 14px; line-height: 16px;">If you have any questions you can contact us at <a href="mailto:support@bridgebooks.ng">support@bridgebooks.ng</a></span></p>
                   </div>
                 </div><!--[if mso]></td></tr></table><![endif]-->
                 <!--[if (!mso)&(!IE)]><!-->

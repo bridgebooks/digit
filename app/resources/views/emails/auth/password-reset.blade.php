@@ -185,7 +185,7 @@
                     <p style="margin: 0;font-size: 12px;line-height: 14px;text-align: center"><span style="font-size: 17px; line-height: 24px;">Hi, {{ $user->first_name }},</span></p>
                   </div>
                   <div style="font-size:12px;line-height:14px;text-align:center;color:#0068A5;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;">
-                    <p style="margin: 0;font-size: 12px;line-height: 14px;text-align: center"><span style="font-size: 16px; line-height: 24px;">A password reset has been requested on your MAX account.</span></p>
+                    <p style="margin: 0;font-size: 12px;line-height: 14px;text-align: center"><span style="font-size: 16px; line-height: 24px;">A password reset has been requested on your Bridge Books.</span></p>
                   </div>
                   <div style="font-size:12px;line-height:14px;text-align:center;color:#0068A5;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;">
                     <p style="margin: 0;font-size: 12px;line-height: 14px;text-align: center"><span style="font-size: 16px; line-height: 24px;">If you did not request a password reset, please ignore this email otherwise click the button below to change your password.</span></p>
@@ -212,7 +212,7 @@
                 </div><!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;"><![endif]-->
                 <div style="color:#555555;line-height:120%;font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif; padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;">
                   <div style="font-size:12px;line-height:14px;font-family:Lato, Tahoma, Verdana, Segoe, sans-serif;color:#555555;text-align:left;">
-                    <p style="margin: 0;font-size: 12px;line-height: 14px"><span style="font-size: 14px; line-height: 16px;">If you have any questions you can contact us at <a href="mailto:support@zenbooks.ng">support@zenbooks.ng</a></span></p>
+                    <p style="margin: 0;font-size: 12px;line-height: 14px"><span style="font-size: 14px; line-height: 16px;">If you have any questions you can contact us at <a href="mailto:support@bridegebooks.ng">support@bridegebooks.ng</a></span></p>
                   </div>
                 </div><!--[if mso]></td></tr></table><![endif]-->
                 <!--[if (!mso)&(!IE)]><!-->

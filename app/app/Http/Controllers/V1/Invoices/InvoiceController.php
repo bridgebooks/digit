@@ -114,7 +114,21 @@ class InvoiceController extends Controller
 
 		$this->authorize('update', $invoice);
 
-		$attrs = $request->all();
+		$attrs = $request->only([
+			'contact_id', 
+			'due_at', 
+			'raised_at', 
+			'invoice_no', 
+			'reference', 
+			'line_amount_type',
+			'sub_total',
+			'tax_total',
+			'total'
+		]);
+
+		$items = $request->get('items');
+
+		$this->repository->updateInvoiceItems($invoice, $items);
 
 		return $this->repository->update($attrs, $id);
 	}

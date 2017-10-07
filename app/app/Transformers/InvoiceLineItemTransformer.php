@@ -38,7 +38,7 @@ class InvoiceLineItemTransformer extends TransformerAbstract
             'item_id' => $model->item_id,
             'item' => $model->item,
             'description' => $model->description,
-            'unit_price' => $model->unit_price,
+            'unit_price' => (float) $model->unit_price,
             'quantity' => $model->quantity,
             'discount_rate' => $model->discount_rate,
             'account_id' => $model->account_id,
@@ -50,7 +50,7 @@ class InvoiceLineItemTransformer extends TransformerAbstract
                 'is_system' => (bool) $model->taxRate->is_system,
                 'value' => $this->getTaxRateValue($model->taxRate)
             ],
-            'amount' => $model->amount,
+            'amount' => (float) $model->amount,
             'created_at' => $model->created_at->getTimestamp() * 1000,
             'updated_at' => $model->updated_at->getTimestamp() * 1000
         ];

@@ -26,6 +26,6 @@ class InvoiceObserver
      */
     public function updated(Invoice $invoice)
     {
-        Log::info('Invoice updated', ['status' => $invoice->status ]);
+        
     }
 }

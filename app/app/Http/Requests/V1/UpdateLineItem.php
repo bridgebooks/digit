@@ -3,9 +3,8 @@
 namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class UpdateInvoice extends FormRequest
+class UpdateLineItem extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,14 +24,12 @@ class UpdateInvoice extends FormRequest
     public function rules()
     {
         return [
-            'contact_id' => 'exists:contacts,id',
-            'due_at' => 'date',
-            'raised_at' => 'date',
-            'sub_total' => 'numeric',
-            'tax_total' => 'numeric',
-            'total' => 'numeric',
-            'line_amount_type' => 'in:exclusive,inclusive,no_tax',
-            'items' => 'array'
+            'item_id' => 'exists:sale_items,id',
+            'account_id' => 'exists:accounts,id',
+            'tax_rate_id' => 'exists:tax_rates,id',
+            'unit_price' => 'numeric|min:0',
+            'discount_rate' => 'numeric|min:0',
+            'amount' => 'numeric|min:0'
         ];
     }
 }

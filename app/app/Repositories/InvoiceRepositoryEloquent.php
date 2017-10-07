@@ -42,4 +42,27 @@ class InvoiceRepositoryEloquent extends BaseRepository implements InvoiceReposit
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
+
+    public function updateInvoiceItems(Invoice $invoice, array $items) 
+    {
+        $invoice->items()->delete();
+
+        $lineItems = [];
+
+        foreach ($items as $item) {
+            $lineItems[] = [
+                'row_order' => $item['row_order'],
+                'item_id' => $item['item_id'],
+                'description' => $item['description'],
+                'quantity' => $item['quantity'],
+                'unit_price' => $item['unit_price'],
+                'discount_rate' => empty($item['discount_rate']) ? null : $item['discount_rate'],
+                'account_id' => $item['account_id'],
+                'tax_rate_id' => $item['tax_rate_id'],
+                'amount' => $item['amount'],
+            ];
+        }
+
+        $invoice->items()->createMany($lineItems);
+    }
 }

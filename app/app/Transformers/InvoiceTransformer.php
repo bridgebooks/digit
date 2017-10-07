@@ -2,6 +2,7 @@
 
 namespace App\Transformers;
 
+use Carbon\Carbon;
 use League\Fractal\TransformerAbstract;
 use App\Models\Invoice;
 use App\Models\Contact;
@@ -30,6 +31,15 @@ class InvoiceTransformer extends TransformerAbstract
         return $this->collection($items, new InvoiceLineItemTransformer);
     }
 
+    private function getOverduePeriod ($raisedAt, $dueAt) {
+        $due_at = new Carbon($dueAt);
+        $now = Carbon::now();
+        $difference = ($due_at->diff($now)->days > 0) ? $due_at->diff($now)->days : 0;
+
+
+        return $difference;
+    }
+
     /**
      * Transform the \Invoice entity
      * @param \Invoice $model
@@ -49,11 +59,12 @@ class InvoiceTransformer extends TransformerAbstract
             'reference' =>  $model->reference,
             'notes' => $model->notes,
             'status' => ucfirst($model->status),
-            'sub_total' => $model->sub_total,
-            'tax_total' => $model->tax_total,
-            'total' => $model->total,
+            'sub_total' => (float) $model->sub_total,
+            'tax_total' => (float) $model->tax_total,
+            'total' => (float) $model->total,
             'raised_at' => $model->raised_at->getTimestamp() * 1000,
             'due_at' => $model->due_at->getTimestamp() * 1000,
+            'overdue' => $this->getOverduePeriod($model->raised_at, $model->due_at),
             'pdf_url' => $model->pdf_url,
             'created_at' =>$model->created_at->getTimestamp() * 1000,
             'updated_at' => $model->updated_at->getTimestamp() * 1000
