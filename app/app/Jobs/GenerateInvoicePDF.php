@@ -50,7 +50,7 @@ class GenerateInvoicePDF implements ShouldQueue
         $settings = $this->getInvoiceSettings($this->invoice);
         
         $name = $invoice->invoice_no.'_'. time(). '.pdf';
-
+        // Set PDF options
         PDF::setOptions(['defaultPaperSize' => $setttings->paper_size ]);
         $pdf = PDF::loadView('invoices.standard', compact('invoice'));
 
