@@ -20,7 +20,7 @@ class InvoiceController extends Controller
 
 	public function __construct(InvoiceRepository $repository)
 	{
-		$this->middleware('jwt.auth');
+		$this->middleware('jwt.auth')->except(['get']);
 		$this->repository = $repository;
 	}
 

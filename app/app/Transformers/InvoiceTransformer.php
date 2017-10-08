@@ -13,9 +13,16 @@ use App\Models\Contact;
  */
 class InvoiceTransformer extends TransformerAbstract
 {
-    protected $availableIncludes = ['contact', 'items'];
+    protected $availableIncludes = ['contact', 'items', 'org'];
 
     //protected $defaultIncludes = ['contact'];
+
+    public function includeOrg(Invoice $invoice)
+    {
+        $org = $invoice->org;
+
+        return $this->item($org, new OrgTransformer);
+    }
 
     public function includeContact(Invoice $invoice)
     {
@@ -64,7 +71,7 @@ class InvoiceTransformer extends TransformerAbstract
             'total' => (float) $model->total,
             'raised_at' => $model->raised_at->getTimestamp() * 1000,
             'due_at' => $model->due_at->getTimestamp() * 1000,
-            'overdue' => $this->getOverduePeriod($model->raised_at, $model->due_at),
+            'overdue' => $model->status !== 'paid' || $model->status !== 'voided' ? $this->getOverduePeriod($model->raised_at, $model->due_at) : 0,
             'pdf_url' => $model->pdf_url,
             'created_at' =>$model->created_at->getTimestamp() * 1000,
             'updated_at' => $model->updated_at->getTimestamp() * 1000

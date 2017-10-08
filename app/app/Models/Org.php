@@ -66,4 +66,9 @@ class Org extends Model
     {
         return $this->hasMany('App\Models\SalePurchaseItem');
     }
+
+    public function invoiceSettings()
+    {
+        return $this->hasOne('App\Models\OrgInvoiceSettings');
+    }
 }
