@@ -38,11 +38,11 @@ class InvoiceTransformer extends TransformerAbstract
         return $this->collection($items, new InvoiceLineItemTransformer);
     }
 
-    private function getOverduePeriod ($raisedAt, $dueAt) {
-        $due_at = new Carbon($dueAt);
-        $now = Carbon::now();
-        $difference = ($due_at->diff($now)->days > 0) ? $due_at->diff($now)->days : 0;
+    private function getOverduePeriod ($dueDate) {
+        $due_at = new Carbon($dueDate);
+        $now = new Carbon('now');
 
+        $difference = ($now->diffInDays($due_at) > 0 && !$due_at->isFuture()) ? $now->diffInDays($due_at) : 0;
 
         return $difference;
     }
@@ -71,7 +71,7 @@ class InvoiceTransformer extends TransformerAbstract
             'total' => (float) $model->total,
             'raised_at' => $model->raised_at->getTimestamp() * 1000,
             'due_at' => $model->due_at->getTimestamp() * 1000,
-            'overdue' => $model->status !== 'paid' || $model->status !== 'voided' ? $this->getOverduePeriod($model->raised_at, $model->due_at) : 0,
+            'overdue' => $model->status !== 'paid' || $model->status !== 'voided' ? $this->getOverduePeriod($model->due_at) : 0,
             'pdf_url' => $model->pdf_url,
             'created_at' =>$model->created_at->getTimestamp() * 1000,
             'updated_at' => $model->updated_at->getTimestamp() * 1000
