@@ -25,16 +25,22 @@ class OrgInvoiceController extends Controller
 	{
         $items = $this->repository->scopeQuery(function ($query) use($request, $id) {
         	 // period
-	        $period = $request->input('period');
-	        // from date
-	        $fromDate = $period === 'month' ? new Carbon('this month') : new Carbon('this week');
-	        // to date
-	        $toDate = new Carbon('now');
+	        $period = $request->input('period', 'month');
+	        // now date
+	        $now = new Carbon('now');
+	
+	        if ($period == 'month') {
+	        	$fromDate = $now->copy()->startOfMonth();
+	        	$toDate = $now->copy()->endOfMonth();
+	        } elseif ($period == 'week') {
+	        	$fromDate = $now->copy()->startOfWeek();
+	        	$toDate = $now->copy()->endOfWeek();
+	        }
 
 	        return $query->where('org_id', $id)
 	        	->whereIn('status', ['submitted', 'authorized', 'sent'])
 	        	->whereBetween('created_at', [$fromDate->toDateTimeString(), $toDate->toDateTimeString()]);
-        })->all();
+        	})->all();
 
         return $items;
 	}
