@@ -96,7 +96,7 @@ class CreateUserController extends Controller
         // login user
         try {
           
-          $customTokenClaims = ['acl' => $this->getUserRoles($user)];
+          $customTokenClaims = ['roles' => $this->getUserRoles($user)];
           $token = JWTAuth::fromUser($user, $customTokenClaims);
 
           return response()->json([

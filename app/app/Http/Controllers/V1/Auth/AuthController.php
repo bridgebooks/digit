@@ -34,6 +34,22 @@ class AuthController extends Controller
 		return $roles;
 	}
 
+	private function getUserACL(\App\Models\User $user)
+	{
+		$acl = [];
+
+      	$orgRoles = $user->orgRoles;
+
+      	foreach ($orgRoles as $role) {
+	        $acl[] = [
+	          'name' => $role->name,
+	          'permissions' => $role->permissions
+	        ];
+      	}
+
+     	return $acl;
+	}
+
 	private function getUserOrgs(\App\Models\User $user)
 	{
 		$orgs = [];
@@ -61,7 +77,8 @@ class AuthController extends Controller
                 try {
                     $customTokenClaims = [
                         'orgs' => $this->getUserOrgs($user),
-                        'acl' => $this->getUserRoles($user)
+                        'roles' => $this->getUserRoles($user),
+                        'acl' => $this->getUserACL($user)
                     ];
 
                     $token = JWTAuth::fromUser($user, $customTokenClaims);

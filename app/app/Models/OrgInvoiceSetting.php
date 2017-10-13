@@ -10,6 +10,8 @@ class OrgInvoiceSetting extends Model
 {
     use Uuids;
 
+    public $incrementing = false;
+
     protected $table = 'org_invoice_settings';
 
     protected $fillable = [

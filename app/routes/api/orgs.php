@@ -17,7 +17,8 @@ Route::get('{id}/bills', 'OrgInvoiceController@sales');
 Route::get('{id}/invoice_events', 'OrgInvoiceController@invoiceEvents');
 Route::get('{id}/invoice_settings', 'OrgInvoiceSettingController@get');
 Route::put('{id}/invoice_settings', 'OrgInvoiceSettingController@update');
-
+//Org Users
+Route::get('{id}/users', 'OrgUserController@all');
 // Org Contact Groups
 Route::post('/{id}/contact_groups', 'OrgContactsController@createContactGroup');
 Route::get('/{id}/contact_groups', 'OrgContactsController@contactGroups');

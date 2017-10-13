@@ -47,6 +47,11 @@ class User extends Authenticatable
       return $this->belongsToMany('App\Models\Role', 'user_roles');
     }
 
+    public function orgRoles()
+    {
+      return $this->belongsToMany('App\Models\OrgRole', 'org_user_roles', 'user_id', 'org_role_id');
+    }
+
     public function orgs()
     {
       return $this->belongsToMany('App\Models\Org', 'org_users');

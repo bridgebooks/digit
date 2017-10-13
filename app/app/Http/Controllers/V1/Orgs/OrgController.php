@@ -25,6 +25,7 @@ class OrgController extends Controller
   protected $orgRepository;
   protected $userRepository;
   protected $contactRepository;
+  protected $orgRoleRepository;
 
   protected $attributes = [
       'name',
@@ -45,7 +46,11 @@ class OrgController extends Controller
       'website'
   ];
 
-  public function __construct(OrgRepository $orgRepository, UserRepository $userRepository, ContactRepository $contactRepository) {
+  public function __construct(
+    OrgRepository $orgRepository, 
+    UserRepository $userRepository, 
+    ContactRepository $contactRepository
+  ) {
 
   	$this->middleware('jwt.auth');
     $this->orgRepository = $orgRepository;
@@ -53,39 +58,50 @@ class OrgController extends Controller
     $this->contactRepository = $contactRepository;
   }
 
-  private function addOrg(\App\Models\Org $org) {
+    private function addOrg(\App\Models\Org $org) 
+    {
 
-    $currentOrgs = $this->getUserOrgs();
-    $newOrg = [
-      'id' => $org->id,
-      'name' => $org->name
-    ];
+      $currentOrgs = $this->getUserOrgs();
+      $newOrg = [
+        'id' => $org->id,
+        'name' => $org->name
+      ];
 
-    array_push($currentOrgs, $newOrg);
+      array_push($currentOrgs, $newOrg);
 
-    return $currentOrgs;
-  }
+      return $currentOrgs;
+    }
+
+    private function addACL(\App\Models\OrgRole $role)
+    {
+      $acl = [];
+
+      $acl[] = [
+        'name' => $role->name,
+        'permissions' => $role->permissions
+      ];
+      
+      return $acl;
+    }
 
     /**
      * @param Request $request
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
     public function index(Request $request)
-  {
-      //models per page
-      $perPage = $request->input('perPage', 30);
-      //current page
-      $page = $request->input('page', 1);
-      //contact type
-      $type = $request->input('type');
+    {
+        //models per page
+        $perPage = $request->input('perPage', 30);
+        //current page
+        $page = $request->input('page', 1);
 
-      $orgs = $this->orgRepository->all();
+        $orgs = $this->orgRepository->all();
 
-      return $this->paginate($orgs['data'], count($orgs['data']), $page, $perPage, [
-          'path' => $request->url(),
-          'query' => $request->query()
-      ]);
-  }
+        return $this->paginate($orgs['data'], count($orgs['data']), $page, $perPage, [
+            'path' => $request->url(),
+            'query' => $request->query()
+        ]);
+    }
 
     /**
      * Fetch Org
@@ -93,9 +109,9 @@ class OrgController extends Controller
      * @return mixed
      */
     public function one(string $id)
-  {
-      return $this->orgRepository->with(['industry'])->find($id);
-  }
+    {
+        return $this->orgRepository->with(['industry'])->find($id);
+    }
 
     /**
      * Create new Org
@@ -103,40 +119,50 @@ class OrgController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function create(CreateOrg $request)
-  {
-    // user
-    $user = $this->requestUser();
-    // create org
-    $org = $this->orgRepository->skipPresenter()->create($request->only($this->attributes));
-    // create update token
-    try {
-      $customTokenClaims['acl'] = $this->getUserRoles();
-      $customTokenClaims['orgs'] = $this->addOrg($org);
+    {
+      // user
+      $user = $this->requestUser();
+      // create org
+      $org = $this->orgRepository->skipPresenter()->create($request->only($this->attributes));
+      // create update token
+      try {
+        // get `adviser` role
+        $role = \App\Models\OrgRole::where('name', 'adviser')->first();
+        // create org invoice settings
+        $settings = new \App\Models\OrgInvoiceSetting();
+        $settings->org_id = $org->id;
+        $settings->save();
+        // custom jwt claims
+        $customTokenClaims['roles'] = $this->getUserRoles();
+        $customTokenClaims['orgs'] = $this->addOrg($org);
+        $customTokenClaims['acl'] = $this->addACL($role);
+        // create jwt
+        $token = JWTAuth::fromUser($user, $customTokenClaims);
 
-      $token = JWTAuth::fromUser($user, $customTokenClaims);
+        // associate user with org
+        $org->users()->attach($user->id);
+        // assoicate user with org role
+        $user->orgRoles()->attach($role->id, ['org_id' => $org->id]);
 
-      // associate user with org
-      $org->users()->attach($user->id);
+        //fire OrgCreated Event
+        event(new OrgCreated($org));
 
-      //fire OrgCreated Event
-      event(new OrgCreated($org));
-
-      return response()->json([
-        'status' => 'success',
-        'data' => [
-          'token' => $token,
-          'org' => $org,
-          'user' => $user
-        ]
-      ]);
-
-    } catch (JWTException $e) {
         return response()->json([
-          'status' => 'error',
-          'message' => 'Unable to create token'
-        ], 500);
+          'status' => 'success',
+          'data' => [
+            'token' => $token,
+            'org' => $org,
+            'user' => $user
+          ]
+        ]);
+
+      } catch (JWTException $e) {
+          return response()->json([
+            'status' => 'error',
+            'message' => 'Unable to create token'
+          ], 500);
+      }
     }
-  }
 
     /**
      * @param UpdateOrg $request

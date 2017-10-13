@@ -13,7 +13,7 @@ trait UserRequest
     public function userHasRole(string $name) {
     	
     	$payload = JWTAuth::parseToken()->getPayload();
-    	$roles = $payload->get('acl');
+    	$roles = $payload->get('roles');
 
     	foreach ($roles as $role) {
     		if($role['name'] == $name) return true;
@@ -41,7 +41,7 @@ trait UserRequest
     public function getUserRoles() {
 
         $payload = JWTAuth::parseToken()->getPayload();
-        return $payload->get('acl');
+        return $payload->get('roles');
     }
 
     public function getUserOrgs() {

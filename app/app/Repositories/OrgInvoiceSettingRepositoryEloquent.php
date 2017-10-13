@@ -4,6 +4,8 @@ namespace App\Repositories;
 
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
+use Prettus\Repository\Contracts\CacheableInterface;
+use Prettus\Repository\Traits\CacheableRepository;
 use App\Repositories\OrgInvoiceSettingRepository;
 use App\Models\OrgInvoiceSetting;
 use App\Presenters\OrgInvoiceSettingPresenter;
@@ -11,8 +13,9 @@ use App\Presenters\OrgInvoiceSettingPresenter;
  * Class OrgInvoiceSettingRepositoryEloquent
  * @package namespace App\Repositories;
  */
-class OrgInvoiceSettingRepositoryEloquent extends BaseRepository implements OrgInvoiceSettingRepository
+class OrgInvoiceSettingRepositoryEloquent extends BaseRepository implements OrgInvoiceSettingRepository, CacheableInterface
 {
+    use CacheableRepository;
     /**
      * Specify Model class name
      *
