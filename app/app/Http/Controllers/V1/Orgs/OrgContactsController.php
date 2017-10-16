@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\V1\Orgs;
 
 use App\Http\Controllers\Traits\Pageable;
+use Illuminate\Http\Request;
 use App\Http\Controllers\V1\Controller;
-use App\Http\Requests\V1\GetOrgContacts;
 use App\Http\Requests\V1\CreateContactGroup;
 use App\Models\ContactGroup;
 use App\Repositories\ContactPersonRepository;
@@ -47,20 +47,17 @@ class OrgContactsController extends Controller
      * @param string $id
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
-    public function contacts(GetOrgContacts $request, string $id)
+    public function contacts(Request $request, string $id)
     {
         //models per page
         $perPage = $request->input('perPage', 30);
         //current page
         $page = $request->input('page', 1);
         //contact type
-        $type = $request->input('type', 'customer');
+        $type = $request->get('type');
+        \Log::info('type', ['value' => $type]);
 
-        $contacts = $this->contactRepository->skipCache()->findWhere([
-            'org_id' => $id,
-            'type' => $type,
-            'deleted_at' => null
-        ]);
+        $contacts = $this->contactRepository->org($id, $type);
 
         return $this->paginate($contacts['data'], $perPage, []);
     }

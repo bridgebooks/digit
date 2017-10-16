@@ -10,8 +10,8 @@ trait UserRequest
     	return JWTAuth::parseToken()->authenticate();
     }
 
-    public function userHasRole(string $name) {
-    	
+    public function userHasRole(string $name) 
+    { 	
     	$payload = JWTAuth::parseToken()->getPayload();
     	$roles = $payload->get('roles');
 
@@ -21,8 +21,8 @@ trait UserRequest
     	}
     }
 
-    public function belongsToOrg(string $id) {
-
+    public function belongsToOrg(string $id) 
+    {
         $payload = JWTAuth::parseToken()->getPayload();
         $orgs = $payload->get('orgs');
 
@@ -32,20 +32,44 @@ trait UserRequest
         }
     }
 
-    public function isOwner(string $id) {
+    public function isOwner(string $id) 
+    {
 	     $user = JWTAuth::parseToken()->authenticate();
 
 	     return $user->id === $id;
     }
 
-    public function getUserRoles() {
+    public function can(string $role)
+    {
+        $payload = JWTAuth::parseToken()->getPayload();
+        $userACL = $payload->get('acl');
 
+        $allow = false;
+
+        $parsedRole = explode('.', $role);
+        $group = $parsedRole[0];
+        $action = isset($parsedRole[1]) ? $parsedRole[1] : null;
+
+        foreach($userACL as $accessLevel) {
+            if (count($parsedRole) > 0) {
+                $test = isset($accessLevel['permissions'][$group][$action]) ? $accessLevel['permissions'][$group][$action] : 0;
+                $allow = (bool) $test;
+            } else {
+                if (isset($accessLevel['persmissions'][$group]) && $accessLevel['persmissions'][$group] == 1) $allow = true;
+                $allow = false;
+            }
+        }
+        return $allow;
+    }
+
+    public function getUserRoles() 
+    {
         $payload = JWTAuth::parseToken()->getPayload();
         return $payload->get('roles');
     }
 
-    public function getUserOrgs() {
-        
+    public function getUserOrgs() 
+    {
         $payload = JWTAuth::parseToken()->getPayload();
         
         if (!$payload->get('orgs')) return [];

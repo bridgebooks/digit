@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\V1\Invoices;
 
+use Illuminate\Http\Request;
 use App\Jobs\GenerateInvoicePDF;
 use App\Jobs\SendInvoiceEmail;
-use Illuminate\Http\Request;
 use App\Traits\UserRequest;
 use App\Repositories\InvoiceRepository;
 use App\Http\Controllers\V1\Controller;
@@ -58,7 +58,7 @@ class InvoiceController extends Controller
 				'description' => $item['description'],
 				'quantity' => $item['quantity'],
 				'unit_price' => (float) $item['unit_price'],
-				'discount_rate' => (float) $item['discount'],
+				'discount_rate' => isset($item['discount_rate']) ? (float) $item['discount_rate'] : 0.00,
 				'account_id' => $item['account_id'],
 				'tax_rate_id' => $item['tax_rate_id'],
 				'amount' => $item['amount'],
@@ -114,22 +114,12 @@ class InvoiceController extends Controller
 
 		$this->authorize('update', $invoice);
 
-		$attrs = $request->only([
-			'contact_id', 
-			'due_at', 
-			'raised_at', 
-			'invoice_no', 
-			'reference', 
-			'line_amount_type',
-			'sub_total',
-			'tax_total',
-			'total'
-		]);
+		$attrs = $request->all();
 
 		$items = $request->get('items');
 
-		$this->repository->updateInvoiceItems($invoice, $items);
+		if($items) $this->repository->updateInvoiceItems($invoice, $items);
 
-		return $this->repository->update($attrs, $id);
+		return $this->repository->skipPresenter(false)->update($attrs, $id);
 	}
 }

@@ -21,12 +21,11 @@ class OrgRoleTransformer extends TransformerAbstract
     public function transform(OrgRole $model)
     {
         return [
-            'id'         => (int) $model->id,
-
-            /* place your other model properties here */
-
-            'created_at' => $model->created_at,
-            'updated_at' => $model->updated_at
+            'id' => $model->id,
+            'name' => $model->name,
+            'short_description' => $model->short_description,
+            'description' => $model->description,
+            'permissions' => $model->permissions
         ];
     }
 }

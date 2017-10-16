@@ -6,15 +6,15 @@ use League\Fractal\TransformerAbstract;
 use App\Models\User;
 
 /**
- * Class UserTransformer
+ * Class OrgUserTransformer
  * @package namespace App\Transformers;
  */
-class UserTransformer extends TransformerAbstract
+class OrgUserTransformer extends TransformerAbstract
 {
 
     /**
-     * Transform the \User entity
-     * @param \User $model
+     * Transform the \OrgUser entity
+     * @param \OrgUser $model
      *
      * @return array
      */
@@ -24,12 +24,12 @@ class UserTransformer extends TransformerAbstract
             'id' => $model->id,
             'first_name' => $model->first_name,
             'last_name' => $model->last_name,
-            'full_name' => $model->first_name. " ".$model->last_name,
             'email' => $model->email,
-            'phone' => $model->phone,
-            'is_verified' => (bool) $model->is_verified,
-            'created_at' => $model->created_at,
-            'updated_at' => $model->updated_at
+            'status' => $model->pivot->status,
+            'roles' => $model->roles,
+            'org_roles' => $model->orgRoles,
+            'created_at' => $model->created_at->getTimestamp() * 1000,
+            'updated_at' => $model->updated_at->getTimestamp() * 1000,
         ];
     }
 }

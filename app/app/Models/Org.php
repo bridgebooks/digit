@@ -44,7 +44,7 @@ class Org extends Model
 
     public function users()
     {
-      return $this->belongsToMany('App\Models\User', 'org_users');
+      return $this->belongsToMany('App\Models\User', 'org_users')->withPivot('status')->withTimestamps();
     }
 
     public function employees()
@@ -69,6 +69,6 @@ class Org extends Model
 
     public function invoiceSettings()
     {
-        return $this->hasOne('App\Models\OrgInvoiceSettings');
+        return $this->hasOne('App\Models\OrgInvoiceSetting');
     }
 }

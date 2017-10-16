@@ -5,7 +5,6 @@ namespace App\Transformers;
 use Carbon\Carbon;
 use League\Fractal\TransformerAbstract;
 use App\Models\Invoice;
-use App\Models\Contact;
 
 /**
  * Class InvoiceTransformer
@@ -13,7 +12,7 @@ use App\Models\Contact;
  */
 class InvoiceTransformer extends TransformerAbstract
 {
-    protected $availableIncludes = ['contact', 'items', 'org'];
+    protected $availableIncludes = ['contact', 'items', 'org', 'user'];
 
     //protected $defaultIncludes = ['contact'];
 
@@ -29,6 +28,13 @@ class InvoiceTransformer extends TransformerAbstract
         $contact = $invoice->contact;
 
         return $this->item($contact, new ContactTransformer);
+    }
+
+    public function includeUser(Invoice $invoice)
+    {
+        $user = $invoice->user;
+
+        return $this->item($user, new UserTransformer);
     }
 
     public function includeItems(Invoice $invoice)

@@ -32,10 +32,6 @@ class GenerateInvoicePDF implements ShouldQueue
     {
         $settings = $this->invoice->org->invoiceSettings;
 
-        if($settings) return $settings;
-
-        $setttings = OrgInvoiceSettings::firstOrCreate(['org_id', $invoice->org_id]);
-
         return $settings;
     }
 
@@ -51,7 +47,7 @@ class GenerateInvoicePDF implements ShouldQueue
         
         $name = $invoice->invoice_no.'_'. time(). '.pdf';
         // Set PDF options
-        PDF::setOptions(['defaultPaperSize' => $setttings->paper_size ]);
+        PDF::setOptions(['defaultPaperSize' => $settings->paper_size ]);
         $pdf = PDF::loadView('invoices.standard', compact('invoice'));
 
         Storage::disk('azure')->put($name, $pdf->output());

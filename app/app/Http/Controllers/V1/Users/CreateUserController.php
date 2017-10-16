@@ -40,6 +40,38 @@ class CreateUserController extends Controller
       return $roles;
     }
 
+    private function getUserACL(\App\Models\User $user)
+    {
+      $roles = [];
+
+      $userRoles = $user->orgRoles;
+
+      foreach ($userRoles as $role) {
+        $roles[] = [
+          'name' => $role->name,
+          'permissions' => $role->permissions
+        ];
+      }
+
+      return $roles;
+    }
+
+    private function getUserOrgs(\App\Models\User $user)
+    {
+      $orgs = [];
+
+      $userOrgs = $user->orgs;
+
+      foreach ($userOrgs as $org) {
+        $orgs[] = [
+          'id' => $org->id,
+          'name' => $org->name
+        ];
+      }
+
+      return $orgs;
+    }
+
     /**
      * Create User Account
      * @param $request App\Http\Requests\V1\CreateUser
@@ -89,14 +121,25 @@ class CreateUserController extends Controller
     {
       $password = $request->password;
       $token = $request->token;
+      $invited = $request->get('invited', false);
+      $org_id = $request->get('org', false);
 
       try {
         $user = $this->userRepository->skipPresenter(true)->validateUser($id, $password, $token);
         $validatedUser = $this->userRepository->skipPresenter(false)->find($id);
         // login user
         try {
+          if ($invited && $org_id) {
+            $user->orgs()
+              ->newPivotStatementForId($org_id)
+              ->update(['status' => 'active']);
+          }
           
-          $customTokenClaims = ['roles' => $this->getUserRoles($user)];
+          $customTokenClaims = [
+            'roles' => $this->getUserRoles($user), 
+            'acl' => $this->getUserACL($user),
+            'orgs' => $this->getUserOrgs($user)
+          ];
           $token = JWTAuth::fromUser($user, $customTokenClaims);
 
           return response()->json([

@@ -5,6 +5,7 @@ namespace App\Repositories;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use App\Repositories\OrgRoleRepository;
+use App\Presenters\OrgRolePresenter;
 use App\Models\OrgRole;
 
 /**
@@ -23,7 +24,15 @@ class OrgRoleRepositoryEloquent extends BaseRepository implements OrgRoleReposit
         return OrgRole::class;
     }
 
-    
+    /**
+     * Specify Presenter class name
+     *
+     * @return string
+     */
+    public function presenter()
+    {
+        return OrgRolePresenter::class;
+    }
 
     /**
      * Boot up the repository, pushing criteria

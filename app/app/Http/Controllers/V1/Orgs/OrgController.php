@@ -140,7 +140,7 @@ class OrgController extends Controller
         $token = JWTAuth::fromUser($user, $customTokenClaims);
 
         // associate user with org
-        $org->users()->attach($user->id);
+        $org->users()->attach($user->id, ['status' => 'active']);
         // assoicate user with org role
         $user->orgRoles()->attach($role->id, ['org_id' => $org->id]);
 

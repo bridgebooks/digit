@@ -39,4 +39,17 @@ class OrgRepositoryEloquent extends BaseRepository implements OrgRepository, Cac
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
+
+    public function orgUsers(string $id)
+    {
+        $this->applyCriteria();
+        $this->applyScope();
+
+        $results = $this->model->find($id)->users()->with(['roles', 'orgRoles'])->get();
+
+        $this->resetModel();
+        $this->resetScope();
+
+        return $this->parserResult($results);
+    }
 }

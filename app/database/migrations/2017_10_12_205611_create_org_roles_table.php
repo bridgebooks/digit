@@ -16,6 +16,7 @@ class CreateOrgRolesTable extends Migration
 		Schema::create('org_roles', function(Blueprint $table) {
             $table->uuid('id');
             $table->string('name');
+            $table->string('short_description', 255)->nullable();
             $table->text('description')->nullable();
             $table->json('permissions');
             $table->primary('id');

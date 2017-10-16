@@ -20,7 +20,7 @@ class OrgRole extends Model
 
 
     protected $fillable = [
-        'org_id', 'name', 'description', 'permissions'
+        'org_id', 'name', 'short_description', 'description', 'permissions'
     ];
 
     public function org()

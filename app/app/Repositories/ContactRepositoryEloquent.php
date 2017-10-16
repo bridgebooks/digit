@@ -44,6 +44,23 @@ class ContactRepositoryEloquent extends BaseRepository implements ContactReposit
         $this->pushCriteria(app(RequestCriteria::class));
     }
 
+    public function org(string $id, string $type = null)
+    {
+        $this->applyCriteria();
+        $this->applyScope();
+
+        if (!is_null($type)) {
+            $results = $this->model->with(['group'])->where('org_id', $id)->where('type', $type)->get();
+        } else {
+            $results = $this->model->with(['group'])->where('org_id', $id)->get();
+        }
+
+        $this->resetModel();
+        $this->resetScope();
+
+        return $this->parserResult($results);
+    }
+
 
     public function search(string $query, string $id = null)
     {

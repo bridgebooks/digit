@@ -133,8 +133,11 @@
       </div>
 
       <hr>
-
-      <div></div>
+      @if((bool)$invoice->org->invoiceSettings->show_payment_advice)
+      <div>
+        <p>{{ $invoice->org->invoiceSettings->payment_advice }}</p>
+      </div>
+      @endif
     </div>
 </body>
 </html>

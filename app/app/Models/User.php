@@ -34,7 +34,15 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'verification_token'
+        'card_brand', 
+        'card_exp_month', 
+        'card_last_four', 
+        'card_exp_year', 
+        'paystack_customer_code', 
+        'password', 
+        'remember_token', 
+        'verification_token',
+        'authorization_code'
     ];
 
     public function subscriptions()
@@ -54,7 +62,7 @@ class User extends Authenticatable
 
     public function orgs()
     {
-      return $this->belongsToMany('App\Models\Org', 'org_users');
+      return $this->belongsToMany('App\Models\Org', 'org_users')->withPivot('status')->withTimestamps();
     }
 
     public function getVerificationToken()

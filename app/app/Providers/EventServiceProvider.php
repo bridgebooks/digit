@@ -19,6 +19,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\OrgCreated' => [
             'App\Listeners\OrgCreatedListener'
         ],
+        'App\Events\UserInvited' => [
+            'App\Listeners\UserInvitedListener'
+        ],
         'App\Events\SendInvoice' => [
             'App\Listeners\SendInvoiceListener'
         ],

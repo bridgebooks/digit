@@ -51,11 +51,10 @@ class OrgInvoiceController extends Controller
         $perPage = $request->input('perPage', 30);
         // current page
         $page = $request->input('page', 1);
+        // status
+        $status = $request->input('status');
 
-        $items = $this->repository->with(['contact'])->findWhere([
-            'org_id' => $id,
-            'type' => 'acc_rec'
-        ]);
+        $items = $this->repository->with(['contact'])->org($id, 'acc_rec', $status);
 
         return $this->paginate($items['data'], $perPage, []);
 	}
@@ -66,11 +65,10 @@ class OrgInvoiceController extends Controller
         $perPage = $request->input('perPage', 30);
         // current page
         $page = $request->input('page', 1);
+        // status
+        $status = $request->input('status');
 
-        $items = $this->repository->with(['contact'])->findWhere([
-            'org_id' => $id,
-            'type' => 'acc_pay'
-        ]);
+        $items = $this->repository->with(['contact'])->org($id, 'acc_pay', $status);
 
         return $this->paginate($items['data'], $perPage, []);
 	}
