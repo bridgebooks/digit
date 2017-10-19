@@ -18,7 +18,7 @@ class CreateOrgRolesTable extends Migration
             $table->string('name');
             $table->string('short_description', 255)->nullable();
             $table->text('description')->nullable();
-            $table->json('permissions');
+            $table->text('permissions');
             $table->primary('id');
             $table->timestamps();
 		});
