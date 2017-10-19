@@ -65,6 +65,10 @@ class User extends Authenticatable
       return $this->belongsToMany('App\Models\Org', 'org_users')->withPivot('status')->withTimestamps();
     }
 
+    /**
+    * Get user verification token
+    * @return string
+    */
     public function getVerificationToken()
     {
         return $this->verification_token;

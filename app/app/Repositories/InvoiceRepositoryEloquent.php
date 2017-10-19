@@ -64,12 +64,12 @@ class InvoiceRepositoryEloquent extends BaseRepository implements InvoiceReposit
         return $this->parserResult($results->get());
     }
 
-    public function user($id, string $type = null, string $status = 'all')
+    public function user(string $id, string $org_id, string $type = null, string $status = 'all')
     {
         $this->applyCriteria();
         $this->applyScope();
 
-        $results = $this->model->where('user_id', $id);
+        $results = $this->model->where('user_id', $id)->where('org_id', $org_id);
 
         if (!is_null($type)) $results->where('type', $type);
         if ($status !== 'all') $results->where('status', $status);

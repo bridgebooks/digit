@@ -31,7 +31,7 @@ class ContactPolicy
      */
     public function create(User $user)
     {
-        //
+        return $this->can('contacts.create');
     }
 
     /**

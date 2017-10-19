@@ -51,6 +51,8 @@ class ContactController extends Controller
      */
     public function create(CreateContact $request)
     {
+        $this->authorize('create', \App\Models\Contact::class);
+
         $attributes = $request->only($this->attributes);
 
         $attributes['user_id'] = $this->requestUser()->id;

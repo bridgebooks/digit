@@ -54,7 +54,10 @@ class OrgInvoiceController extends Controller
         // status
         $status = $request->input('status');
 
-        $items = $this->repository->with(['contact'])->org($id, 'acc_rec', $status);
+        if ($this->can('invoices.org_view'))
+        	$items = $this->repository->with(['contact'])->org($id, 'acc_rec', $status);
+        else
+        	$items = $this->repository->with(['contact'])->user($this->requestUser()->id, $id,'acc_rec', $status);
 
         return $this->paginate($items['data'], $perPage, []);
 	}
