@@ -52,7 +52,7 @@ class OrgInvoiceController extends Controller
         // current page
         $page = $request->input('page', 1);
         // status
-        $status = $request->input('status');
+        $status = $request->input('status', 'all');
 
         if ($this->can('invoices.org_view'))
         	$items = $this->repository->with(['contact'])->org($id, 'acc_rec', $status);
@@ -69,7 +69,7 @@ class OrgInvoiceController extends Controller
         // current page
         $page = $request->input('page', 1);
         // status
-        $status = $request->input('status');
+        $status = $request->input('status', 'all');
 
         $items = $this->repository->with(['contact'])->org($id, 'acc_pay', $status);
 
