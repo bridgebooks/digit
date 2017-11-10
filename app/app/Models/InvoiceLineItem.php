@@ -30,7 +30,7 @@ class InvoiceLineItem extends Model
         'account_id',
         'tax_rate_id',
         'description',
-        'discount',
+        'discount_rate',
         'amount',
         'quantity'
     ];

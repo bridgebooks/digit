@@ -46,5 +46,8 @@ class SendInvoiceEmail implements ShouldQueue
             Mail::to($to)
                 ->send($mail);
         }
+
+        // delete job from queue
+        $this->delete();
     }
 }

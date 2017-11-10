@@ -208,6 +208,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\ModelServiceProvider::class,
+        App\Providers\MoneywaveProvider::class,
 
         JeroenG\Packager\PackagerServiceProvider::class,
         Mrfoh\Mulla\MullaServiceProvider::class,

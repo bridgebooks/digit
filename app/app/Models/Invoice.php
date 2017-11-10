@@ -36,6 +36,7 @@ class Invoice extends Model
       'line_amount_type',
       'currency_id',
       'status',
+      'notes',
       'pdf_url'
     ];
 

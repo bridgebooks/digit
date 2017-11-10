@@ -55,7 +55,6 @@ class OrgContactsController extends Controller
         $page = $request->input('page', 1);
         //contact type
         $type = $request->get('type');
-        \Log::info('type', ['value' => $type]);
 
         $contacts = $this->contactRepository->org($id, $type);
 

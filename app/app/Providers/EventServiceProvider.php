@@ -22,8 +22,20 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\UserInvited' => [
             'App\Listeners\UserInvitedListener'
         ],
+        'App\Events\InvoiceNoContactError' => [
+            'App\Listeners\InvoiceNoContactErrorListener'
+        ],
         'App\Events\SendInvoice' => [
             'App\Listeners\SendInvoiceListener'
+        ],
+        'App\Events\InvoiceSubmitted' => [
+            'App\Listeners\InvoiceSubmittedListener'
+        ],
+        'App\Events\InvoiceCardPaymentInit' => [
+            'App\Listeners\InvoiceCardPaymentInitListener'
+        ],
+        'App\Events\InvoiceCardPaymentVerify' => [
+            'App\Listeners\InvoiceCardPaymentVerifyListener'
         ],
     ];
 

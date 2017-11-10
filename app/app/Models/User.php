@@ -28,6 +28,8 @@ class User extends Authenticatable
         'first_name', 'last_name', 'email', 'phone', 'password',
     ];
 
+    protected $dates = ['trial_ends_at'];
+
     /**
      * The attributes that should be hidden for arrays.
      *

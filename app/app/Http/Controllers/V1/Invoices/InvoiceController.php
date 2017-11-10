@@ -41,6 +41,7 @@ class InvoiceController extends Controller
 			'tax_total',
 			'total',
 			'status',
+			'notes'
 		]);
 
 		$attrs['user_id'] = $this->requestUser()->id;
@@ -58,7 +59,7 @@ class InvoiceController extends Controller
 				'description' => $item['description'],
 				'quantity' => $item['quantity'],
 				'unit_price' => (float) $item['unit_price'],
-				'discount_rate' => isset($item['discount_rate']) ? (float) $item['discount_rate'] : 0.00,
+				'discount_rate' => (float) $item['discount_rate'],
 				'account_id' => $item['account_id'],
 				'tax_rate_id' => $item['tax_rate_id'],
 				'amount' => $item['amount'],

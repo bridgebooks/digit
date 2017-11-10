@@ -14,7 +14,7 @@ trait Billable
     protected $paystackCustomers = null;
 
     private function getPaystackCustomersInstance() {
-        if(is_null($this->paystackCustomers)) {
+        if (is_null($this->paystackCustomers)) {
             $this->paystackCustomers = new Customers();
         }
 
@@ -23,7 +23,7 @@ trait Billable
 
     public function hasCardOnFile()
     {
-        return (bool) $this->card_brand;
+        return ! is_null($this->card_brand);
     }
     
     public function hasPaystackCustomerCode()
@@ -38,11 +38,11 @@ trait Billable
         try {
             $customerData['email'] = $this->email;
 
-            if(!empty($metaData)) $customerData['metadata'] = $metaData;
-            if($this->first_name) $customerData['first_name'] = $this->first_name;
-            if($this->last_name) $customerData['first_name'] = $this->last_name;
-            if($this->phone) $customerData['phone'] = $this->phone;
-            if($this->email) $customerData['email'] = $this->email;
+            if (!empty($metaData)) $customerData['metadata'] = $metaData;
+            if ($this->first_name) $customerData['first_name'] = $this->first_name;
+            if ($this->last_name) $customerData['first_name'] = $this->last_name;
+            if ($this->phone) $customerData['phone'] = $this->phone;
+            if ($this->email) $customerData['email'] = $this->email;
 
             $customer = $this->getPaystackCustomersInstance()->create($customerData);
 
@@ -50,10 +50,10 @@ trait Billable
 
             $this->save();
         } 
-        catch(EmptyDataException $e) {
+        catch (EmptyDataException $e) {
             return false;
         }
-        catch(InvalidFieldException $e) {
+        catch (InvalidFieldException $e) {
             return false;
         }
     }

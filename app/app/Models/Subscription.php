@@ -24,8 +24,7 @@ class Subscription extends Model
      * @var array
      */
     protected $dates = [
-        'trial_ends_at', 'ends_at',
-        'created_at', 'updated_at',
+        'trial_ends_at', 'ends_at'
     ];
 
     public function owner()

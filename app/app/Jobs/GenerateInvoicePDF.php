@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use PDF;
 use Storage;
-use CloudinaryImage as Cloudinary;
 use App\Models\Invoice;
 use App\Models\OrgInvoiceSettings;
 use Illuminate\Bus\Queueable;
@@ -45,7 +44,7 @@ class GenerateInvoicePDF implements ShouldQueue
         $invoice = $this->invoice;
         $settings = $this->getInvoiceSettings($this->invoice);
         
-        $name = $invoice->invoice_no.'_'. time(). '.pdf';
+        $name = $invoice->invoice_no.'_'. $invoice->created_at->getTimestamp(). '.pdf';
         // Set PDF options
         PDF::setOptions(['defaultPaperSize' => $settings->paper_size ]);
         $pdf = PDF::loadView('invoices.standard', compact('invoice'));
@@ -55,5 +54,8 @@ class GenerateInvoicePDF implements ShouldQueue
 
         $invoice->pdf_url = $url;
         $invoice->save();
+
+        // delete job from queue
+        $this->delete();
     }
 }

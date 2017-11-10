@@ -18,6 +18,7 @@ class ModelServiceProvider extends ServiceProvider
     {
         // Model Observers
         User::observe(\App\Models\Observers\UserObserver::class);
+        Invoice::observe(\App\Models\Observers\InvoiceObserver::class);
     }
 
     /**

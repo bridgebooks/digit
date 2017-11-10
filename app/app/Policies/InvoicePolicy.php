@@ -45,7 +45,6 @@ class InvoicePolicy
     {
         $isOrgAdmin = $this->userHasRole('org_admin');
         $isOrgMember = $this->userHasRole('org_member');
-        \Log::info('invoice', $invoice->toArray());
         return $isOrgAdmin || $isOrgMember;
     }
 

@@ -27,8 +27,6 @@ trait Pageable
 
         $currrentPageData = $collection->forPage($currentPage, $perPage)->values();
 
-        \Log::info('collection', [$currentPage]);
-
         return new LengthAwarePaginator($currrentPageData, $collection->count(), $perPage, $currentPage);
     }
 }
