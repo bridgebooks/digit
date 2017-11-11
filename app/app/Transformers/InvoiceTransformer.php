@@ -77,7 +77,7 @@ class InvoiceTransformer extends TransformerAbstract
             'total' => (float) $model->total,
             'raised_at' => $model->raised_at->getTimestamp() * 1000,
             'due_at' => $model->due_at->getTimestamp() * 1000,
-            'overdue' => $model->status !== 'paid' || $model->status !== 'voided' ? $this->getOverduePeriod($model->due_at) : 0,
+            'overdue' => in_array($model->status, ['paid', 'voided']) ? 0 : $this->getOverduePeriod($model->due_at),
             'pdf_url' => $model->pdf_url,
             'created_at' =>$model->created_at->getTimestamp() * 1000,
             'updated_at' => $model->updated_at->getTimestamp() * 1000

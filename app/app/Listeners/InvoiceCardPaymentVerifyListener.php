@@ -28,13 +28,29 @@ class InvoiceCardPaymentVerifyListener
      */
     public function handle(InvoiceCardPaymentVerify $event)
     {
-        // Update invoice payment
-        $payment = $this->paymentRepository->skipPresenter()->findWhere(['invoice_id' => $event->invoice->id])->first();
-        $payment->status = 'verified';
-        $payment->save();
+        // convert response to object
+        $requestResponse = json_encode($event->response->getData());
+        $response = json_decode($requestResponse);
 
-        // update invoice to paid
-        $invoice->status = 'paid';
-        $invoice->save();
+        // Update invoice payment
+        $payment = $this->paymentRepository->skipPresenter()
+            ->findWhere([
+                'invoice_id' => $event->invoice->id, 
+                'processor_transaction_ref' => $event->params['transaction_ref']
+            ])
+            ->first();
+
+        if ($payment && in_array($response->flutterChargeResponseCode, ['0', '00', 'RR-00'])) {
+            // update payment
+            $payment->status = 'verified';
+            $payment->save();
+            // update invoice
+            $event->invoice->status = 'paid';
+            $event->invoice->save();
+        } else {
+            // update payment;
+            $payment->status = 'failed';
+            $payment->save();
+        }
     }
 }

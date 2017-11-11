@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-use App\Repositories\InvoicePaymentRepository;
 use App\Models\Invoice;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
@@ -12,7 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class InvoiceCardPaymentVerify
+class InvoiceCardPaymentVerifyFail
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 

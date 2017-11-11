@@ -37,6 +37,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\InvoiceCardPaymentVerify' => [
             'App\Listeners\InvoiceCardPaymentVerifyListener'
         ],
+        'App\Events\InvoiceCardPaymentVerifyFail' => [
+            'App\Listeners\InvoiceCardPaymentVerifyFailListener'
+        ]
     ];
 
     /**

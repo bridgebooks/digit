@@ -8,6 +8,7 @@ use App\Models\Bank;
 
 use App\Events\InvoiceCardPaymentInit;
 use App\Events\InvoiceCardPaymentVerify;
+use App\Events\InvoiceCardPaymentVerifyFail;
 
 use Emmanix2002\Moneywave\Moneywave;
 use Emmanix2002\Moneywave\Enum\PaymentMedium;
@@ -131,10 +132,12 @@ class InvoicePaymentController extends Controller
 		$requestResponse = $this->initCardToAccountValidation($params);
 
 		if (empty($requestResponse->getMessage())) {
-			event(new InvoiceCardPaymentVerify($invoice, $requestResponse));
+			event(new InvoiceCardPaymentVerify($invoice, $params, $requestResponse));
 
 			return response()->json($requestResponse->getData());
 		}
+
+		event(new InvoiceCardPaymentVerifyFail($invoice, $params, $requestResponse));
 
 		return response()->json([
 			'status' => 'error',
