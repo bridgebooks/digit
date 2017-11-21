@@ -6,10 +6,11 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Traits\Uuids;
+use Laravel\Scout\Searchable;
 
 class Employee extends Model
 {
-    use SoftDeletes, Uuids;
+    use SoftDeletes, Uuids, Searchable;
     /**
      * Indicates if the IDs are auto-incrementing.
      *
@@ -19,9 +20,20 @@ class Employee extends Model
 
     protected $guarded = [];
 
-    protected $dates = ['deleted_at'];
+    protected $dates = ['deleted_at', 'date_of_birth', 'start_date', 'termination_date'];
 
-    public function org() {
-      return $this->belongsTo('App\Models\Org');
+    public function org()
+    {
+        return $this->belongsTo('App\Models\Org');
+    }
+
+    public function bank()
+    {
+        return $this->belongsTo('App\Models\Bank');
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo('App\Models\User');
     }
 }
