@@ -105,6 +105,54 @@ class OrgUserRoleTableSeeder extends Seeder
 				]
 			]
 		],
+        [
+            'name' => 'payroll admin',
+            'short_description' => 'Payroll administration and employee management',
+            'description' => 'The payroll admin user role is limited, and suitable for someone who needs to only access employee records and manage payroll.',
+            'permissions' => [
+                'invoices' => [
+                    'draft' => 0,
+                    'authorize' => 0,
+                    'void' => 0,
+                    'send' => 0,
+                    'edit' => 0,
+                    'view' => 0,
+                    'delete' => 0,
+                    'pdf' => 0,
+                    'org_view' => 0,
+                    'org_edit' => 0
+                ],
+                'contacts' => [
+                    'view' => 0,
+                    'create' => 0,
+                    'edit' => 0,
+                    'delete' => 0,
+                    'org_view' => 0,
+                    'org_edit' => 0
+                ],
+                'settings' => [
+                    'users' => 0,
+                    'tax_rates' => 0,
+                    'accounts' => 0,
+                    'bank_accounts' => 0,
+                    'invoices' => 0
+                ],
+                'employees' => [
+                    'create' => 1,
+                    'view' => 1,
+                    'edit' => 1,
+                    'delete' => 1
+                ],
+                'reports' => 0,
+                'payroll' => 1,
+                'items' => [
+                    'create' => 0,
+                    'view' => 0,
+                    'edit' => 0,
+                    'delete' => 0
+                ]
+            ]
+        ],
 		[
 			'name' => 'read only',
 			'short_description' => 'Read only access to organization information',

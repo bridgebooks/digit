@@ -20,7 +20,7 @@ class EmployeeTransformer extends TransformerAbstract
     private function getAge(string $dob)
     {
         if (is_null($dob)) {
-            return NULL;
+            return null;
         }
 
         $now = new Carbon();
@@ -43,9 +43,10 @@ class EmployeeTransformer extends TransformerAbstract
             'user_id' => $model->user_id,
             'first_name' => $model->first_name,
             'last_name' => $model->last_name,
+            'full_name' => $model->first_name.' '.$model->last_name,
             'gender' => $model->gender,
-            'date_of_birth' => $model->date_of_birth->getTimestamp() * 1000,
-            'age' => $this->getAge($model->date_of_birth),
+            'date_of_birth' => $model->date_of_birth,
+            'age' => $model->date_of_birth ? $this->getAge($model->date_of_birth) : null,
             'role' => $model->role,
             'email' => $model->email,
             'phone' => $model->phone,
@@ -55,11 +56,15 @@ class EmployeeTransformer extends TransformerAbstract
             'state_region' => $model->state_region,
             'postal_zip' => $model->postal_zip,
             'country' => $model->country,
-            'start_date' => $model->start_date->getTimestamp() * 1000,
-            'termination_date' => $model->status == 'terminated' ? $model->termination_date->getTimestamp() * 1000 : NULL,
+            'start_date' => $model->start_date,
+            'termination_date' => $model->status == 'terminated' ? $model->termination_date : null,
             'status' => $model->status,
+            'bank_id' => $model->bank_id,
+            'bank_account_name' => $model->bank_account_name,
+            'bank_account_no' => $model->bank_account_no,
+            'is_archived' => ($model->deleted_at) ? true : false,
             'created_at' => $model->created_at->getTimestamp() * 1000,
-            'updated_at' => $model->updated_at
+            'updated_at' => $model->updated_at->getTimestamp() * 1000,
         ];
     }
 }

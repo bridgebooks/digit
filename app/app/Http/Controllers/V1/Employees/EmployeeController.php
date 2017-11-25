@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\V1\Employees;
 
 use App\Http\Controllers\V1\Controller;
+use App\Http\Requests\V1\BulkDeleteEmployees;
+use App\Http\Requests\V1\BulkEmployeeAction;
 use App\Http\Requests\V1\CreateEmployee;
 use App\Http\Requests\V1\UpdateEmployee;
 use App\Repositories\EmployeeRepository;
@@ -25,6 +27,7 @@ class EmployeeController extends Controller
         $this->middleware('acl:employees.create')->only(['create']);
         $this->middleware('acl:employees.edit')->only(['update']);
         $this->middleware('acl:employees.delete')->only(['delete']);
+        $this->middleware('acl:payroll')->only(['bulkDelete', 'bulkArchive', 'bulkRestore', 'bulkTerminate']);
 
         $this->repository = $repository;
     }
@@ -48,12 +51,10 @@ class EmployeeController extends Controller
      */
     public function read(string $id)
     {
-        $this->repository->skipPresenter();
-        $employee = $this->repository->find($id);
+        $employee = \App\Models\Employee::find($id);
 
         $this->authorize('view', $employee);
 
-        $this->repository->skipPresenter(false);
         return $this->repository->find($id);
     }
 
@@ -66,11 +67,11 @@ class EmployeeController extends Controller
     {
         $attrs = $request->all();
 
-        $employee = $this->repository->skipPresenter()->find($id);
+        $employee = \App\Models\Employee::find($id);
 
         $this->authorize('update', $employee);
 
-        return $this->repository->skipPresenter(false)->update($attrs, $id);
+        return $this->repository->update($attrs, $id);
     }
 
     /**
@@ -79,16 +80,79 @@ class EmployeeController extends Controller
      */
     public function delete(string $id)
     {
-        $this->repository->skipPresenter();
-        $employee = $this->repository->find($id);
+        $employee = \App\Models\Employee::find($id);
 
         $this->authorize('delete', $employee);
 
-        $this->repository->delete($id);
+        $employee->forceDelete();
 
         return response()->json([
             'status' => 'success',
             'message' => 'Employee archived successfully'
+        ]);
+    }
+
+    /**
+     * @param BulkEmployeeAction $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function bulkDelete(BulkEmployeeAction $request)
+    {
+        $ids = $request->get('employees');
+
+        $this->repository->deleteMany($ids);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Models successfully deleted'
+        ]);
+    }
+
+    /**
+     * @param BulkEmployeeAction $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function bulkArchive(BulkEmployeeAction $request)
+    {
+        $ids = $request->get('employees');
+
+        $this->repository->archiveMany($ids);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Models successfully deleted'
+        ]);
+    }
+
+    /**
+     * @param BulkEmployeeAction $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function bulkRestore(BulkEmployeeAction $request)
+    {
+        $ids = $request->get('employees');
+
+        $this->repository->restoreMany($ids);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Models successfully restored'
+        ]);
+    }
+
+    /**
+     * @param BulkEmployeeAction $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function bulkTerminate(BulkEmployeeAction $request)
+    {
+        $ids = $request->get('employees');
+
+        $this->repository->terminateMany($ids);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Models successfully restored'
         ]);
     }
 }

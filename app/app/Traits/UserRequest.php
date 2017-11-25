@@ -51,14 +51,16 @@ trait UserRequest
         $action = isset($parsedRole[1]) ? $parsedRole[1] : null;
 
         foreach($userACL as $accessLevel) {
-            if (count($parsedRole) > 0) {
+            if ($group && $action) {
                 $test = isset($accessLevel['permissions'][$group][$action]) ? $accessLevel['permissions'][$group][$action] : 0;
                 $allow = (bool) $test;
             } else {
-                if (isset($accessLevel['persmissions'][$group]) && $accessLevel['persmissions'][$group] == 1) $allow = true;
-                $allow = false;
+                $allow = isset($accessLevel['permissions'][$group]) && $accessLevel['permissions'][$group] == 1
+                    ? true
+                    : false;
             }
         }
+
         return $allow;
     }
 

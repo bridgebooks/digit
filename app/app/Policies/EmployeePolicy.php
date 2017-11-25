@@ -30,4 +30,9 @@ class EmployeePolicy
     {
         return $this->belongsToOrg($employee->org_id);
     }
+
+    public function delete(User $user, Employee $employee)
+    {
+        return $this->belongsToOrg($employee->org_id) || $this->isOwner($employee->user_id);
+    }
 }

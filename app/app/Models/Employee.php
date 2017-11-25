@@ -20,7 +20,7 @@ class Employee extends Model
 
     protected $guarded = [];
 
-    protected $dates = ['deleted_at', 'date_of_birth', 'start_date', 'termination_date'];
+    protected $dates = ['deleted_at'];
 
     public function org()
     {

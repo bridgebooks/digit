@@ -32,7 +32,7 @@ class OrgEmployeeController extends Controller
         //models per page
         $perPage = $request->input('perPage', 30);
         //employee status
-        $status = $request->get('type', 'all');
+        $status = $request->get('status', 'all');
 
         $employees = $this->repository->org($id, $status);
 

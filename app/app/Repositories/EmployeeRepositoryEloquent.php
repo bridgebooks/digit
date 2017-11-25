@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use Carbon\Carbon;
+use App\Models\Enums\EmployeeStatus;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Contracts\CacheableInterface;
@@ -54,11 +56,12 @@ class EmployeeRepositoryEloquent extends BaseRepository implements EmployeeRepos
         $this->applyCriteria();
         $this->applyScope();
 
-        if (!is_null($status)) {
-            $results = $this->model->with(['bank'])->where('org_id', $id)->where('status', $status)->get();
-        } else {
-            $results = $this->model->with(['bank'])->where('org_id', $id)->get();
-        }
+        if ($status == 'all')
+            $results = $this->model->where('org_id', $id)->get();
+        elseif ($status == 'archived')
+            $results = $this->model->onlyTrashed()->where('org_id', $id)->get();
+        else
+            $results = $this->model->where('org_id', $id)->where('status', $status)->get();
 
         $this->resetModel();
         $this->resetScope();
@@ -67,12 +70,61 @@ class EmployeeRepositoryEloquent extends BaseRepository implements EmployeeRepos
     }
 
     /**
+     * @param string $query
+     * @param string|null $id
+     * @return mixed
+     */
+    public function search(string $query, string $id = null)
+    {
+        if ($id) return Employee::search($query)->where('org_id', $id)->paginate(20);
+
+        return Employee::search($query)->paginate(20);
+    }
+
+    /**
+     * @param array $ids
+     * @return bool
+     */
+    public function archiveMany(array $ids) {
+
+        $this->model->whereIn('id', $ids)->delete();
+
+        return true;
+    }
+
+    /**
      * @param array $ids
      * @return bool
      */
     public function deleteMany(array $ids) {
 
-        $models = $this->model->whereIn('id', $ids)->delete();
+        $this->model->whereIn('id', $ids)->forceDelete();
+
+        return true;
+    }
+
+    /**
+     * @param array $ids
+     * @return bool
+     */
+    public function restoreMany(array $ids) {
+
+        $models = $this->model->onlyTrashed()->whereIn('id', $ids)->restore();
+
+        return true;
+    }
+
+    /**
+     * @param array $ids
+     * @return bool
+     */
+    public function terminateMany(array $ids) {
+
+        $this->model->whereIn('id', $ids)
+            ->update([
+                'termination_date' => Carbon::now()->toDateString(),
+                'status' => EmployeeStatus::TERMINATED
+            ]);
 
         return true;
     }
