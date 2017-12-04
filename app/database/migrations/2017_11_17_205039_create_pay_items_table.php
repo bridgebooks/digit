@@ -22,7 +22,7 @@ class CreatePayItemsTable extends Migration
             $table->text('description')->nullable();
             $table->string('pay_item_type');
             $table->uuid('account_id');
-            $table->boolean('mark_default')->default(0);
+            $table->boolean('default')->default(0);
             $table->timestamps();
 		});
 	}

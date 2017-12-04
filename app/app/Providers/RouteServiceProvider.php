@@ -32,6 +32,8 @@ class RouteServiceProvider extends ServiceProvider
         'Banks', 
         'Contacts', 
         'Employees',
+        'Payruns',
+        'Payitems',
         'Search',
         'Items', 
         'Invoices',
