@@ -49,6 +49,19 @@ class PayItemRepositoryEloquent extends BaseRepository implements PayItemReposit
         return $this->parserResult($results);
     }
 
+    public function getOrgDefault(string $id)
+    {
+        $this->applyCriteria();
+        $this->applyScope();
+
+        $results = $this->model->where('org_id', $id)->where('mark_default', 1)->get();
+
+        $this->resetModel();
+        $this->resetScope();
+
+        return $this->parserResult($results);
+    }
+
     public function forceDelete(string $id)
     {
         $model = $this->model->onlyTrashed()->find($id);

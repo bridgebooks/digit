@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\User;
 use App\Models\Invoice;
+use App\Models\Payslip;
 use Illuminate\Support\ServiceProvider;
 use App\Providers\RepositoryServiceProvider;
 
@@ -19,6 +20,7 @@ class ModelServiceProvider extends ServiceProvider
         // Model Observers
         User::observe(\App\Models\Observers\UserObserver::class);
         Invoice::observe(\App\Models\Observers\InvoiceObserver::class);
+        Payslip::observe(\App\Models\Observers\PayslipObserver::class);
     }
 
     /**

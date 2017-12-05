@@ -29,6 +29,11 @@ class Payslip extends Model
         return $this->belongsTo('App\Models\Employee', 'employee_id');
     }
 
+    public function items()
+    {
+        return $this->hasMany('App\Models\PayslipItem', 'pay_slip_id');
+    }
+
     public function payrun()
     {
         return $this->belongsTo('App\Models\Payrun', 'pay_run_id');
