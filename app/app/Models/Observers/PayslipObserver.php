@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: admin
- * Date: 04/12/2017
- * Time: 22:10
- */
 
 namespace App\Models\Observers;
-
 
 use App\Models\Payslip;
 use App\Repositories\PayItemRepository;
@@ -21,6 +14,9 @@ class PayslipObserver
         $this->payitemRepository = $payItemRepository;
     }
 
+    /**
+     * @param Payslip $payslip
+     */
     public function created(Payslip $payslip)
     {
         $org = $payslip->payrun->org;
@@ -42,8 +38,12 @@ class PayslipObserver
 
     }
 
+    /**
+     * @param Payslip $payslip
+     */
     public function updated(Payslip $payslip)
     {
-
+        $payrun = $payslip->payrun;
+        $payrun->updateTotals();
     }
 }

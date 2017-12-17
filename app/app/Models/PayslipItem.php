@@ -24,7 +24,7 @@ class PayslipItem extends Model
         return $this->belongsTo('App\Models\Payslip', 'pay_slip_id');
     }
 
-    public  function payitem()
+    public  function item()
     {
         return $this->belongsTo('App\Models\PayItem', 'pay_item_id');
     }

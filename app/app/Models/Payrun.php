@@ -45,4 +45,66 @@ class Payrun extends Model
     {
         return $this->belongsTo('App\Models\Org');
     }
+
+    private function wages()
+    {
+       $amount = 0;
+
+       foreach($this->payslips as $slip) {
+           $amount = $amount + $slip->wages;
+       }
+
+       return $amount;
+    }
+
+    private function deductions()
+    {
+        $amount = 0;
+
+        foreach($this->payslips as $slip) {
+            $amount = $amount + $slip->deductions;
+        }
+
+        return $amount;
+    }
+
+    private function reimbursements()
+    {
+        $amount = 0;
+
+        foreach($this->payslips as $slip) {
+            $amount = $amount + $slip->reimbursements;
+        }
+
+        return $amount;
+    }
+
+    private function tax()
+    {
+        $amount = 0;
+
+        foreach($this->payslips as $slip) {
+            $amount = $amount + $slip->tax;
+        }
+
+        return $amount;
+    }
+
+    public function updateTotals()
+    {
+        $wages = $this->wages();
+        $deductions = $this->deductions();
+        $reimbursements = $this->reimbursements();
+        $taxes = $this->tax();
+
+        $net_pay = $wages + $reimbursements - $deductions - $taxes;
+
+        $this->wages = $wages;
+        $this->deductions = $deductions;
+        $this->reimbursements = $reimbursements;
+        $this->tax = $taxes;
+        $this->net_pay = $net_pay;
+
+        $this->save();
+    }
 }

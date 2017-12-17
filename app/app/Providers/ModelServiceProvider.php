@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\PayslipItem;
 use App\Models\User;
 use App\Models\Invoice;
 use App\Models\Payslip;
@@ -21,6 +22,7 @@ class ModelServiceProvider extends ServiceProvider
         User::observe(\App\Models\Observers\UserObserver::class);
         Invoice::observe(\App\Models\Observers\InvoiceObserver::class);
         Payslip::observe(\App\Models\Observers\PayslipObserver::class);
+        PayslipItem::observe(\App\Models\Observers\PayslipItemObserver::class);
     }
 
     /**

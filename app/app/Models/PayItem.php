@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\Uuids;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
 
 class PayItem extends Model
 {
-	use Uuids, SoftDeletes;
+	use Uuids, SoftDeletes, Searchable;
 
 	protected $table = 'pay_items';
 

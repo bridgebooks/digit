@@ -6,6 +6,7 @@ use App\Http\Controllers\V1\Controller;
 use App\Repositories\BankRepository;
 use App\Repositories\ContactRepository;
 use App\Repositories\EmployeeRepository;
+use App\Repositories\PayItemRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 
@@ -14,23 +15,26 @@ class SearchController extends Controller
     protected $contactRepository;
     protected $userRepository;
     protected $bankRepository;
+    protected $payItemRepository;
     protected $employeeRepository;
 
     public function __construct(
         ContactRepository $contacts,
         UserRepository $userRepository,
         BankRepository $bankRepository,
+        PayItemRepository $payItemRepository,
         EmployeeRepository $employeeRepository)
     {
         $this->contactRepository = $contacts;
         $this->userRepository = $userRepository;
         $this->bankRepository = $bankRepository;
+        $this->payItemRepository = $payItemRepository;
         $this->employeeRepository = $employeeRepository;
     }
 
     /**
      * @param string $index
-     * @return ContactRepository|UserRepository|BankRepository|EmployeeRepository
+     * @return ContactRepository|UserRepository|BankRepository|EmployeeRepository|PayItemRepository
      */
     private function getRepository(string $index)
     {
@@ -46,6 +50,9 @@ class SearchController extends Controller
                 break;
             case 'banks':
                 return $this->bankRepository;
+                break;
+            case 'pay_items':
+                return $this->payItemRepository;
                 break;
             default:
                 return $this->contactRepository;

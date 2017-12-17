@@ -70,6 +70,18 @@ class PayItemRepositoryEloquent extends BaseRepository implements PayItemReposit
     }
 
     /**
+    * @param string $query
+    * @param string|null $id
+    * @return mixed
+    */
+    public function search(string $query, string $id = null, int $perPage = 20)
+    {
+        if ($id) return PayItem::search($query)->where('org_id', $id)->paginate($perPage);
+
+        return PayItem::search($query)->paginate($perPage);
+    }
+
+    /**
      * Boot up the repository, pushing criteria
      */
     public function boot()
