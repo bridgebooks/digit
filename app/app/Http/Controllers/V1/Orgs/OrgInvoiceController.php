@@ -45,7 +45,7 @@ class OrgInvoiceController extends Controller
         return $items;
 	}
 
-	public function sales(Request $request, string $id)
+	public function invoices(Request $request, string $id)
 	{
 		// models per page
         $perPage = $request->input('perPage', 30);
@@ -53,25 +53,13 @@ class OrgInvoiceController extends Controller
         $page = $request->input('page', 1);
         // status
         $status = $request->input('status', 'all');
+        // type
+        $type = $request->input('type', 'acc_rec');
 
         if ($this->can('invoices.org_view'))
-        	$items = $this->repository->with(['contact'])->org($id, 'acc_rec', $status);
+        	$items = $this->repository->with(['contact'])->org($id, $type, $status);
         else
-        	$items = $this->repository->with(['contact'])->user($this->requestUser()->id, $id,'acc_rec', $status);
-
-        return $this->paginate($items['data'], $perPage, []);
-	}
-
-	public function bills(Request $request, string $id)
-	{
-		// models per page
-        $perPage = $request->input('perPage', 30);
-        // current page
-        $page = $request->input('page', 1);
-        // status
-        $status = $request->input('status', 'all');
-
-        $items = $this->repository->with(['contact'])->org($id, 'acc_pay', $status);
+        	$items = $this->repository->with(['contact'])->user($this->requestUser()->id, $id, $type, $status);
 
         return $this->paginate($items['data'], $perPage, []);
 	}
