@@ -4,8 +4,8 @@ namespace App\Jobs;
 
 use PDF;
 use Storage;
+use View;
 use App\Models\Invoice;
-use App\Models\OrgInvoiceSettings;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -35,6 +35,34 @@ class GenerateInvoicePDF implements ShouldQueue
     }
 
     /**
+     * @param Invoice $invoice
+     * @return mixed
+     */
+    private function makePDF(Invoice $invoice)
+    {
+        $html = View::make('invoices.standard', ['invoice' => $invoice])->render();
+        $html = preg_replace('/>\s+</', '><', $html);
+
+        return PDF::loadHtml($html);
+    }
+
+    /**
+     * @param Invoice $invoice
+     * @return mixed
+     */
+    private function savePDF(Invoice $invoice)
+    {
+        $pdf = $this->makePDF($invoice);
+        $name = $invoice->invoice_no.'_'. $invoice->created_at->getTimestamp(). '.pdf';
+
+
+        Storage::disk('azure')->put($name, $pdf->output());
+        $url = Storage::disk('azure')->url($name);
+
+        return $url;
+    }
+
+    /**
      * Execute the job.
      *
      * @return void
@@ -44,13 +72,7 @@ class GenerateInvoicePDF implements ShouldQueue
         $invoice = $this->invoice;
         $settings = $this->getInvoiceSettings($this->invoice);
         
-        $name = $invoice->invoice_no.'_'. $invoice->created_at->getTimestamp(). '.pdf';
-        // Set PDF options
-        PDF::setOptions(['defaultPaperSize' => $settings->paper_size ]);
-        $pdf = PDF::loadView('invoices.standard', compact('invoice'));
-
-        Storage::disk('azure')->put($name, $pdf->output());
-        $url = Storage::disk('azure')->url($name);
+        $url = $this->savePDF($invoice);
 
         $invoice->pdf_url = $url;
         $invoice->save();

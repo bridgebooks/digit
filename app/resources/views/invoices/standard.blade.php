@@ -39,7 +39,7 @@
     <div class="container-fluid">
       <div class="header clearfix" style="padding: 10px 0px;">
         <div class="pull-left">
-          @if($invoice->org->logo_url)
+          @if($invoice->org->logo_url && $invoice->type == 'acc_rec')
           <div class="logo"><img class="img-responsive" src="{{ $invoice->org->logo_url }}"></div>
           @endif
         </div>
@@ -59,7 +59,12 @@
 
       <div class="header sub-header clearfix">
         <div class="pull-left">
+          @if($invoice->type == 'acc_rec')
           <h4>INVOICE TO:</h4>
+          @endif
+          @if($invoice->type == 'acc_pay')
+              <h4>INVOICE FROM:</h4>
+            @endif
           <h3>{{ $invoice->contact->name }}</h3>
           <p> {{ $invoice->contact->address_line_1 }}</p>
           <p> {{ $invoice->contact->address_line_2 }}</p>
