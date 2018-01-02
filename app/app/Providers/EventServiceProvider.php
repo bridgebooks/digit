@@ -28,9 +28,6 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\SendInvoice' => [
             'App\Listeners\SendInvoiceListener'
         ],
-        'App\Events\InvoiceSubmitted' => [
-            'App\Listeners\InvoiceSubmittedListener'
-        ],
         'App\Events\InvoiceCardPaymentInit' => [
             'App\Listeners\InvoiceCardPaymentInitListener'
         ],
@@ -39,8 +36,17 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\InvoiceCardPaymentVerifyFail' => [
             'App\Listeners\InvoiceCardPaymentVerifyFailListener'
+        ],
+        'App\Events\InvoiceSubmitted' => [
+            'App\Listeners\InvoiceSubmittedListener'
+        ],
+        'App\Events\InvoiceAuthorized' => [
+            'App\Listeners\InvoiceAuthorizedListener'
+        ],
+        'App\Events\PayrunApproved' => [
+            'App\Listeners\PayrunApprovedListener'
         ]
-    ];
+     ];
 
     /**
      * Register any events for your application.

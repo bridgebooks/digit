@@ -100,15 +100,32 @@ class Payslip extends Model
         return $amount;
     }
 
+    private function calculateTax() {
+        $amount = 0;
+
+        $amount = $this->items
+            ->filter(function ($payslipItem) {
+                return $payslipItem->item->pay_item_type === PayitemType::TAX;
+            })
+            ->map(function ($item) {
+                return $item->amount;
+            })
+            ->sum();
+
+        return $amount;
+    }
+
     public function updateTotals()
     {
         $wages = $this->calculateWages();
         $deductions = $this->calculateDeductions();
         $reimbursements = $this->calculateReimbursements();
+        $taxes = $this->calculateTax();
 
-        $net_pay = $wages + $reimbursements - $deductions;
+        $net_pay = $wages + $reimbursements - $deductions - $taxes;
 
         $this->wages = $wages;
+        $this->tax = $taxes;
         $this->deductions = $deductions;
         $this->reimbursements = $reimbursements;
         $this->net_pay = $net_pay;

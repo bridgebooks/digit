@@ -46,7 +46,7 @@ class Payrun extends Model
         return $this->belongsTo('App\Models\Org');
     }
 
-    private function wages()
+    private function _wages()
     {
        $amount = 0;
 
@@ -57,7 +57,7 @@ class Payrun extends Model
        return $amount;
     }
 
-    private function deductions()
+    private function _deductions()
     {
         $amount = 0;
 
@@ -68,7 +68,7 @@ class Payrun extends Model
         return $amount;
     }
 
-    private function reimbursements()
+    private function _reimbursements()
     {
         $amount = 0;
 
@@ -79,7 +79,7 @@ class Payrun extends Model
         return $amount;
     }
 
-    private function tax()
+    private function _tax()
     {
         $amount = 0;
 
@@ -92,10 +92,10 @@ class Payrun extends Model
 
     public function updateTotals()
     {
-        $wages = $this->wages();
-        $deductions = $this->deductions();
-        $reimbursements = $this->reimbursements();
-        $taxes = $this->tax();
+        $wages = $this->_wages();
+        $deductions = $this->_deductions();
+        $reimbursements = $this->_reimbursements();
+        $taxes = $this->_tax();
 
         $net_pay = $wages + $reimbursements - $deductions - $taxes;
 

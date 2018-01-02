@@ -2,6 +2,7 @@
 
 namespace App\Models\Observers;
 
+use App\Events\InvoiceAuthorized;
 use Log;
 use App\Jobs\SendInvoiceEmail;
 use App\Models\Enums\InvoiceStatus;
@@ -129,6 +130,8 @@ class InvoiceObserver
             } else {
                 $this->generateInvoiceAndSend($invoice);
             }
+
+            event(new InvoiceAuthorized($invoice));
         }
 
         if ($invoice->status == InvoiceStatus::SUBMITTED) {

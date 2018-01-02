@@ -24,18 +24,13 @@ class OrgInvoiceController extends Controller
 	public function invoiceEvents(Request $request, string $id)
 	{
         $items = $this->repository->scopeQuery(function ($query) use($request, $id) {
-        	 // period
-	        $period = $request->input('period', 'month');
-	        // now date
-	        $now = new Carbon('now');
-	
-	        if ($period == 'month') {
-	        	$fromDate = $now->copy()->startOfMonth();
-	        	$toDate = $now->copy()->endOfMonth();
-	        } elseif ($period == 'week') {
-	        	$fromDate = $now->copy()->startOfWeek();
-	        	$toDate = $now->copy()->endOfWeek();
-	        }
+            // start date
+            $start = $request->input('start_date');
+            // end date
+            $end = $request->input('end_date');
+
+            $fromDate = new Carbon($start);
+            $toDate = new Carbon($end);
 
 	        return $query->where('org_id', $id)
 	        	->whereIn('status', ['submitted', 'authorized', 'sent'])

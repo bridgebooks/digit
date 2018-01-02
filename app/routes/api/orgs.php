@@ -17,8 +17,13 @@ Route::get('/{id}/items', 'OrgItemsController@all');
 Route::get('/{id}/payitems', 'OrgPayitemController@all');
 Route::get('{id}/invoices', 'OrgInvoiceController@invoices');
 Route::get('{id}/invoice_events', 'OrgInvoiceController@invoiceEvents');
-Route::get('{id}/invoice_settings', 'OrgInvoiceSettingController@get');
-Route::put('{id}/invoice_settings', 'OrgInvoiceSettingController@update');
+
+Route::get('{id}/settings/invoices', 'OrgInvoiceSettingController@get');
+Route::get('{id}/settings/payruns', 'OrgPayrunSettingController@get');
+
+Route::put('{id}/settings/payruns', 'OrgPayrunSettingController@update');
+Route::put('{id}/settings/invoices', 'OrgInvoiceSettingController@update');
+
 //Org Users
 Route::get('{id}/users', 'OrgUserController@all');
 Route::post('{id}/users/invite', 'OrgUserController@invite');

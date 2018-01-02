@@ -2,12 +2,11 @@
 
 namespace App\Listeners;
 
-use App\Jobs\GenerateInvoicePDF;
-use App\Events\InvoiceSubmitted;
+use App\Events\PayrunApproved;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class InvoiceSubmittedListener
+class PayrunApprovedListener
 {
     /**
      * Create the event listener.
@@ -22,13 +21,11 @@ class InvoiceSubmittedListener
     /**
      * Handle the event.
      *
-     * @param  InvoiceSubmitted  $event
+     * @param  PayrunApproved  $event
      * @return void
      */
-    public function handle(InvoiceSubmitted $event)
+    public function handle(PayrunApproved $event)
     {
-        // Notify 'advisers' in org
-        // Generate PDF
-        GenerateInvoicePDF::dispatch($event->invoice);
+        //
     }
 }

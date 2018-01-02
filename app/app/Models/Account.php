@@ -39,4 +39,9 @@ class Account extends Model
     {
       return $this->belongsTo('App\Models\TaxRate');
     }
+
+    public function transactions()
+    {
+        return $this->morphMany('App\Models\Transaction', 'transactable');
+    }
 }
