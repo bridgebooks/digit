@@ -12,7 +12,49 @@
 */
 
 Route::get('/', function () {
-	//$invoice = \App\Models\Invoice::with(['org','contact','items', 'items.item'])->find('5e76aea0-a988-11e7-a54e-4f1aff114730');
-    //return view('invoices.standard', ['invoice' => $invoice]);
-    echo "ksnlgs";
+
+	$slip = \App\Models\Payslip::with(['payrun', 'payrun.org', 'employee'])
+        ->find('c3281d10-ef80-11e7-9758-3fd3719e6399');
+
+	$allowances = $slip->items->filter(function ($paySlipItem) {
+	   return $paySlipItem->item->pay_item_type === \App\Models\Enums\PayitemType::ALLOWANCE;
+    });
+
+    $wages = $slip->items->filter(function ($paySlipItem) {
+        return $paySlipItem->item->pay_item_type === \App\Models\Enums\PayitemType::WAGES;
+    });
+
+    $reimbursements = $slip->items->filter(function ($paySlipItem) {
+        return $paySlipItem->item->pay_item_type === \App\Models\Enums\PayitemType::REIMBURSEMENT;
+    });
+
+    $deductions = $slip->items->filter(function ($paySlipItem) {
+        return $paySlipItem->item->pay_item_type === \App\Models\Enums\PayitemType::DEDUCTION;
+    });
+
+    $tax = $slip->items->filter(function ($paySlipItem) {
+        return $paySlipItem->item->pay_item_type === \App\Models\Enums\PayitemType::TAX;
+    });
+
+    $earnings = $allowances->concat($wages, $reimbursements)
+        ->map(function ($item) {
+            return $item->amount;
+        })
+        ->sum();
+
+    $less = $deductions->concat($tax)
+        ->map(function ($item) {
+            return $item->amount;
+        })
+        ->sum();
+
+    return view('payslips.standard', [
+        'wages' => $wages,
+        'allowances' => $allowances,
+        'reimbursements' => $reimbursements,
+        'deductions' => $deductions,
+        'earnings' => $earnings,
+        'gross_deductions' => $less,
+        'slip' => $slip
+    ]);
 });

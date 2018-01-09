@@ -11,7 +11,7 @@ use App\Models\Payitem;
  */
 class PayitemTransformer extends TransformerAbstract
 {
-    protected $availableIncludes = ['account'];
+    protected $defaultIncludes = ['account'];
 
     /**
      * @param Payitem $model

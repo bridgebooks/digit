@@ -4,6 +4,7 @@ namespace App\Models\Observers;
 
 use App\Models\Payslip;
 use App\Repositories\PayItemRepository;
+use App\Jobs\GeneratePayslipPDF;
 
 class PayslipObserver
 {
@@ -14,6 +15,10 @@ class PayslipObserver
         $this->payitemRepository = $payItemRepository;
     }
 
+    public function creating(Payslip $payslip)
+    {
+        $payslip->reference = 'PR-'. time() . rand(10*45, 100*98);
+    }
     /**
      * @param Payslip $payslip
      */
@@ -38,12 +43,14 @@ class PayslipObserver
 
     }
 
+
+
     /**
      * @param Payslip $payslip
      */
     public function updated(Payslip $payslip)
     {
-        $payrun = $payslip->payrun;
-        $payrun->updateTotals();
+        $payrun = $payslip->payrun();
+        if ( is_null($payslip->pdf_url) ) $payrun->updateTotals();
     }
 }

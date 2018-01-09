@@ -13,6 +13,20 @@ class PayrunTransformer extends TransformerAbstract
 {
     protected $availableIncludes = ['payslips'];
 
+    private function getTotal(Payrun $model): int {
+        $payout = 0;
+        $tax = 0;
+
+        $payslips = $model->payslips;
+
+        foreach($payslips as $slip) {
+            $payout = $payout + $slip->net_pay;
+            $tax = $tax + $slip->tax;
+        }
+
+        return $payout + $tax;
+    }
+
     public function includePayslips(Payrun $model)
     {
         $payslips = $model->payslips;
@@ -39,7 +53,9 @@ class PayrunTransformer extends TransformerAbstract
             'tax' => $model->tax,
             'reimbursements' => $model->reimbursements,
             'net_pay' =>  $model->net_pay,
+            'total' => $this->getTotal($model),
             'status' => $model->status,
+            'notes' => $model->notes,
             'created_at' => $model->created_at->getTimestamp() * 1000,
             'updated_at' => $model->updated_at->getTimestamp() * 1000
         ];

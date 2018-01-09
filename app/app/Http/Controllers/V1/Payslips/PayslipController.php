@@ -22,6 +22,11 @@ class PayslipController extends Controller
         $this->itemRepository = $itemRepository;
     }
 
+    public function get(string $id)
+    {
+        return $this->repository->find($id);
+    }
+
     /**
      * @param string $id
      * @return mixed
@@ -51,6 +56,8 @@ class PayslipController extends Controller
     public function updateItem(UpdatePayslipItem $request, string $id)
     {
         $attrs = $request->all();
+
+
 
         return $this->itemRepository->update($attrs, $id);
     }

@@ -11,7 +11,7 @@ use App\Models\PayslipItem;
  */
 class PayslipItemTransformer extends TransformerAbstract
 {
-    protected $availableIncludes = ['item'];
+    protected $defaultIncludes = ['item'];
 
     /**
      * @param PayslipItem $model

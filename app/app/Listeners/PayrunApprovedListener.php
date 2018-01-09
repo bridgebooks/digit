@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\PayrunApproved;
+use App\Jobs\GeneratePayslipPDF;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -26,6 +27,8 @@ class PayrunApprovedListener
      */
     public function handle(PayrunApproved $event)
     {
-        //
+        $payrun = $event->payrun;
+
+        dispatch(new GeneratePayslipPDF($payrun));
     }
 }

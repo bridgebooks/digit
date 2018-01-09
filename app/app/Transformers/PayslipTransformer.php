@@ -11,7 +11,7 @@ use App\Models\Payslip;
  */
 class PayslipTransformer extends TransformerAbstract
 {
-    protected $availableIncludes = ['employee'];
+    protected $availableIncludes = ['employee', 'payrun', 'items'];
 
     /**
      * List of resources to automatically include
@@ -33,6 +33,28 @@ class PayslipTransformer extends TransformerAbstract
     }
 
     /**
+     * @param Payslip $model
+     * @return \League\Fractal\Resource\Item
+     */
+    public function includePayrun(Payslip $model)
+    {
+        $payrun = $model->payrun;
+
+        return $this->item($payrun, new PayrunTransformer);
+    }
+
+    /**
+     * @param Payslip $model
+     * @return \League\Fractal\Resource\Item
+     */
+    public function includeItems(Payslip $model)
+    {
+        $items = $model->items;
+
+        return $this->collection($items, new PayslipItemTransformer);
+    }
+
+    /**
      * Transform the \Payslip entity
      * @param \Payslip $model
      *
@@ -42,6 +64,7 @@ class PayslipTransformer extends TransformerAbstract
     {
         return [
             'id' => $model->id,
+            'reference' => $model->reference,
             'pay_run_id' => $model->pay_run_id,
             'employee_id' => $model->employee_id,
             'wages' => $model->wages,

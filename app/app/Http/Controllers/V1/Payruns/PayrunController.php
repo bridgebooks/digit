@@ -8,8 +8,11 @@
 
 namespace App\Http\Controllers\V1\Payruns;
 
+use App\Events\PayrunApproved;
 use App\Http\Controllers\V1\Controller;
+use App\Http\Requests\V1\ApprovePayrun;
 use App\Http\Requests\V1\CreatePayrun;
+use App\Models\Enums\PayrunStatus;
 use App\Repositories\EmployeeRepository;
 use App\Repositories\PayrunRepository;
 use App\Traits\UserRequest;
@@ -24,7 +27,7 @@ class PayrunController extends Controller
     public function __construct(PayrunRepository $repository, EmployeeRepository $employeeRepository)
     {
         $this->middleware('jwt.auth');
-        $this->middleware('acl:payroll')->only(['create', 'read', 'update']);
+        $this->middleware('acl:payroll')->only(['create', 'read', 'update', 'approve']);
         $this->repository = $repository;
         $this->employeeRepository = $employeeRepository;
     }
@@ -49,7 +52,7 @@ class PayrunController extends Controller
                 $payslips[] = [
                     'pay_run_id' => $payrun['data']['id'],
                     'employee_id' => $employee['id']
-                 ];
+                ];
             }
             $this->repository->addPaySlips($payslips, $payrun['data']['id']);
         }
@@ -69,5 +72,23 @@ class PayrunController extends Controller
     public function update(string $id)
     {
 
+    }
+
+    /**
+     * @param ApprovePayrun $request
+     * @param string $id
+     * @return mixed
+     */
+    public function approve(ApprovePayrun $request, string $id)
+    {
+        $attrs = $request->only(['notes']);
+
+        $attrs['status'] = PayrunStatus::APPROVED;
+
+        $payrun = $this->repository->skipPresenter(true)->find($id);
+
+        event(new PayrunApproved($payrun));
+
+        return $this->repository->skipPresenter(false)->update($attrs, $id);
     }
 }
