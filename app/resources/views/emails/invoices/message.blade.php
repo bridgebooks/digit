@@ -181,8 +181,8 @@
                 <!--<![endif]-->
                 <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;"><![endif]-->
                 <div style="color:#0068A5;line-height:120%;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;">
-                  <div style="font-size:12px;line-height:14px;text-align:center;color:#000;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;">
-                    <p style="margin: 0;font-size: 12px;line-height: 14px;text-align: center"><span style="font-size: 16px; line-height: 18px;">{{ $params['message'] }}</span></p>
+                  <div style="font-size:16px;line-height:18px;text-align:left;color:#000;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;">
+                    <p style="margin: 0;font-size: 16px;line-height: 18px;text-align: left">{{ $params['message'] }}</p>
                   </div>
                 </div><!--[if mso]></td></tr></table><![endif]-->
                 <div align="center" class="button-container center" style="padding-right: 10px; padding-left: 10px; padding-top:10px; padding-bottom:10px;">
