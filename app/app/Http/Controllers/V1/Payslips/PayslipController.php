@@ -5,6 +5,7 @@ namespace App\Http\Controllers\V1\Payslips;
 use App\Http\Controllers\V1\Controller;
 use App\Http\Requests\V1\CreatePayslipItem;
 use App\Http\Requests\V1\UpdatePayslipItem;
+use App\Notifications\EmployeePayslip;
 use App\Repositories\PayslipItemRepository;
 use App\Repositories\PayslipRepository;
 
@@ -57,8 +58,6 @@ class PayslipController extends Controller
     {
         $attrs = $request->all();
 
-
-
         return $this->itemRepository->update($attrs, $id);
     }
 
@@ -70,5 +69,24 @@ class PayslipController extends Controller
             'status' => 'success',
             'message' => 'Item successully delete'
         ]);
+    }
+
+    public function send(string $id)
+    {
+        $slip = $this->repository->skipPresenter()->with(['payrun', 'payrun.org', 'employee'])->find($id);
+
+        if ($slip->employee->email) {
+            $slip->employee->notify(new EmployeePayslip($slip));
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Payslip will be sent to employee shortly'
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No email address is set for employee'
+            ], 400);
+        }
     }
 }

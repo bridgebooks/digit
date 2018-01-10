@@ -72,6 +72,7 @@ class PayslipTransformer extends TransformerAbstract
             'tax' => $model->tax,
             'reimbursements' => $model->reimbursements,
             'net_pay' =>  $model->net_pay,
+            'pdf_url' => $model->pdf_url,
             'created_at' => $model->created_at->getTimestamp() * 1000,
             'updated_at' => $model->updated_at->getTimestamp() * 1000
         ];

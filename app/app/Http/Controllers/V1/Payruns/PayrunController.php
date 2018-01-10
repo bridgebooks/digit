@@ -12,6 +12,7 @@ use App\Events\PayrunApproved;
 use App\Http\Controllers\V1\Controller;
 use App\Http\Requests\V1\ApprovePayrun;
 use App\Http\Requests\V1\CreatePayrun;
+use App\Jobs\SendPayrunSlips;
 use App\Models\Enums\PayrunStatus;
 use App\Repositories\EmployeeRepository;
 use App\Repositories\PayrunRepository;
@@ -90,5 +91,21 @@ class PayrunController extends Controller
         event(new PayrunApproved($payrun));
 
         return $this->repository->skipPresenter(false)->update($attrs, $id);
+    }
+
+    public function send(string $id)
+    {
+        $payrun = $this->repository->skipPresenter(true)->with([
+            'org',
+            'payslips',
+            'payslips.employee'
+        ])->find($id);
+
+        dispatch(new SendPayrunSlips($payrun));
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Payslips will be sent shortly.'
+        ]);
     }
 }
