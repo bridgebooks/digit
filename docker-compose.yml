@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 
 services:
   web:
@@ -21,12 +21,12 @@ services:
     volumes:
       - ./app:/var/www/app
     environment:
-        - "DB_PORT=3306"
-        - "DB_HOST=database"
-        - "REDIS_PORT=6379"
-        - "REDIS_HOST=redis"
-        - "ELASTICSEARCH_HOST=elasticsearch_1"
-        - "ELASTICSEARCH_PORT=9200"
+        - DB_PORT=3306
+        - DB_HOST=database
+        - REDIS_PORT=6379
+        - REDIS_HOST=redis
+        - ELASTICSEARCH_HOST=elasticsearch_1
+        - ELASTICSEARCH_PORT=9200
 
   redis:
     image: redis:3.0
@@ -36,24 +36,24 @@ services:
   database:
     image: mariadb
     environment:
-      - "MYSQL_ROOT_PASSWORD=si55le101"
-      - "MYSQL_DATABASE=digit_hemidal"
-      - "MYSQL_USER=hemidal"
-      - "MYSQL_PASSWORD=Asgard1an5"
+      - MYSQL_ROOT_PASSWORD=si55le101
+      - MYSQL_DATABASE=digit_hemidal
+      - MYSQL_USER=hemidal
+      - MYSQL_PASSWORD=Asgard1an5
     ports:
       - "33061:3306"
 
   elasticsearch_1:
     image: elasticsearch
     environment:
-      - "cluster.name=bb-cluster"
-      - "bootstrap.memory_lock=true"
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - cluster.name=bb-cluster
+      - bootstrap.memory_lock=true
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
     ulimits:
       memlock:
         soft: -1
         hard: -1
-    mem_limit: 1g
+      mem_limit: 1024
     volumes:
       - "./esdata1:/usr/share/elasticsearch/data"
     ports:
@@ -62,14 +62,14 @@ services:
   elasticsearch_2:
     image: elasticsearch
     environment:
-      - "cluster.name=bb-cluster"
-      - "bootstrap.memory_lock=true"
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - "discovery.zen.ping.unicast.hosts=elasticsearch_1"
+      - cluster.name=bb-cluster
+      - bootstrap.memory_lock=true
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - discovery.zen.ping.unicast.hosts=elasticsearch_1
     ulimits:
       memlock:
         soft: -1
         hard: -1
-    mem_limit: 1g
+      mem_limit: 1024
     volumes:
       - "./esdata2:/usr/share/elasticsearch/data"
