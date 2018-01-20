@@ -17,6 +17,7 @@ class OrgItemsController extends Controller
 	public function __construct(SalePurchaseItemRepository $repository)
 	{
 		$this->middleware('jwt.auth');
+        $this->middleware('subscription.check');
 		$this->repository = $repository;
 	}
 

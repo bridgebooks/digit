@@ -68,21 +68,34 @@ trait Billable
         return new SubscriptionBuilder($this, $plan);
     }
 
+    /**
+     * @return bool
+     */
     public function onTrial()
     {
         if (func_num_args() === 0 && $this->onGenericTrial()) {
             return true;
+        } elseif ($this->getActiveSubscription()) {
+            return false;
         }
-
-        // TODO check user subscriptions for active trials
     }
 
+    /**
+     * @return bool
+     */
     public function onGenericTrial()
     {
         return $this->trial_ends_at && Carbon::now()->lt($this->trial_ends_at);
     }
 
-    public function onPlan()
+    /**
+     * @param string $plan
+     * @return bool
+     */
+    public function onPlan(string $plan)
     {
+        return ! is_null($this->subscriptions->filter(function ($value) use ($plan) {
+            return $value->plan->name === $plan && $value->valid();
+        }))[0];
     }
 }

@@ -18,6 +18,7 @@ class OrgInvoiceController extends Controller
 	public function __construct(InvoiceRepository $repository)
 	{
 		$this->middleware('jwt.auth');
+		$this->middleware('subscription.check');
 		$this->repository = $repository;
 	}
 

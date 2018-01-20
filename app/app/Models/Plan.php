@@ -19,7 +19,18 @@ class Plan extends Model
 
     protected $guarded = [];
 
-    protected $fillable = [ 'name', 'description', 'interval', 'amount', 'currency', 'status' ];
+    protected $fillable = [
+        'name',
+        'display_name',
+        'description',
+        'invoice_interval',
+        'invoice_period',
+        'trial_period',
+        'trial_interval',
+        'amount',
+        'currency',
+        'status'
+    ];
 
     protected $paystackPlans = null;
 
@@ -29,6 +40,17 @@ class Plan extends Model
         }
 
         return $this->paystackPlans;
+    }
+
+    /**
+     * @param string $interval
+     * @return string
+     */
+    private function setPaystackPlanInterval(string $interval)
+    {
+        $allowed = ['month', 'year', 'hour', 'week'];
+
+        return in_array($interval, $allowed) ? $interval.'ly' : 'monthly';
     }
 
     public function features() 
@@ -41,7 +63,7 @@ class Plan extends Model
         $planAttributes = [];
 
         $planAttributes['name'] = $this->name;
-        $planAttributes['interval'] = $this->interval;
+        $planAttributes['interval'] = $this->setPaystackPlanInterval($this->invoice_interval);
         $planAttributes['amount'] = $this->amount * 100;
         $planAttributes['description'] = $this->description ? $this->description : '';
         $planAttributes['currency'] = $this->currency ? $this->currency : 'NGN';

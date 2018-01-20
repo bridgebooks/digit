@@ -28,6 +28,7 @@ class PayrunController extends Controller
     public function __construct(PayrunRepository $repository, EmployeeRepository $employeeRepository)
     {
         $this->middleware('jwt.auth');
+        $this->middleware('subscription.check');
         $this->middleware('acl:payroll')->only(['create', 'read', 'update', 'approve']);
         $this->repository = $repository;
         $this->employeeRepository = $employeeRepository;

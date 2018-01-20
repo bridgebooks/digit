@@ -2,6 +2,8 @@
 
 namespace App\Listeners;
 
+use App\Models\Libs\SubscriptionBuilder;
+use App\Models\Plan;
 use Carbon\Carbon;
 use App\Events\PrimaryUserCreated;
 use Illuminate\Queue\InteractsWithQueue;
@@ -28,7 +30,11 @@ class PrimaryUserCreatedListener implements ShouldQueue
      */
     public function handle(PrimaryUserCreated $event)
     {
-        $event->user->trial_ends_at = Carbon::now()->addDays($event->trial_days);
-        $event->user->save();
+        // Create paystack customer
+        $event->user->createPaystackCustomer();
+        // Plan
+        $plan = Plan::where('name', $event->plan)->first();
+        // Create subscription
+        $event->user->newSubscription($plan)->create([ 'skip_paystack' => true ]);
     }
 }

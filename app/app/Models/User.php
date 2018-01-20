@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Hash;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Models\Traits\Billable;
 use App\Models\Traits\Uuids;
+use App\Models\Subscription;
 
 class User extends Authenticatable
 {
@@ -65,6 +67,48 @@ class User extends Authenticatable
     public function orgs()
     {
       return $this->belongsToMany('App\Models\Org', 'org_users')->withPivot('status')->withTimestamps();
+    }
+
+    /**
+     * Get user's active subscription
+     * @return \App\Models\Subscription|bool
+     */
+    public function getActiveSubscription()
+    {
+        $subscriptions = $this->subscriptions;
+
+        if (!$subscriptions) return false;
+
+        $active =  $subscriptions->firstWhere('ends_at', '>=', Carbon::now());
+
+        return $active ? $active : false;
+    }
+
+    public function getOrgActiveSubscription()
+    {
+        $orgs = $this->orgs;
+
+        if (!$orgs) return false;
+
+        if (count($orgs) < 2) {
+            $org = $orgs[0];
+            $admin = $org->getAdmin();
+
+            return $admin->getActiveSubscription();
+        }
+
+        // TODO: check for active subscriptions across user member orgs
+    }
+
+    public function getLastActiveSubscription()
+    {
+        $subscriptions = $this->subscriptions;
+
+        if (!$subscriptions) return false;
+
+        $inactive =  $subscriptions->firstWhere('ends_at', '<=', Carbon::now());
+
+        return $inactive;
     }
 
     /**

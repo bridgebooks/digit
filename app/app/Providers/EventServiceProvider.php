@@ -31,6 +31,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\InvoiceCardPaymentInit' => [
             'App\Listeners\InvoiceCardPaymentInitListener'
         ],
+        'App\Events\SubscriptionPaymentSuccess' => [
+            'App\Listeners\SubscriptionPaymentListener'
+        ],
         'App\Events\InvoiceCardPaymentVerify' => [
             'App\Listeners\InvoiceCardPaymentVerifyListener'
         ],
@@ -47,6 +50,10 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\PayrunApprovedListener'
         ]
      ];
+
+    protected $subscribe = [
+        'App\Listeners\PaystackSubscriptionEventSubscriber'
+    ];
 
     /**
      * Register any events for your application.

@@ -4,11 +4,14 @@ RUN apt-get update && apt-get install -y \
 	libmcrypt-dev \
 	libpng-dev \
 	mysql-client \
-  && docker-php-ext-install -j$(nproc) mcrypt pdo_mysql bcmath gd
+  && docker-php-ext-install -j$(nproc)  pdo_mysql bcmath gd
+
+RUN pecl install mcrypt-1.0.1
 
 RUN docker-php-source extract && \
     pecl install redis && \
-    docker-php-ext-enable redis&& \
+    docker-php-ext-enable redis && \
+    docker-php-ext-enable mcrypt && \
     docker-php-source delete
 
 #RUN apt-get update && apt-get install -y wget

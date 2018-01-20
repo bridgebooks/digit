@@ -14,9 +14,8 @@ use App\Models\Industry;
  * Class RoleRepositoryEloquent
  * @package namespace App\Repositories;
  */
-class IndustryRepositoryEloquent extends BaseRepository implements IndustryRepository, CacheableInterface
+class IndustryRepositoryEloquent extends BaseRepository implements IndustryRepository
 {
-    use CacheableRepository;
     /**
      * Specify Model class name
      *

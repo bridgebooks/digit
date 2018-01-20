@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Libs\Period;
+use App\Models\Traits\Subscribable;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\Uuids;
 
 class Subscription extends Model
 {
-    use Uuids;
+    use Uuids, Subscribable;
     /**
      * Indicates if the IDs are auto-incrementing.
      *
@@ -24,7 +26,24 @@ class Subscription extends Model
      * @var array
      */
     protected $dates = [
-        'trial_ends_at', 'ends_at'
+        'trial_ends_at',
+        'ends_at',
+        'starts_at',
+        'canceled_at',
+        'cancels_at'
+    ];
+
+    public $fillable = [
+        'plan_id',
+        'user_id',
+        'paystack_subscription_code',
+        'paystack_subscription_token',
+        'quantity',
+        'trial_ends_at',
+        'ends_at',
+        'starts_at',
+        'canceled_at',
+        'cancels_at'
     ];
 
     public function owner()
@@ -38,14 +57,23 @@ class Subscription extends Model
     }
 
     /**
-     * Determine if the subscription is active, on trial, or within its grace period.
+     * Cancel subscription.
      *
-     * @return bool
+     * @param bool $immediately
+     *
+     * @return $this
      */
-    public function valid()
+    public function cancel($immediately = false)
     {
-        return $this->active() || $this->onTrial() || $this->onGracePeriod();
+        $this->canceled_at = Carbon::now();
+        if ($immediately) {
+            $this->ends_at = $this->canceled_at;
+        }
+        $this->save();
+
+        return $this;
     }
+
     /**
      * Determine if the subscription is active.
      *
@@ -53,19 +81,19 @@ class Subscription extends Model
      */
     public function active()
     {
-        return is_null($this->ends_at) || $this->onGracePeriod();
+        return ! $this->ended() || $this->onTrial();
     }
 
-
     /**
-     * Determine if the subscription is no longer active.
+     * Check if subscription is inactive.
      *
      * @return bool
      */
-    public function cancelled()
+    public function inactive()
     {
-        return ! is_null($this->ends_at);
+        return ! $this->active();
     }
+
     /**
      * Determine if the subscription is within its trial period.
      *
@@ -73,11 +101,7 @@ class Subscription extends Model
      */
     public function onTrial()
     {
-        if (! is_null($this->trial_ends_at)) {
-            return Carbon::now()->lt($this->trial_ends_at);
-        } else {
-            return false;
-        }
+        return $this->trial_ends_at ? Carbon::now()->lt($this->trial_ends_at) : false;
     }
 
     /**
@@ -95,17 +119,41 @@ class Subscription extends Model
     }
 
     /**
+     * Check if subscription is canceled.
+     *
+     * @return bool
+     */
+    public function canceled(): bool
+    {
+        return $this->canceled_at ? Carbon::now()->gte($this->canceled_at) : false;
+    }
+
+    /**
+     * Check if subscription period has ended.
+     *
+     * @return bool
+     */
+    public function ended()
+    {
+        return $this->ends_at ? Carbon::now()->gte($this->ends_at) : false;
+    }
+
+    /**
      * Mark the subscription as cancelled.
      *
      * @return void
      */
     public function markAsCancelled()
     {
-        $this->fill(['ends_at' => Carbon::now()])->save();
+        $this->fill(['canceled_at' => Carbon::now()])->save();
     }
 
-    public function cancelNow()
+    public function cancelTrial()
     {
-
+        if ($this->onTrial()) {
+            $this->ends_at = null;
+            $this->trial_ends_at = null;
+            $this->save();
+        }
     }
 }

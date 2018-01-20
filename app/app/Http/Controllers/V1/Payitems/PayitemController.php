@@ -17,6 +17,7 @@ class PayitemController extends Controller
     public function __construct(PayItemRepository $repository)
     {
         $this->middleware('jwt.auth');
+        $this->middleware('subscription.check');
         $this->middleware('acl:payroll')->only(['create', 'read', 'update', 'delete']);
         $this->repository = $repository;
     }

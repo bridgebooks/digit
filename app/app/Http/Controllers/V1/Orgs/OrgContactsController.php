@@ -36,6 +36,7 @@ class OrgContactsController extends Controller
         ContactPersonRepository $contactPersonRepository)
     {
         $this->middleware('jwt.auth');
+        $this->middleware('subscription.check');
         $this->orgRepository = $orgRepository;
         $this->contactRepository = $contactRepository;
         $this->contactGroupRepository = $contactGroupRepository;

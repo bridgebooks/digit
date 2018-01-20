@@ -19,16 +19,19 @@ class PrimaryUserCreated
 
     public $trial_days;
 
+    public $plan;
+
     /**
      * Create a new event instance.
      * @param User $user
      * @param int $trial_days
      * @return void
      */
-    public function __construct(User $user, $trial_days)
+    public function __construct(User $user, int $trial_days, string $plan)
     {
         $this->user = $user;
         $this->trial_days = $trial_days;
+        $this->plan = $plan;
     }
 
     /**

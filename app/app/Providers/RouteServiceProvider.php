@@ -39,7 +39,9 @@ class RouteServiceProvider extends ServiceProvider
         'Items', 
         'Invoices',
         'Bills',
-        'TaxRates'
+        'TaxRates',
+        'Plans',
+        'Webhooks'
     ];
 
     /**

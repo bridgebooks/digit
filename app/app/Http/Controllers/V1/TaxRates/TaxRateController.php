@@ -18,6 +18,7 @@ class TaxRateController extends Controller
 	public function __construct(TaxRateRepository $repository)
 	{
 		$this->middleware('jwt.auth');
+        $this->middleware('subscription.check');
 		$this->repository = $repository;
 	}
 

@@ -7,27 +7,57 @@ class MonthlyPlansTableSeed extends Seeder
 {
     protected $plans = [
         [
-            'name' => 'ZenBooks Easy Monthly',
-            'interval' => 'monthly',
-            'amount' => 3600,
-            'description' => 'ZenBooks starter plan for 30 day',
+            'name' => 'easy',
+            'display_name' => 'Bridgebooks Easy',
+            'invoice_interval' => 'month',
+            'invoice_period' => 1,
+            'trial_interval' => 'day',
+            'amount' => 1999,
+            'description' => 'Bridgebooks starter plan for 30 days',
             'features' => [
+                'users' => 0,
+                'employees' => 10,
+                'payruns' => 1,
+                'invoices' => 10,
+                'invoice_attachments' => 'false',
+                'contacts' => 20,
+                'activity_logs' => 'false'
             ]
         ],
         [
-            'name' => 'ZenBooks Pro Monthly',
-            'interval' => 'monthly',
-            'amount' => 6000,
-            'description' => 'ZenBooks pro plan for 30 day',
+            'name' => 'pro',
+            'display_name' => 'Bridgebooks Pro',
+            'invoice_interval' => 'month',
+            'invoice_period' => 1,
+            'trial_interval' => 'day',
+            'amount' => 3999,
+            'description' => 'Bridgebooks pro plan for 30 days',
             'features' => [
+                'users' => 5,
+                'employees' => -1,
+                'payruns' => -1,
+                'invoices' => -1,
+                'invoice_attachments' => 'true',
+                'contacts' => -1,
+                'activity_logs' => 'true'
             ]
         ],
         [
-            'name' => 'ZenBooks Enterprise Monthly',
-            'interval' => 'monthly',
-            'amount' => 8000,
-            'description' => 'ZenBooks  plan for 30 day',
+            'name' => 'enterprise',
+            'display_name' => 'Bridgebooks Enterprise',
+            'invoice_interval' => 'month',
+            'invoice_period' => 1,
+            'trial_interval' => 'day',
+            'amount' => 5999,
+            'description' => 'Bridgebooks enterprise plan for 30 days',
             'features' => [
+                'users' => -1,
+                'employees' => -1,
+                'payruns' => -1,
+                'invoices' => -1,
+                'invoice_attachments' => 'true',
+                'contacts' => -1,
+                'activity_logs' => 'true'
             ]
         ]
     ];
@@ -42,12 +72,27 @@ class MonthlyPlansTableSeed extends Seeder
             $plan = new Plan();
 
             $plan->name = str_slug($attributes['name'],'-');
-            $plan->interval = $attributes['interval'];
+            $plan->display_name = $attributes['display_name'];
+            $plan->invoice_interval = $attributes['invoice_interval'];
+            $plan->invoice_period = $attributes['invoice_period'];
+            $plan->trial_interval = $attributes['trial_interval'];
+            $plan->trial_period = 30;
             $plan->amount = $attributes['amount'];
             $plan->description = $attributes['description'];
+            $plan->status = 'active';
 
             if ($plan->save()) {
                 $plan->createPaystackPlan();
+                $features = [];
+
+                foreach($attributes['features'] as $feature => $value) {
+                    $featureAttributes['name'] = $feature;
+                    $featureAttributes['value'] = $value;
+
+                    $features[] = $featureAttributes;
+
+                    $plan->features()->createMany($features);
+                }
             }
         }
     }

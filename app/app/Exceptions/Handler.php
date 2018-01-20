@@ -53,6 +53,8 @@ class Handler extends ExceptionHandler
             return response()->json(['status' => 'error', 'message' => 'token not provided'], 400);
         } else if ($e instanceof \Illuminate\Auth\Access\AuthorizationException) {
             return response()->json(['status' => 'error', 'message' => 'action not authorized'], 403);
+        } else if ($e instanceof \Symfony\Component\HttpKernel\Exception\HttpException) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage() ], $e->getStatusCode());
         }
 
         if ($e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {

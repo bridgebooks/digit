@@ -16,6 +16,7 @@ class OrgPayrunController extends Controller
     public function __construct(PayrunRepository $repository)
     {
         $this->middleware('jwt.auth');
+        $this->middleware('subscription.check');
         $this->middleware('acl:payroll')->only(['all']);
         $this->repository = $repository;
     }

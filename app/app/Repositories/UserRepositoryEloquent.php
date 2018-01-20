@@ -51,6 +51,19 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
         return true;
     }
 
+    public function byEmail(string $email)
+    {
+        $this->applyCriteria();
+        $this->applyScope();
+
+        $result = $this->model->where('email', $email)->first();
+
+        $this->resetModel();
+        $this->resetScope();
+
+        return $this->parserResult($result);
+    }
+
     public function validateUser(String $id, String $password, String $validateToken)
     {
         $this->skipPresenter(true);

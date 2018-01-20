@@ -23,7 +23,7 @@
         "league/fractal": "^0.16.0",
         "marc-mabe/php-enum": "^2.3",
         "morrislaptop/laravel-queue-clear": "^1.1",
-        "mrfoh/mulla": "^1.0",
+        "mrfoh/mulla": "^1.0.1",
         "predis/predis": "^1.1",
         "prettus/l5-repository": "^2.6",
         "tamayo/laravel-scout-elastic": "^3.0",

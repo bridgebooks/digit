@@ -2,11 +2,16 @@
 
 namespace App\Traits;
 
+use App\Models\User;
 use JWTAuth;
 
 trait UserRequest
 {
-	 public function requestUser() {
+    /**
+     * Get requesting user
+     * @return App\Models\User;
+     */
+    public function requestUser(): User {
     	return JWTAuth::parseToken()->authenticate();
     }
 

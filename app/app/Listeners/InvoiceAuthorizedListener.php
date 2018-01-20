@@ -28,14 +28,5 @@ class InvoiceAuthorizedListener
      */
     public function handle(InvoiceAuthorized $event)
     {
-        $this->transactionRepo->skipPresenter(true);
-
-        $invoice = $event->invoice;
-        // invoice items
-        $items = $invoice->items;
-
-        foreach ($items as $item) {
-            $transaction = $this->transactionRepo->create();
-        }
     }
 }
