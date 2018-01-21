@@ -70,6 +70,22 @@ class User extends Authenticatable
     }
 
     /**
+     * @param string $id
+     * @return bool
+     */
+    public function memberOf(string $id)
+    {
+        $org = $this->orgs()->where('org_id', '=', $id)->first();
+
+        return $org ? true : false;
+    }
+
+    public function detachOrgRoles(string $id)
+    {
+        return $this->orgs()->detach($id);
+    }
+
+    /**
      * Get user's active subscription
      * @return \App\Models\Subscription|bool
      */

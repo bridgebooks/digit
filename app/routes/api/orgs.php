@@ -27,6 +27,7 @@ Route::put('{id}/settings/invoices', 'OrgInvoiceSettingController@update');
 //Org Users
 Route::get('{id}/users', 'OrgUserController@all');
 Route::post('{id}/users/invite', 'OrgUserController@invite');
+Route::delete('{id}/users/{user_id}', 'OrgUserController@delete');
 // Org Contact Groups
 Route::post('/{id}/contact_groups', 'OrgContactsController@createContactGroup');
 Route::get('/{id}/contact_groups', 'OrgContactsController@contactGroups');

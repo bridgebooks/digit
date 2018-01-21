@@ -84,4 +84,31 @@ class OrgUserController extends Controller
 
         return response()->json(['status' => 'success', 'message' => 'User invitation sent']);
 	}
+
+	public function delete(string $id, string $user_id)
+    {
+        // get org
+        $org = $this->orgRepository->skipPresenter(true)->find($id);
+        // get 'org_member' role
+        $role = $this->roleRepository->skipPresenter(true) ->findWhere(['name' => 'org_member'])->first();
+        // get user
+        $user = $this->userRepository->skipPresenter()->find($user_id);
+
+        if ($user->memberOf($id)) {
+            $this->authorize('remove', $user);
+
+            $org->users()->detach($user->id);
+            $user->roles()->detach($role->id);
+            $user->detachOrgRoles($id);
+
+            if ($user->delete()) {
+                return response()->json(['status' => 'success', 'message' => 'User deleted']);
+            }
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Action not authorized.'
+            ], 403);
+        }
+    }
 }
