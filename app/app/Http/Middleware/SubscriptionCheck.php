@@ -25,7 +25,9 @@ class SubscriptionCheck
      */
     public function handle($request, Closure $next)
     {
-        if ($this->user->getOrgActiveSubscription()) {
+        if ($this->userHasRole('org_admin') && $this->user->getActiveSubscription()) {
+            return $next($request);
+        } else if ($this->userHasRole('org_member') && $this->user->getOrgActiveSubscription()) {
             return $next($request);
         } else {
             \App::abort(402, 'No active subscription found. Please subscribe to a Bridgebooks plan');

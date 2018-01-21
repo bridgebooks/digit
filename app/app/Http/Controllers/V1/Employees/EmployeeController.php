@@ -23,6 +23,8 @@ class EmployeeController extends Controller
     public function __construct(EmployeeRepository $repository)
     {
         $this->middleware('jwt.auth');
+        $this->middleware('subscription.check');
+        $this->middleware('subscription.feature_usage_check:employees')->only(['create']);
         $this->middleware('acl:employees.view')->only(['read']);
         $this->middleware('acl:employees.create')->only(['create']);
         $this->middleware('acl:employees.edit')->only(['update']);

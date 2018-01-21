@@ -40,7 +40,7 @@ class OrgPayrunSettingRepositoryEloquent extends BaseRepository implements OrgPa
         return OrgPayrunSettingPresenter::class;
     }
 
-    public function get(string $id)
+    public function byOrgID(string $id)
     {
         $this->applyScope();
 

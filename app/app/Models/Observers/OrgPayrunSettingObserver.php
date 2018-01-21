@@ -38,7 +38,7 @@ class OrgPayrunSettingObserver
         $payitem->name = "Tax";
         $payitem->is_system = true;
         $payitem->description = "Employee income tax";
-        $payitem->mark_default = 1;
+        $payitem->default = 1;
 
         $payitem->save();
     }}

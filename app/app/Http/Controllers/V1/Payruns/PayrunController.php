@@ -30,6 +30,7 @@ class PayrunController extends Controller
         $this->middleware('jwt.auth');
         $this->middleware('subscription.check');
         $this->middleware('acl:payroll')->only(['create', 'read', 'update', 'approve']);
+        $this->middleware('subscription.feature_usage_check:payruns')->only(['create']);
         $this->repository = $repository;
         $this->employeeRepository = $employeeRepository;
     }

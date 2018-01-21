@@ -41,6 +41,9 @@ class ContactController extends Controller
 	public function __construct(ContactRepository $contactRepository, ContactPersonRepository $contactPersonRepository)
 	{
         $this->middleware('jwt.auth');
+        $this->middleware('subscription.check');
+        $this->middleware('subscription.feature_usage_check:payruns')->only(['create']);
+
         $this->contactRepository = $contactRepository;
         $this->contactPersonRepository = $contactPersonRepository;
 	}

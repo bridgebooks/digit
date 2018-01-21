@@ -52,6 +52,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(\App\Repositories\OrgPayrunSettingRepository::class, \App\Repositories\OrgPayrunSettingRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\SubscriptionRepository::class, \App\Repositories\SubscriptionRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\PlanRepository::class, \App\Repositories\PlanRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\SubscriptionUsageRepository::class, \App\Repositories\SubscriptionUsageRepositoryEloquent::class);
         //:end-bindings:
     }
 }

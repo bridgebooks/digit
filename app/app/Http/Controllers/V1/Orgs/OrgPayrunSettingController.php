@@ -13,6 +13,7 @@ class OrgPayrunSettingController extends Controller
     public function __construct(OrgPayrunSettingRepository $repository)
     {
         $this->middleware('jwt.auth');
+        $this->middleware('subscription.check');
         $this->repository = $repository;
     }
 
@@ -22,7 +23,7 @@ class OrgPayrunSettingController extends Controller
      */
     public function get(string $id)
     {
-        return $this->repository->get($id);
+        return $this->repository->byOrgID($id);
     }
 
     /**
@@ -31,7 +32,7 @@ class OrgPayrunSettingController extends Controller
     public function update(UpdatePayrunSetting $request, string $id)
     {
 
-        $settings = $this->repository->skipPresenter(true)->get($id);
+        $settings = $this->repository->skipPresenter(true)->byOrgID($id);
 
         $this->authorize('view', $settings);
 

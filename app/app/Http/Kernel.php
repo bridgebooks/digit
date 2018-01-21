@@ -61,5 +61,6 @@ class Kernel extends HttpKernel
         'jwt.refresh' => \Tymon\JWTAuth\Middleware\RefreshToken::class,
         'acl' => \App\Http\Middleware\ACL::class,
         'subscription.check' => \App\Http\Middleware\SubscriptionCheck::class,
+        'subscription.feature_usage_check' => \App\Http\Middleware\SubscriptionPlanFeatureUsageCheck::class,
     ];
 }

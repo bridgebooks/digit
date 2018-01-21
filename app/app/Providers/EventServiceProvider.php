@@ -48,6 +48,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\PayrunApproved' => [
             'App\Listeners\PayrunApprovedListener'
+        ],
+        'App\Events\FeatureUsed' => [
+            'App\Listeners\FeatureUsedListener'
         ]
      ];
 

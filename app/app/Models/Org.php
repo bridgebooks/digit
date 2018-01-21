@@ -72,12 +72,13 @@ class Org extends Model
         return $this->hasOne('App\Models\OrgInvoiceSetting');
     }
 
+    /**
+     * @return Model|mixed|null|static
+     */
     public function getAdmin()
     {
-        $admin = null;
-
-        return $this->users->filter(function ($user) {
-            return $user->roles->firstWhere('name', 'org_admin');
-        })[0];
+        return $this->users()->whereHas('roles', function ($query) {
+            $query->where('name', '=', 'org_admin');
+        })->first();
     }
 }

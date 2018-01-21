@@ -7,6 +7,7 @@ use App\Models\Traits\Subscribable;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\Uuids;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Subscription extends Model
 {
@@ -17,6 +18,7 @@ class Subscription extends Model
      * @var bool
      */
     public $incrementing = false;
+
 
     protected $guarded = [];
 
@@ -54,6 +56,11 @@ class Subscription extends Model
     public function plan()
     {
       return $this->belongsTo('App\Models\Plan');
+    }
+
+    public function usage()
+    {
+        return $this->hasMany('App\Models\SubscriptionUsage');
     }
 
     /**
@@ -138,15 +145,6 @@ class Subscription extends Model
         return $this->ends_at ? Carbon::now()->gte($this->ends_at) : false;
     }
 
-    /**
-     * Mark the subscription as cancelled.
-     *
-     * @return void
-     */
-    public function markAsCancelled()
-    {
-        $this->fill(['canceled_at' => Carbon::now()])->save();
-    }
 
     public function cancelTrial()
     {
@@ -155,5 +153,104 @@ class Subscription extends Model
             $this->trial_ends_at = null;
             $this->save();
         }
+    }
+
+    /**
+     * Get feature value.
+     *
+     * @param string $featureSlug
+     *
+     * @return mixed
+     */
+    public function getFeatureValue(string $featureName)
+    {
+        $feature = $this->plan->features()->where('name', $featureName)->first();
+        return $feature->value ?? null;
+    }
+
+    /**
+     * Get how many times the feature has been used.
+     *
+     * @param string $featureName
+     *
+     * @return int
+     */
+    public function getFeatureUsage(string $featureName): int
+    {
+        $usage = $this->usage()->byFeatureName($featureName)->first();
+        return $usage ? $usage->used : 0;
+    }
+
+    /**
+     * Get the available uses.
+     *
+     * @param string $featureName
+     *
+     * @return int
+     */
+    public function getFeatureRemainings(string $featureName): int
+    {
+        $value = $this->getFeatureValue($featureName);
+        $usage = $this->getFeatureUsage($featureName);
+
+        return (int) $value - (int) $usage;
+    }
+
+    /**
+     * @param string $featureName
+     * @param int $uses
+     * @param bool $incremental
+     * @return SubscriptionUsage
+     */
+    public function recordFeatureUsage(string $featureName, int $uses = 1, bool $incremental = true): SubscriptionUsage
+    {
+        $feature = $this->plan->features()->where('name', $featureName)->first();
+
+        $usage = $this->usage()->firstOrNew([
+            'subscription_id' => $this->id,
+            'feature_id' => $feature->id
+        ]);
+
+        $usage->used = ($incremental) ? $usage->used + $uses : $uses;
+
+        $usage->save();
+
+        return $usage;
+    }
+
+    /**
+     * Decrement a feature usage
+     * @param string $featureName
+     * @param int $uses
+     */
+    public function reduceFeatureUsage(string $featureName, int $uses = 1)
+    {
+        $usage = $this->usage()->byFeatureName($featureName)->first();
+        if (is_null($usage)) {
+            return;
+        }
+        $usage->used = max($usage->used - $uses, 0);
+        $usage->save();
+        return $usage;
+    }
+
+    public function canUseFeature(string $featureName): bool
+    {
+        $featureValue = $this->getFeatureValue($featureName);
+        // $usage = $this->usage()->byFeatureName($featureName)->first();
+        $valueIsNumber = is_numeric($featureValue);
+        $valuesIsBool = is_bool($featureValue);
+
+        $featureValue = $valueIsNumber ? (int) $featureValue : (bool) $featureValue;
+
+        if ($valuesIsBool && $featureValue) return true;
+
+        if ($valuesIsBool && !$featureValue) return false;
+
+        if ($valueIsNumber && $featureValue === -1) return true;
+
+        return ($valueIsNumber && $featureValue > 0)
+            ? $this->getFeatureRemainings($featureName) > 0
+            : false;
     }
 }

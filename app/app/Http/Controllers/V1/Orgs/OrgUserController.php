@@ -29,7 +29,9 @@ class OrgUserController extends Controller
 	)
 	{
 		$this->middleware('jwt.auth');
-		$this->middleware('acl:settings.users');
+        $this->middleware('subscription.check');
+        $this->middleware('acl:settings.users');
+        $this->middleware('subscription.feature_usage_check:users')->only(['invite']);
 
 		$this->orgRepository = $orgRepository;
 		$this->userRepository = $userRepository;
@@ -51,7 +53,12 @@ class OrgUserController extends Controller
 		return $this->paginate($users['data'], $perPage, []);
 	}
 
-	public function invite(InviteUser $request, string $id)
+    /**
+     * @param InviteUser $request
+     * @param string $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function invite(InviteUser $request, string $id)
 	{
 		$userAttributes = $request->only(['first_name', 'last_name', 'email']);
 		$message = $request->get('message');
