@@ -226,10 +226,12 @@ class Subscription extends Model
     public function reduceFeatureUsage(string $featureName, int $uses = 1)
     {
         $usage = $this->usage()->byFeatureName($featureName)->first();
+
         if (is_null($usage)) {
             return;
         }
-        $usage->used = max($usage->used - $uses, 0);
+
+        $usage->used = max((int) $usage->used - $uses, 0);
         $usage->save();
         return $usage;
     }

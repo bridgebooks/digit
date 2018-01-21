@@ -23,18 +23,6 @@ class SubscriptionPlanFeatureUsageCheck
     }
 
     /**
-     * Get user subscription
-     * @return Subscription
-     */
-    private function getSubscription() : Subscription
-    {
-        if ($this->userHasRole('org_admin') && $this->user->getActiveSubscription())
-            return $this->user->getActiveSubscription();
-        elseif ($this->userHasRole('org_member') && $this->user->getOrgActiveSubscription())
-            return $this->user->getOrgActiveSubscription();
-    }
-
-    /**
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request

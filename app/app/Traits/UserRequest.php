@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Models\Subscription;
 use App\Models\User;
 use JWTAuth;
 
@@ -67,6 +68,20 @@ trait UserRequest
         }
 
         return $allow;
+    }
+
+    /**
+     * Get user subscription
+     * @return Subscription
+     */
+    private function getSubscription() : Subscription
+    {
+        $user = $this->requestUser();
+
+        if ($this->userHasRole('org_admin') && $user->getActiveSubscription())
+            return $user->getActiveSubscription();
+        elseif ($this->userHasRole('org_member') && $user->getOrgActiveSubscription())
+            return $user->getOrgActiveSubscription();
     }
 
     public function getUserRoles() 
