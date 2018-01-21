@@ -42,7 +42,7 @@ class ContactController extends Controller
 	{
         $this->middleware('jwt.auth');
         $this->middleware('subscription.check');
-        $this->middleware('subscription.feature_usage_check:payruns')->only(['create']);
+        $this->middleware('subscription.feature_usage_check:contacts')->only(['create']);
 
         $this->contactRepository = $contactRepository;
         $this->contactPersonRepository = $contactPersonRepository;

@@ -19,12 +19,12 @@ class OrgInvoiceSettingController extends Controller
 
 	public function get(string $id)
 	{
-		return $this->repository->get($id);
+		return $this->repository->byOrgID($id);
 	}
 
 	public function update(UpdateInvoiceSetting $request, string $id)
 	{
-		$settings = $this->repository->skipPresenter(true)->get($id);
+		$settings = $this->repository->skipPresenter(true)->byOrgID($id);
 
 		$this->authorize('update', $settings);
 

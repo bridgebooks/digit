@@ -36,7 +36,7 @@ class OrgInvoiceSettingRepositoryEloquent extends BaseRepository implements OrgI
         return OrgInvoiceSettingPresenter::class;
     }
 
-    public function get(string $id)
+    public function byOrgID(string $id)
     {
         $this->applyScope();
 
