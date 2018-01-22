@@ -64,6 +64,38 @@ class InvoiceRepositoryEloquent extends BaseRepository implements InvoiceReposit
         return $this->parserResult($results->get());
     }
 
+    public function contactUnpaid(string $id, string $type = null)
+    {
+        $this->applyCriteria();
+        $this->applyScope();
+
+        $results = $this->model->where('contact_id', $id);
+
+        if (!is_null($type)) $results->where('type', $type);
+        $results->whereIn('status', [ 'authorized', 'sent' ]);
+
+        $this->resetModel();
+        $this->resetScope();
+
+        return $this->parserResult($results->get());
+    }
+
+    public function contact(string $id, string $type = null, string $status = 'all')
+    {
+        $this->applyCriteria();
+        $this->applyScope();
+
+        $results = $this->model->where('contact_id', $id);
+
+        if (!is_null($type)) $results->where('type', $type);
+        if ($status !== 'all') $results->where('status', $status);
+
+        $this->resetModel();
+        $this->resetScope();
+
+        return $this->parserResult($results->get());
+    }
+
     public function user(string $id, string $org_id, string $type = null, string $status = 'all')
     {
         $this->applyCriteria();
