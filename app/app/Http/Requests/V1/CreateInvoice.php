@@ -37,9 +37,6 @@ class CreateInvoice extends FormRequest
             'invoice_no' => Rule::unique('invoices')->where(function ($query) {
                 $query->where('org_id', $this->request->get('org_id'));
             }),
-            'reference' => Rule::unique('invoices')->where(function ($query) {
-                $query->where('org_id', $this->request->get('org_id'));
-            }),
             'items' => 'required|array'
         ];
     }

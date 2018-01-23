@@ -38,7 +38,6 @@ class InvoiceController extends Controller
 			'due_at', 
 			'raised_at', 
 			'invoice_no', 
-			'reference', 
 			'line_amount_type',
 			'sub_total',
 			'tax_total',
@@ -48,6 +47,7 @@ class InvoiceController extends Controller
 		]);
 
 		$attrs['user_id'] = $this->requestUser()->id;
+		$attrs['reference'] = $request->input('reference', InvoiceUtil::generateReference(5));
 
 		$invoice = $this->repository->skipPresenter()->create($attrs);
 
