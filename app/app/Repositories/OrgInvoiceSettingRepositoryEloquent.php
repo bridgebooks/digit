@@ -40,10 +40,6 @@ class OrgInvoiceSettingRepositoryEloquent extends BaseRepository implements OrgI
     {
         $this->applyScope();
 
-        if (!is_null($this->validator)) {
-            $this->validator->with($attributes)->passesOrFail(ValidatorInterface::RULE_UPDATE);
-        }
-
         $temporarySkipPresenter = $this->skipPresenter;
 
         $this->skipPresenter(true);

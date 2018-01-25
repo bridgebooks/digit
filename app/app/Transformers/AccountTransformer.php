@@ -54,7 +54,8 @@ class AccountTransformer extends TransformerAbstract
             'code' => $model->code,
             'description' => $model->description,
             'tax_rate_id' => $model->tax_rate_id,
-            'created_at' => $model->created_at
+            'ytd_balance' => $model->ytd_balance,
+            'created_at' => $model->created_at->getTimestamp() * 1000
         ];
     }
 }

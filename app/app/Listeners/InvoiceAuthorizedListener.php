@@ -28,5 +28,6 @@ class InvoiceAuthorizedListener
      */
     public function handle(InvoiceAuthorized $event)
     {
+
     }
 }
