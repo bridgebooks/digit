@@ -6,6 +6,7 @@ use App\Events\InvoiceAuthorized;
 use App\Repositories\TransactionRepository;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Notifications\InvoiceAuthorized as InvoiceAuthorizedNotification;
 
 class InvoiceAuthorizedListener
 {
@@ -28,6 +29,9 @@ class InvoiceAuthorizedListener
      */
     public function handle(InvoiceAuthorized $event)
     {
-
+        // send InvoiceAuthorized email
+        $user = $event->invoice->user;
+        $user->notify(new InvoiceAuthorizedNotification($event->invoice));
+        // commit transaction
     }
 }
