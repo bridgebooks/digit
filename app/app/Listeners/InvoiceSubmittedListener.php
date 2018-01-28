@@ -2,8 +2,10 @@
 
 namespace App\Listeners;
 
+use Illuminate\Support\Facades\Notification;
 use App\Jobs\GenerateInvoicePDF;
 use App\Events\InvoiceSubmitted;
+use App\Notifications\InvoiceSubmitted as InvoiceSubmittedNotification;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -27,8 +29,15 @@ class InvoiceSubmittedListener
      */
     public function handle(InvoiceSubmitted $event)
     {
-        // Notify 'advisers' in org
+        // advisers
+        $advisers = $event->invoice->org->getUsersByRole('adviser');
+
         // Generate PDF
         GenerateInvoicePDF::dispatch($event->invoice);
+
+        if ($advisers) {
+            // Notify advisers
+            Notification::send($advisers, new InvoiceSubmittedNotification($event->invoice));
+        }
     }
 }

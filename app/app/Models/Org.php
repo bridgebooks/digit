@@ -81,4 +81,15 @@ class Org extends Model
             $query->where('name', '=', 'org_admin');
         })->first();
     }
+
+    /**
+     * @param string $name
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public function getUsersByRole(string $name)
+    {
+        return $this->users()->whereHas('orgRoles', function ($query) use ($name) {
+            $query->where('name', '=', $name);
+        })->get();
+    }
 }

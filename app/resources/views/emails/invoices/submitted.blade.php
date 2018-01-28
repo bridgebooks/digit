@@ -183,10 +183,10 @@
                             <div style="color:#0068A5;line-height:120%;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;">
                                 <div style="font-size:16px;line-height:18px;text-align:left;color:#000;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;">
                                     <p style="margin: 0;font-size: 16px;line-height: 18px;text-align: left">
-                                        Hello, {{ $invoice->user->first_name }}
+                                        Hello,
                                     </p>
                                     <p style="margin: 0;font-size: 16px;line-height: 18px;text-align: left">
-                                        Your invoice {{ $invoice->invoice_no }} has been authorized. The invoice will automatically be sent to the designated contact.
+                                        {{ $invoice->user->first_name }} has submitted an invoice {{ $invoice->invoice_no }} for authorization. Please review.
                                     </p>
                                 </div>
                             </div><!--[if mso]></td></tr></table><![endif]-->

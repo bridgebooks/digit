@@ -2,23 +2,27 @@
 
 namespace App\Notifications;
 
+use App\Models\Invoice;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use App\Mail\InvoiceSubmitted as InvoiceSubmittedMailable;
 
 class InvoiceSubmitted extends Notification
 {
     use Queueable;
+
+    protected $invoice;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Invoice $invoice)
     {
-        //
+        $this->invoice = $invoice;
     }
 
     /**
@@ -40,10 +44,10 @@ class InvoiceSubmitted extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+        $mail = new InvoiceSubmittedMailable($this->invoice);
+        $mail->to($notifiable->email);
+
+        return $mail;
     }
 
     /**
