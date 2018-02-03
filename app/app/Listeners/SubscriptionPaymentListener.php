@@ -27,7 +27,7 @@ class SubscriptionPaymentListener
 
     private function updateUser(User $user, array $authorization)
     {
-        $user->card_brand = $authorization['card_type'];
+        $user->card_brand = substr($authorization['card_type'], 0, 4);
         $user->card_last_four = $authorization['last4'];
         $user->card_exp_month = $authorization['exp_month'];
         $user->card_exp_year = $authorization['exp_year'];
