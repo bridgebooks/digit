@@ -11,7 +11,6 @@ class PayrunObserver
     public function updated(Payrun $payrun)
     {
         if ($payrun->status == PayrunStatus::APPROVED) {
-
         }
     }
 }

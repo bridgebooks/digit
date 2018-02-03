@@ -40,10 +40,7 @@ class PayslipObserver
 
            $payslip->items()->createMany($payslipItems);
         }
-
     }
-
-
 
     /**
      * @param Payslip $payslip
