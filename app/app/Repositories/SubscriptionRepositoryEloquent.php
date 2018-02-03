@@ -55,6 +55,6 @@ class SubscriptionRepositoryEloquent extends BaseRepository implements Subscript
         $this->resetModel();
         $this->resetScope();
 
-        return $this->parserResult($result);
+        return $result ? $this->parserResult($result) : null; 
     }
 }
