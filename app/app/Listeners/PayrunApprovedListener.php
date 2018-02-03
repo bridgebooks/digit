@@ -22,13 +22,13 @@ class PayrunApprovedListener
     /**
      * Handle the event.
      *
-     * @param  PayrunApproved  $event
+     * @param PayrunApproved $event
      * @return void
      */
     public function handle(PayrunApproved $event)
     {
         $payrun = $event->payrun;
-
+        // generate payslips
         dispatch(new GeneratePayslipPDF($payrun));
     }
 }
