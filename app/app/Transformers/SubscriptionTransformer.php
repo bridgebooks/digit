@@ -12,7 +12,7 @@ use App\Models\Subscription;
  */
 class SubscriptionTransformer extends TransformerAbstract
 {
-    protected $availableIncludes = ['plan'];
+    protected $availableIncludes = [ 'plan' ];
 
     public function includePlan(Subscription $model)
     {
