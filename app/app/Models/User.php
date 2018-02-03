@@ -97,7 +97,7 @@ class User extends Authenticatable
 
         $active =  $this->subscriptions()
             ->where('ends_at', '>=', Carbon::now())
-            ->where('canceled_at', '=', NULL)
+            ->where('canceled_at', '=', null)
             ->first();
 
         return $active ? $active : false;
@@ -127,11 +127,11 @@ class User extends Authenticatable
 
         $inactive = $this->subscriptions()
             ->where('ends_at', '<=', Carbon::now())
-            ->orWhere('canceled_at', '!=', NULL)
+            ->orWhere('canceled_at', '!=', null)
             ->orderBy('created_at', 'desc')
             ->first();
 
-        return $inactive;
+        return $inactive ?? null;
     }
 
     /**
