@@ -41,7 +41,9 @@ class UserBillingController extends Controller
     {
         $user = $this->requestUser();
 
-        return $this->repository->active($user);
+        $subscription =  $this->repository->active($user);
+
+        return (!is_null($subscription)) ? $subscription : response()->json(["status" => "error", "message" => "No subscription found" ], 404);
     }
 
     public function subscription(CreateUserSubscription $request, PlanRepository $plans)
