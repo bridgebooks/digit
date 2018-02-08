@@ -42,6 +42,23 @@ class Account extends Model
 
     public function transactions()
     {
-        return $this->morphMany('App\Models\Transaction', 'transactable');
+        return $this->hasMany('App\Models\Transaction', 'account_id');
+    }
+
+    public function updateYTD()
+    {
+    }
+
+    /**
+     * Scope a query to only include users of a given type.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $name
+     * @param string $id
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeByName($query, string $name, string $id)
+    {
+        return $query->where('org_id', $id)->where('name', 'LIKE', '%' . $name . '%');
     }
 }

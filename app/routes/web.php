@@ -13,10 +13,12 @@
 
 Route::get('/', function () {
 
-	$slip = \App\Models\Payslip::with(['payrun', 'employee'])
-        ->find('a7b19220-f399-11e7-8636-8112971985bb');
-
-    return view('emails.payroll.payslip', [
-        'slip'=> $slip
-    ]);
+	$invoice = \App\Models\Invoice::find("d7b48420-09aa-11e8-9228-1371adb918f5");
+	$items = $invoice->items;
+	$itemGroups = $items->groupBy("account_id");
+	$itemGroups->each(function ($group) {
+	   $group->each(function ($item) {
+	      dd($item);
+       });
+    });
 });

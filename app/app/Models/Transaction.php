@@ -9,17 +9,21 @@ class Transaction extends Model
 {
     use Uuids;
 
+    public $table = "account_transactions";
+
     public $incrementing = false;
 
     protected $fillable = [
-        'debit_account_id',
-        'credit_account_id',
+        'org_id',
+        'source_id',
+        'source_type',
+        'account_id',
         'credit',
         'debit'
     ];
 
-    public function transactable()
+    public function account()
     {
-        return $this->morphTo();
+        return $this->belongsTo('App\Models\Account');
     }
 }

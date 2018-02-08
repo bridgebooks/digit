@@ -24,7 +24,14 @@ class SubscriptionPaymentListener
         $this->users = $users;
         $this->plans = $plans;
     }
-
+    
+    /**
+     * Upadate user model
+     * @param $user \App\Models\User
+     * Uer model
+     * @param $authorization array
+     * Authorization payload from paystack
+     */
     private function updateUser(User $user, array $authorization)
     {
         $user->card_brand = substr($authorization['card_type'], 0, 4);

@@ -20,9 +20,12 @@ Route::get('{id}/invoice_events', 'OrgInvoiceController@invoiceEvents');
 
 Route::get('{id}/settings/invoices', 'OrgInvoiceSettingController@get');
 Route::get('{id}/settings/payruns', 'OrgPayrunSettingController@get');
+Route::get('{id}/settings/accounts', 'OrgAccountSettingController@get');
 
 Route::put('{id}/settings/payruns', 'OrgPayrunSettingController@update');
 Route::put('{id}/settings/invoices', 'OrgInvoiceSettingController@update');
+Route::put('{id}/settings/accounts', 'OrgAccountSettingController@update');
+
 
 //Org Users
 Route::get('{id}/users', 'OrgUserController@all');

@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Events\CommitPayrun;
 use App\Events\PayrunApproved;
 use App\Jobs\GeneratePayslipPDF;
 use Illuminate\Queue\InteractsWithQueue;
@@ -30,5 +31,7 @@ class PayrunApprovedListener
         $payrun = $event->payrun;
         // generate payslips
         dispatch(new GeneratePayslipPDF($payrun));
+        // commit payrun
+        event(new CommitPayrun($payrun));
     }
 }

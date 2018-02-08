@@ -49,10 +49,16 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\PayrunApproved' => [
             'App\Listeners\PayrunApprovedListener'
         ],
+        'App\Events\CommitInvoice' => [
+            'App\Listeners\CommitInvoiceListener'
+        ],
+        'App\Events\CommitPayrun' => [
+            'App\Listeners\CommitPayrunListener'
+        ],
         'App\Events\FeatureUsed' => [
             'App\Listeners\FeatureUsedListener'
         ]
-     ];
+    ];
 
     protected $subscribe = [
         'App\Listeners\PaystackSubscriptionEventSubscriber'

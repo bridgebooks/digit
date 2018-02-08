@@ -25,6 +25,11 @@ class Payslip extends Model
         'net_pay',
     ];
 
+    public function transactable()
+    {
+        return $this->morphTo();
+    }
+
     public function employee()
     {
         return $this->belongsTo('App\Models\Employee', 'employee_id');

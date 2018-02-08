@@ -3,22 +3,21 @@
 namespace App\Listeners;
 
 use App\Events\InvoiceAuthorized;
-use App\Repositories\TransactionRepository;
+use App\Events\CommitInvoice;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Notifications\InvoiceAuthorized as InvoiceAuthorizedNotification;
 
 class InvoiceAuthorizedListener
 {
-    protected $transactionRepo;
     /**
      * Create the event listener.
      *
      * @return void
      */
-    public function __construct(TransactionRepository $transactionRepository)
+    public function __construct()
     {
-        $this->transactionRepo = $transactionRepository;
+
     }
 
     /**
@@ -33,5 +32,6 @@ class InvoiceAuthorizedListener
         $user = $event->invoice->user;
         $user->notify(new InvoiceAuthorizedNotification($event->invoice));
         // commit transaction
+        event(new CommitInvoice($event->invoice));
     }
 }
