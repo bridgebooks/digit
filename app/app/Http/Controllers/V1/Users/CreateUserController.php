@@ -93,9 +93,9 @@ class CreateUserController extends Controller
             $user->roles()->attach($role->id);
 
             // selected plan
-            $plan = $request->input('plan', config('app.default_plan'));
+            $plan = $request->input('plan', config('app.default_subscription_plan') ?? 'pro');
             // Trigger 'OnUserCreated' event
-            event(new PrimaryUserCreated($user, config('app.trial_duration'), $plan));
+            event(new PrimaryUserCreated($user, config('app.trial_duration') ?? 30, $plan));
      	} else {
             // Add user to 'org_member'
             $role = $this->roleRepository->skipPresenter(true)
