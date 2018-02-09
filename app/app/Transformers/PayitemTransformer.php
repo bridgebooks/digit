@@ -41,7 +41,7 @@ class PayitemTransformer extends TransformerAbstract
             'name' => $model->name,
             'default_amount' => $model->default_amount,
             'description' => $model->description,
-            'mark_default' => (bool) $model->mark_default,
+            'default' => (bool) $model->mark_default,
             'is_archived' => $model->deleted_at ? true : false,
             'created_at' => $model->created_at->getTimestamp() * 1000,
             'updated_at' => $model->updated_at->getTimestamp() * 1000,
