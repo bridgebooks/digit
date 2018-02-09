@@ -31,7 +31,7 @@ class PayItem extends Model
         'account_id',
         'pay_item_type',
         'default_amount',
-        'mark_default'
+        'default'
     ];
 
     public function account()
