@@ -84,7 +84,7 @@ class CreateUserController extends Controller
 
      	$user = $this->userRepository->skipPresenter(true)->create($userAttributes);
 
-     	if($request->input('primary_user')) {
+     	if ($request->input('primary_user')) {
      		// Add user to 'org_admin'
             $role = $this->roleRepository->skipPresenter(true)
               ->findWhere(['name' => 'org_admin'])
