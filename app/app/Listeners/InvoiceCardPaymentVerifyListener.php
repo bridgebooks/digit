@@ -2,8 +2,10 @@
 
 namespace App\Listeners;
 
+use App\Events\InvoiceCardPaymentSuccess;
 use App\Repositories\InvoicePaymentRepository;
 use App\Events\InvoiceCardPaymentVerify;
+use Carbon\Carbon;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -40,13 +42,16 @@ class InvoiceCardPaymentVerifyListener
             ])
             ->first();
 
-        if ($payment && in_array($response->flutterChargeResponseCode, ['0', '00', 'RR-00'])) {
+        if ($payment && in_array($response->flutterChargeResponseCode, [ '0', '00', 'RR-00' ])) {
             // update payment
             $payment->status = 'verified';
+            $payment->paid_at = new Carbon();
             $payment->save();
             // update invoice
             $event->invoice->status = 'paid';
             $event->invoice->save();
+
+            event(new InvoiceCardPaymentSuccess($event->invoice, $payment));
         } else {
             // update payment;
             $payment->status = 'failed';

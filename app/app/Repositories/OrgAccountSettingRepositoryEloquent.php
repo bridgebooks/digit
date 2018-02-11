@@ -45,6 +45,12 @@ class OrgAccountSettingRepositoryEloquent extends BaseRepository implements OrgA
         return $account->id ?? null;
     }
 
+    private function getWages(string $id)
+    {
+        $account = Account::byName('Wages and Salaries', $id)->where('is_system', 1)->first();
+        return $account->id ?? null;
+    }
+
     /**
      * Set default account settings values
      * @param string $id

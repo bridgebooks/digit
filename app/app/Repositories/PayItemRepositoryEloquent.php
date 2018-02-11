@@ -54,7 +54,7 @@ class PayItemRepositoryEloquent extends BaseRepository implements PayItemReposit
         $this->applyCriteria();
         $this->applyScope();
 
-        $results = $this->model->where('org_id', $id)->where('mark_default', 1)->get();
+        $results = $this->model->where('org_id', $id)->where('default', 1)->get();
 
         $this->resetModel();
         $this->resetScope();

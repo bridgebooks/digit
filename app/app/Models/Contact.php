@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Traits\Uuids;
+use Illuminate\Notifications\Notifiable;
 use Laravel\Scout\Searchable;
 
 class Contact extends Model
 {
-    use SoftDeletes, Uuids, Searchable;
+    use SoftDeletes, Uuids, Searchable, Notifiable;
     /**
      * Indicates if the IDs are auto-incrementing.
      *

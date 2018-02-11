@@ -47,7 +47,7 @@ class PayslipObserver
      */
     public function updated(Payslip $payslip)
     {
-        $payrun = $payslip->payrun();
+        $payrun = $payslip->payrun;
         if ( is_null($payslip->pdf_url) ) $payrun->updateTotals();
     }
 }

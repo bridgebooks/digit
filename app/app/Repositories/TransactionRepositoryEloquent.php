@@ -2,15 +2,18 @@
 
 namespace App\Repositories;
 
+use App\Models\InvoiceLineItem;
+use App\Models\InvoicePayment;
+use App\Models\OrgAccountSetting;
 use App\Models\Payrun;
 use App\Models\Payslip;
+use App\Presenters\TransactionPresenter;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use App\Repositories\TransactionRepository;
 use App\Models\Transaction;
 use App\Models\Invoice;
 use App\Models\Account;
-use OrgAccountSettingRepository;
+
 /**
  * Class TransactionRepositoryEloquent
  * @package namespace App\Repositories;
@@ -28,6 +31,16 @@ class TransactionRepositoryEloquent extends BaseRepository implements Transactio
     }
 
     /**
+     * Specify Presenter class name
+     *
+     * @return string
+     */
+    public function presenter()
+    {
+        return TransactionPresenter::class;
+    }
+
+    /**
      * Boot up the repository, pushing criteria
      */
     public function boot()
@@ -40,6 +53,11 @@ class TransactionRepositoryEloquent extends BaseRepository implements Transactio
         return Account::with(['type'])->find($id);
     }
 
+    private function getAccountSettings(string $id)
+    {
+        return OrgAccountSetting::where('org_id', $id)->first();
+    }
+
     private function postInvoice(Invoice $invoice, Account $account, bool $tax = false)
     {
         // Create transaction
@@ -48,11 +66,55 @@ class TransactionRepositoryEloquent extends BaseRepository implements Transactio
         $transaction->source_type = get_class($invoice);
         $transaction->org_id = $invoice->org_id;
         $transaction->account_id = $account->id;
-        
-        if ($account->type->normal_balance === 'credit') {
-            $transaction->credit = $tax ? $invoice->tax_total : $invoice->total;
+
+        if ($tax) {
+            if ($account->type->normal_balance === 'credit' && $invoice->type === 'acc_pay') {
+                $transaction->debit = $invoice->tax_total;
+            } else {
+                $transaction->credit = $invoice->tax_total;
+            }
         } else {
-            $transaction->debit = $tax ? $invoice->tax_total : $invoice->total;
+            if ($account->type->normal_balance === 'credit') {
+                $transaction->credit = $invoice->total;
+            } else {
+                $transaction->debit = $invoice->total;
+            }
+        }
+
+        $transaction->save();
+    }
+
+    private function postInvoicePayment(Invoice $invoice, Account $account, InvoicePayment $payment)
+    {
+        // Create transaction
+        $transaction = new Transaction();
+        $transaction->source_id = $payment->id;
+        $transaction->source_type = get_class($payment);
+        $transaction->org_id = $invoice->org_id;
+        $transaction->account_id = $account->id;
+
+        if ($account->type->normal_balance === 'credit') {
+            $transaction->debit = $invoice->total;
+        } else {
+            $transaction->credit = $invoice->total;
+        }
+
+        $transaction->save();
+    }
+
+    private function postInvoiceItemPayment(Invoice $invoice, InvoiceLineItem $item, Account $account, InvoicePayment $payment)
+    {
+        // Create transaction
+        $transaction = new Transaction();
+        $transaction->source_id = $payment->id;
+        $transaction->source_type = get_class($payment);
+        $transaction->org_id = $invoice->org_id;
+        $transaction->account_id = $account->id;
+
+        if ($account->type->normal_balance === 'credit') {
+            $transaction->debit = $item->amount;
+        } else {
+            $transaction->credit = $item->amount;
         }
 
         $transaction->save();
@@ -131,22 +193,68 @@ class TransactionRepositoryEloquent extends BaseRepository implements Transactio
         }
     }
 
+    public function postPayslipItems(Payslip $slip)
+    {
+        $slip->items->filter(function ($slipItem) {
+            return $slipItem->item->pay_item_type !== 'wage';
+        })->each(function ($slipItem) {
+           $account = $this->getAccount($slipItem->item->account_id);
+            // Create transaction
+            $transaction = new Transaction();
+            $transaction->source_id = $slipItem->payslip->id;
+            $transaction->source_type = get_class($slipItem->payslip);
+            $transaction->org_id = $slipItem->payslip->payrun->org_id;
+            $transaction->account_id = $account->id;
+
+            if ($account->type->normal_balance === 'credit') {
+                $transaction->credit = $slipItem->amount;
+            } else {
+                $transaction->debit = $slipItem->amount;
+            }
+
+            $transaction->save();
+        });
+    }
+
     /**
      * @param Payrun $payrun
-     * @param OrgAccountSettingRepositoryEloquent $settingsRepository
+     * @param OrgPayrunSettingRepositoryEloquent $settingsRepository
      */
-    public function commitPayrun(Payrun $payrun, OrgAccountSettingRepositoryEloquent $settingsRepository)
+    public function commitPayrun(Payrun $payrun, OrgPayrunSettingRepositoryEloquent $settingsRepository)
     {
         $settingsRepository->skipPresenter();
         $settings = $settingsRepository->byOrgID($payrun->org_id);
+        $accountSettings = $this->getAccountSettings($payrun->org_id);
 
         $wagePayable = $this->getAccount($settings->values->wages_account);
         $employeeTaxPayable = $this->getAccount($settings->values->employee_tax_account);
+        $wages = $accountSettings ? $this->getAccount($accountSettings->values->wages) : null;
 
-        $payrun->payslips->each(function ($payslip) use ($wagePayable, $employeeTaxPayable) {
+        $payrun->payslips->each(function ($payslip) use ($wagePayable, $employeeTaxPayable, $wages) {
+           // post wage payable
            $this->postPayslip($payslip, $wagePayable);
-           //post taxes
-            $this->postPayslip($payslip, $employeeTaxPayable, true);
+           // post tax payable
+           $this->postPayslip($payslip, $employeeTaxPayable, true);
+           // post payslip items
+           $this->postPayslipItems($payslip);
+           // post wages
+           if ($wages) $this->postPayslip($payslip, $wages);
+        });
+    }
+
+    /**
+     * @param Invoice $invoice
+     * @param InvoicePayment $payment
+     */
+    public function commitInvoicePayment(Invoice $invoice, InvoicePayment $payment)
+    {
+        $settings = $this->getAccountSettings($invoice->org_id);
+        $account = $this->getAccount($settings->values->accounts_recievable);
+        $this->postInvoicePayment($invoice, $account, $payment);
+
+        $invoice->items->each(function ($item) use ($invoice) {
+           $account = $this->getAccount($item->account_id);
+           $this->postInvoiceItemPayment($invoice, $item, $account, $payment);
         });
     }
 }

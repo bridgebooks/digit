@@ -26,4 +26,9 @@ class Transaction extends Model
     {
         return $this->belongsTo('App\Models\Account');
     }
+
+    public function source()
+    {
+        return $this->belongsTo($this->source_type);
+    }
 }
