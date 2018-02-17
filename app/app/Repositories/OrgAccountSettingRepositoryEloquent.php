@@ -22,12 +22,16 @@ class OrgAccountSettingRepositoryEloquent extends BaseRepository implements OrgA
     use CacheableRepository;
 
     protected $defaultValues = [
-        'accounts_recievable' => null,
+        'accounts_receivable' => null,
         'accounts_payable' => null,
-        'sales_tax' => null
+        'sales_tax' => null,
+        'financial_year' => [
+            "day" => 31,
+            "month" => 12
+        ]
     ];
 
-    private function getAccountsRecievable(string $id) 
+    private function getAccountsReceivable(string $id)
     {
         $account = Account::byName('Accounts Receivable', $id)->where('is_system', 1)->first();
         return $account->id ?? null;
@@ -59,7 +63,7 @@ class OrgAccountSettingRepositoryEloquent extends BaseRepository implements OrgA
      */
     private function setDefaultValues(string $id)
     {
-        $this->defaultValues['accounts_recievable'] = $this->getAccountsRecievable($id);
+        $this->defaultValues['accounts_receivable'] = $this->getAccountsReceivable($id);
         $this->defaultValues['accounts_payable'] = $this->getAccountsPayable($id);
         $this->defaultValues['sales_tax'] = $this->getSalesTax($id);
     }

@@ -48,6 +48,7 @@ class InvoicePaymentTransformer extends TransformerAbstract
             'phone' => $model->phone,
             'amount' => (float) $model->amount,
             'status' => $model->status,
+            'paid_at' => $model->paid_at ? $model->paid_at->getTimestamp() * 1000 : null,
             'created_at' => $model->created_at->getTimestamp() * 1000,
             'updated_at' => $model->updated_at->getTimestamp() * 1000
         ];

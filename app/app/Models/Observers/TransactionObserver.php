@@ -3,6 +3,7 @@
 namespace App\Models\Observers;
 
 
+use App\Events\TransactionCreated;
 use App\Models\Transaction;
 
 class TransactionObserver
@@ -12,6 +13,6 @@ class TransactionObserver
      */
     public function created(Transaction $transaction)
     {
-        $transaction->account->updateYTD();
+        event(new TransactionCreated($transaction->account));
     }
 }

@@ -49,6 +49,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\InvoiceAuthorized' => [
             'App\Listeners\InvoiceAuthorizedListener'
         ],
+        'App\Events\TransactionCreated' => [
+            'App\Listeners\TransactionCreatedListener'
+        ],
         'App\Events\PayrunApproved' => [
             'App\Listeners\PayrunApprovedListener'
         ],

@@ -8,6 +8,7 @@ use App\Models\OrgAccountSetting;
 use App\Models\Payrun;
 use App\Models\Payslip;
 use App\Presenters\TransactionPresenter;
+use Carbon\Carbon;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use App\Models\Transaction;
@@ -46,6 +47,22 @@ class TransactionRepositoryEloquent extends BaseRepository implements Transactio
     public function boot()
     {
         $this->pushCriteria(app(RequestCriteria::class));
+    }
+
+    public function between(string $id, Carbon $start = null, Carbon $end)
+    {
+        $query = $this->model->where('account_id', $id);
+
+        if (is_null($start)) {
+            $query->where('created_at', '<=', $end->toDateTimeString());
+        } else {
+            $query->whereBetween('created_at', [
+                $start->toDateTimeString(),
+                $end->toDateTimeString(),
+            ]);
+        };
+
+        return $query->get();
     }
 
     private function getAccount(string $id)
@@ -159,7 +176,7 @@ class TransactionRepositoryEloquent extends BaseRepository implements Transactio
         
         switch ($invoice->type) {
             case 'acc_rec':
-                $account = $this->getAccount($settings->values->accounts_recievable);
+                $account = $this->getAccount($settings->values->accounts_receivable);
             break;
             case 'acc_pay':
                 $account = $this->getAccount($settings->values->accounts_payable);
@@ -249,10 +266,10 @@ class TransactionRepositoryEloquent extends BaseRepository implements Transactio
     public function commitInvoicePayment(Invoice $invoice, InvoicePayment $payment)
     {
         $settings = $this->getAccountSettings($invoice->org_id);
-        $account = $this->getAccount($settings->values->accounts_recievable);
+        $account = $this->getAccount($settings->values->accounts_receivable);
         $this->postInvoicePayment($invoice, $account, $payment);
 
-        $invoice->items->each(function ($item) use ($invoice) {
+        $invoice->items->each(function ($item) use ($invoice, $payment) {
            $account = $this->getAccount($item->account_id);
            $this->postInvoiceItemPayment($invoice, $item, $account, $payment);
         });

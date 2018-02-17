@@ -2,11 +2,10 @@
 
 namespace App\Repositories;
 
+use App\Presenters\InvoicePaymentPresenter;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use App\Repositories\InvoicePaymentRepository;
 use App\Models\InvoicePayment;
-use App\Validators\InvoicePaymentValidator;
 
 /**
  * Class InvoicePaymentRepositoryEloquent
@@ -22,6 +21,16 @@ class InvoicePaymentRepositoryEloquent extends BaseRepository implements Invoice
     public function model()
     {
         return InvoicePayment::class;
+    }
+
+    /**
+     * Specify Presenter class name
+     *
+     * @return string
+     */
+    public function presenter()
+    {
+        return InvoicePaymentPresenter::class;
     }
 
     /**

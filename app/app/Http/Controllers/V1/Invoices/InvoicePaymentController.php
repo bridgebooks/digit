@@ -21,10 +21,12 @@ use App\Http\Requests\V1\VerifyPayment;
 
 use App\Repositories\InvoiceRepository;
 use App\Repositories\InvoicePaymentRepository;
+use GuzzleHttp\Psr7\Request;
 
 class InvoicePaymentController extends Controller
 {
 	protected $invoiceRepository;
+	protected $invoicePaymentRepository;
 	protected $moneywave;
 	protected $params = [
 		'first_name',
@@ -41,10 +43,12 @@ class InvoicePaymentController extends Controller
 	public function __construct
 	(
 		InvoiceRepository $invoiceRepository,
+		InvoicePaymentRepository $invoicePaymentRepository,
 		Moneywave $moneywave
 	)
 	{
 		$this->invoiceRepository = $invoiceRepository;
+		$this->invoicePaymentRepository = $invoicePaymentRepository;
 		$this->moneywave = $moneywave;
 	}
 
@@ -91,6 +95,16 @@ class InvoicePaymentController extends Controller
 			return $e->getMessage();
 		}
 	}
+
+    /**
+     * @param Request $request
+     * @param string $id
+     * @return mixed
+     */
+    public function get(string $id)
+    {
+        return $this->invoicePaymentRepository->find($id);
+    }
 
 	public function init(InitPayment $request, string $id)
 	{
