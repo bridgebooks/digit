@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Traits\Uuids;
@@ -45,10 +46,6 @@ class Account extends Model
         return $this->hasMany('App\Models\Transaction', 'account_id');
     }
 
-    public function updateYTD()
-    {
-    }
-
     /**
      * Scope a query to only include users of a given type.
      *
@@ -60,5 +57,39 @@ class Account extends Model
     public function scopeByName($query, string $name, string $id)
     {
         return $query->where('org_id', $id)->where('name', 'LIKE', '%' . $name . '%');
+    }
+
+    public function scopeByType($query, string $type)
+    {
+        return $query->whereHas('type', function ($qb) use ($type) {
+            $qb->where('name', $type);
+        });
+    }
+
+    public function getYTDbalance(Carbon $start, Carbon $end)
+    {
+
+        $transactions = $this->transactions()
+            ->whereBetween('created_at', [
+                $start->toDateTimeString(),
+                $end->toDateTimeString()
+            ])
+            ->get();
+
+        $debits = $transactions->map(function ($transaction) {
+            return $transaction->debit;
+        })->sum();
+
+        $credits = $transactions->map(function ($transaction) {
+            return $transaction->credit;
+        })->sum();
+
+        if ($this->type->normal_balance === "credit") {
+            $ytd = $credits - $debits;
+        } else {
+            $ytd = $debits - $credits;
+        }
+
+        return $ytd;
     }
 }

@@ -49,9 +49,37 @@ class TransactionRepositoryEloquent extends BaseRepository implements Transactio
         $this->pushCriteria(app(RequestCriteria::class));
     }
 
+    /**
+     * @param string $id
+     * @param Carbon|null $start
+     * @param Carbon $end
+     * @return mixed
+     */
     public function between(string $id, Carbon $start = null, Carbon $end)
     {
         $query = $this->model->where('account_id', $id);
+
+        if (is_null($start)) {
+            $query->where('created_at', '<=', $end->toDateTimeString());
+        } else {
+            $query->whereBetween('created_at', [
+                $start->toDateTimeString(),
+                $end->toDateTimeString(),
+            ]);
+        };
+
+        return $query->get();
+    }
+
+    /**
+     * @param string $id
+     * @param Carbon|null $start
+     * @param Carbon $end
+     * @return mixed
+     */
+    public function allBetween(string $id, Carbon $start = null, Carbon $end)
+    {
+        $query = $this->model->where('org_id', $id);
 
         if (is_null($start)) {
             $query->where('created_at', '<=', $end->toDateTimeString());
