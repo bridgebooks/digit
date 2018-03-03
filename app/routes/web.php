@@ -13,12 +13,14 @@
 
 Route::get('/', function () {
 
-	$invoice = \App\Models\Invoice::find("d7b48420-09aa-11e8-9228-1371adb918f5");
-	$items = $invoice->items;
-	$itemGroups = $items->groupBy("account_id");
-	$itemGroups->each(function ($group) {
-	   $group->each(function ($item) {
-	      dd($item);
-       });
-    });
+    $balanceDate = "2018-03-31";
+    $reportEndDate = new \Carbon\Carbon($balanceDate);
+    $reportStartDate = $reportEndDate->copy()->subYear();
+
+    $balanceSheetService = new \App\Services\Reports\BalancesheetService();
+    $report = $balanceSheetService->generate("ad8cd4e0-0ded-11e8-b914-5fec8f4b73a9", $reportStartDate, $reportEndDate);
+	return view('reports.balance-sheet', $report)->with([
+	    "org" => \App\Models\Org::find("ad8cd4e0-0ded-11e8-b914-5fec8f4b73a9"),
+        "balance_date" => $reportEndDate->format("d F Y")
+    ]);
 });
