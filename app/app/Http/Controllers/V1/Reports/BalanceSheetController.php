@@ -23,14 +23,19 @@ class BalanceSheetController extends Controller
         $defaultReportDate = new Carbon();
 
         $balanceDate = $request->input('balance_date', $defaultReportDate->toDateTimeString());
+        $generatePDF= $request->input('export_pdf', false);
         $reportEndDate = new Carbon($balanceDate);
         $reportStartDate = $reportEndDate->copy()->subYear();
 
-        $report = $this->balanceSheetService->generate($id, $reportStartDate, $reportEndDate);
+        $report = $this->balanceSheetService->generate($id, $reportStartDate, $reportEndDate, $generatePDF);
 
-        return response()->json([
-            'status' => 'success',
-            'data' => $report
-        ]);
+        if (!$generatePDF) {
+            return response()->json([
+                'status' => 'success',
+                'data' => $report
+            ]);
+        } else {
+            return $report;
+        }
     }
 }

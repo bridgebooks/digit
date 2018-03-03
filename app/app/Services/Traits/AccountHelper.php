@@ -11,10 +11,12 @@ trait AccountHelper
     {
         $type = AccountType::with(['children'])->where('name', $type)->first();
 
-        if ($type->children) {
+        if (isset($type->children)) {
             $types = $type->children->map(function ($child) {
                 return $child->id;
             })->toArray();
+        } else {
+            $types = [$type->id];
         }
 
         return $types;

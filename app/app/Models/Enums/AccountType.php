@@ -11,4 +11,5 @@ class AccountType extends Enum
     const EXPENSES = "Expenses";
     const EQUITY = "Equity";
     const REVENUE = "Revenue";
+    const DIRECT_COST = "Direct Costs";
 }
