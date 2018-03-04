@@ -41,13 +41,22 @@ class PaystackSubscriptionEventSubscriber implements ShouldQueue
         // get active subscription
         $subscription = $user->getActiveSubscription();
 
-        if (
-            is_null($subscription->paystack_subscription_code) ||
-            is_null($subscription->paystack_subscription_token)
-        ) {
-            $subscription->paystack_subscription_code = $event->data['subscription_code'];
-            $subscription->paystack_subscription_token = $event->data['email_token'];
-            $subscription->save();
+        if ($subscription) {
+            if (
+                is_null($subscription->paystack_subscription_code) ||
+                is_null($subscription->paystack_subscription_token)
+            ) {
+                $subscription->paystack_subscription_code = $event->data['subscription_code'];
+                $subscription->paystack_subscription_token = $event->data['email_token'];
+                $subscription->save();
+            }
+        } else {
+            $lastSubscription = $user->getLastActiveSubscription();
+            if ($lastSubscription) {
+                $user->newSubscription($lastSubscription->plan)
+                    ->skipTrial()
+                    ->create();
+            }
         }
 
         $this->delete();
