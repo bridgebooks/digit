@@ -4,7 +4,7 @@ namespace App\Http\Controllers\V1\Reports;
 
 use Carbon\Carbon;
 use App\Http\Controllers\V1\Controller;
-use App\Services\Reports\ProfitLostService;
+use App\Services\Reports\ProfitLostReportService;
 use Illuminate\Http\Request;
 
 class ProfitLossController extends Controller
@@ -14,7 +14,7 @@ class ProfitLossController extends Controller
     public function __construct()
     {
         $this->middleware('jwt.auth');
-        $this->profitLossReportService = new ProfitLostService();
+        $this->profitLossReportService = new ProfitLostReportService();
     }
 
     public function generate(Request $request, string $id)
@@ -22,17 +22,22 @@ class ProfitLossController extends Controller
         $defaultStart = new Carbon();
         $defaultEnd = $defaultStart->copy()->subMonth()->startOfMonth();
 
-        $startDate = $request->input('start', $defaultStart->toDateTimeString());
-        $endDate = $request->input('end', $defaultEnd->toDateTimeString());
+        $startDate = $request->input('start_date', $defaultStart->toDateTimeString());
+        $endDate = $request->input('end_date', $defaultEnd->toDateTimeString());
+        $generatePDF= $request->input('export_pdf', false);
 
         $reportStartDate = new Carbon($startDate);
         $reportEndDate = new Carbon($endDate);
 
-        $report = $this->profitLossReportService->generate($id, $reportStartDate, $reportEndDate);
+        $report = $this->profitLossReportService->generate($id, $reportStartDate, $reportEndDate, $generatePDF);
 
-        return response()->json([
-            'status' => 'success',
-            'data' => $report
-        ]);
+        if (!$generatePDF) {
+            return response()->json([
+                'status' => 'success',
+                'data' => $report
+            ]);
+        } else {
+            return $report;
+        }
     }
 }

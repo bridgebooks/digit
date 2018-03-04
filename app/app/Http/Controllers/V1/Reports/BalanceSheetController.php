@@ -4,7 +4,7 @@ namespace App\Http\Controllers\V1\Reports;
 
 
 use App\Http\Controllers\V1\Controller;
-use App\Services\Reports\BalancesheetService;
+use App\Services\Reports\BalancesheetReportService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -15,7 +15,7 @@ class BalanceSheetController extends Controller
     public function __construct()
     {
         $this->middleware('jwt.auth');
-        $this->balanceSheetService = new BalancesheetService();
+        $this->balanceSheetService = new BalancesheetReportService();
     }
 
     public function generate(Request $request, string $id)
