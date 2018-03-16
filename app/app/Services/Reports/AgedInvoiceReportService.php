@@ -42,8 +42,11 @@ class AgedInvoiceReportService
     }
     
     private function getRatio(float $value, float $total)
-    {
-        $ratio = ($value / $total) * 100;
+    {   
+        if ($total > 0)
+            $ratio = ($value / $total) * 100;
+        else
+            $ratio = 0;
 
         return number_format($ratio, 2);
     }
