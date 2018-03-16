@@ -87,10 +87,8 @@ trait AccountHelper
         $html = preg_replace('/>\s+</', '><', $html);
 
         $pdf = PDF::loadHtml($html);
-        $pdf->setPaper('a4', 'portrait');
+        $pdf->setPaper('a4', 'landscape');
         $filename = sprintf('%s.pdf', $filename);
         return $pdf->download($filename);
     }
-
-
 }

@@ -59,4 +59,23 @@ class Invoice extends Model
     public function currency() {
       return $this->hasOne('App\Models\Currency', 'currency_id');
     }
+
+    public function scopeOfOrg($query, string $id)
+    {
+        return $query->where('org_id', $id);
+    }
+
+    public function scopeNotStatus($query, array $status)
+    {
+        return $query->whereNotIn('status', $status);
+    }
+
+    public function scopeOfTypeBetween($query, string $type, Carbon $start, Carbon $end)
+    {
+        return $query->where('type', $type)
+            ->whereBetween('created_at', [
+                $start->toDateTimeString(),
+                $end->toDateTimeString()
+            ]);
+    }
 }

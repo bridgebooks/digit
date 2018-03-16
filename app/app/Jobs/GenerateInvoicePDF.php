@@ -40,7 +40,7 @@ class GenerateInvoicePDF implements ShouldQueue
      */
     private function makePDF(Invoice $invoice)
     {
-        $html = View::make('reports.standard', ['invoice' => $invoice])->render();
+        $html = View::make('invoices.standard', ['invoice' => $invoice])->render();
         $html = preg_replace('/>\s+</', '><', $html);
 
         return PDF::loadHtml($html);
