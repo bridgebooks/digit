@@ -20,7 +20,7 @@
 </head>
 <body>
     <div class="container">
-        <h2>Balance Sheet</h2>
+        <h2>{{ $title }}</h2>
         <hr>
     </div>
 
