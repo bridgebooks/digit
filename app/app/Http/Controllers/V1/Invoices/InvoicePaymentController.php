@@ -69,7 +69,7 @@ class InvoicePaymentController extends Controller
 			$cardToAccount->amount = $invoice->total;
 			$cardToAccount->fee = 0;
 			$cardToAccount->narration = 'Payment for '.$invoice->invoice_no;
-			$cardToAccount->redirecturl = 'http://localhost:4040';
+			$cardToAccount->redirecturl = config('mw.callback_url');
 			$cardToAccount->medium = PaymentMedium::WEB;
 			$cardToAccount->pin = $params['pin'];
 
