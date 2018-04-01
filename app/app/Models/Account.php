@@ -71,8 +71,8 @@ class Account extends Model
 
         $transactions = $this->transactions()
             ->whereBetween('created_at', [
-                $start->toDateTimeString(),
-                $end->toDateTimeString()
+                $start->startOfDay()->toDateTimeString(),
+                $end->endOfDay()->toDateTimeString()
             ])
             ->get();
 

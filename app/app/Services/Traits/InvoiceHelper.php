@@ -35,4 +35,15 @@ trait InvoiceHelper
             ])
             ->sum('invoices.total');
     }
+
+    public function getAllInvoicesBetween(string $id, string $type, Carbon $start, Carbon $end)
+    {
+        return Invoice::where('org_id', $id)
+            ->where('type', $type)
+            ->whereBetween('invoices.created_at', [
+                $start->startOfDay()->toDateTimeString(),
+                $end->endOfDay()->toDateTimeString()
+            ])
+            ->get();
+    }
 }

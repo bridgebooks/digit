@@ -43,7 +43,8 @@ class RouteServiceProvider extends ServiceProvider
         'Plans',
         'Webhooks',
         'Reports',
-        'Import'
+        'Import',
+        'Stats'
     ];
 
     /**
