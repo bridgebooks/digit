@@ -131,7 +131,7 @@ class InvoicePaymentController extends Controller
 			return response()->json($requestResponse->getData());
 		}
 
-		return repsonse()->json([
+		return response()->json([
 			'status' => 'error',
 			'message' => $requestResponse->getMessage()
 		], 400);
