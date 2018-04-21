@@ -23,7 +23,7 @@ trait Billable
 
     public function hasCardOnFile()
     {
-        return ! is_null($this->card_brand);
+        return is_null($this->card_brand) ? false : true;
     }
     
     public function hasPaystackCustomerCode()

@@ -68,6 +68,7 @@ class SubscriptionBuilder
      * @param array $options
      * @return \Illuminate\Database\Eloquent\Model
      * @throws \Mrfoh\Mulla\Exceptions\InvalidRequestException
+     * @throws \Mrfoh\Mulla\Exceptions\InvalidResponseException
      */
     public function create(array $options = [ 'skip_paystack' => false ])
     {

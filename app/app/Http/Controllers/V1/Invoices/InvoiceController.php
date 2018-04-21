@@ -21,7 +21,7 @@ class InvoiceController extends Controller
 	public function __construct(InvoiceRepository $repository)
 	{
 		$this->middleware('jwt.auth')->except(['get']);
-        $this->middleware('subscription.check');
+        $this->middleware('subscription.check')->except(['get']);
         $this->middleware('subscription.feature_usage_check:invoices')->only(['create']);
 
 		$this->repository = $repository;
