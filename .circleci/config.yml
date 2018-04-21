@@ -18,7 +18,11 @@ jobs:
 
     steps:
       - checkout
-      - run: sudo docker-php-ext-install gd pcntl
+      - run: 
+          name: Install dependencies
+          command: |
+            sudo apt-get install libpng-dev
+            sudo docker-php-ext-install gd pcntl
       - run:
           name: Install Composer
           command: |
