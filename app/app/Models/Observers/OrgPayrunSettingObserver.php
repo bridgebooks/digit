@@ -25,20 +25,24 @@ class OrgPayrunSettingObserver
      */
     public function created(OrgPayrunSetting $setting)
     {
-        // create tax payitem
-        $payitem = new PayItem();
+        $exists = PayItem::where('org_id', $setting->org_id)->where('name', 'Tax')->first();
 
-        // get employee tax account
-        $account = Account::where('org_id', $setting->org_id)->where('name', 'Employee Tax Payable')->first();
+        if (!$exists) {
+            // create tax payitem
+            $payitem = new PayItem();
 
-        $payitem->org_id = $setting->org_id;
-        $payitem->user_id = $this->requestUser()->id;
-        $payitem->pay_item_type = PayitemType::TAX;
-        $payitem->account_id = $account ? $account->id : $setting->values->employee_tax_account;
-        $payitem->name = "Tax";
-        $payitem->is_system = true;
-        $payitem->description = "Employee income tax";
-        $payitem->default = 1;
+            // get employee tax account
+            $account = Account::where('org_id', $setting->org_id)->where('name', 'Employee Tax Payable')->first();
 
-        $payitem->save();
+            $payitem->org_id = $setting->org_id;
+            $payitem->user_id = $this->requestUser()->id;
+            $payitem->pay_item_type = PayitemType::TAX;
+            $payitem->account_id = $account ? $account->id : $setting->values->employee_tax_account;
+            $payitem->name = "Tax";
+            $payitem->is_system = true;
+            $payitem->description = "Employee income tax";
+            $payitem->default = 1;
+
+            $payitem->save();
+        }
     }}
