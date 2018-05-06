@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\InvoicePayment;
 use App\Models\OrgPayrunSetting;
 use App\Models\PayslipItem;
 use App\Models\Subscription;
@@ -11,7 +12,6 @@ use App\Models\Invoice;
 use App\Models\Payrun;
 use App\Models\Payslip;
 use Illuminate\Support\ServiceProvider;
-use App\Providers\RepositoryServiceProvider;
 
 class ModelServiceProvider extends ServiceProvider
 {
@@ -31,6 +31,7 @@ class ModelServiceProvider extends ServiceProvider
         OrgPayrunSetting::observe(\App\Models\Observers\OrgPayrunSettingObserver::class);
         Subscription::observe(\App\Models\Observers\SubscriptionObserver::class);
         Transaction::observe(\App\Models\Observers\TransactionObserver::class);
+        InvoicePayment::observe(\App\Models\Observers\InvoicePaymentObserver::class);
     }
 
     /**

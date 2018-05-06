@@ -36,17 +36,24 @@ class TransactionTransformer extends TransformerAbstract
         return $this->item($account, new AccountTransformer);
     }
 
+    /**
+     * @param Transaction $model
+     * @return \League\Fractal\Resource\Item
+     */
     public function includeSource(Transaction $model)
     {
         $source = $model->source;
-
-        if ($source instanceof \App\Models\Invoice) {
-            return $this->item($source, new InvoiceTransformer);
-        } else if ($source instanceof \App\Models\Payslip) {
-            return $this->item($source, new PayslipTransformer);
-        }
-        else if ($source instanceof \App\Models\InvoicePayment) {
-            return $this->item($source, new InvoicePaymentTransformer);
+        $sourceClass = get_class($source);
+        switch($sourceClass) {
+            case 'App\\Models\\Invoice':
+                return $this->item($source, new InvoiceTransformer);
+                break;
+            case 'App\\Models\\Payslip':
+                return $this->item($source, new PayslipTransformer);
+                break;
+            case 'App\\Models\\InvoicePayment':
+                return $this->item($source, new InvoicePaymentTransformer);
+                break;
         }
     }
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\V1\Payments;
 
-use App\Events\InvoiceCardPaymentSuccess;
+use App\Events\InvoicePaymentSuccess;
 use App\Http\Controllers\V1\Controller;
 use App\Models\Enums\InvoicePaymentStatus;
 use App\Models\Enums\InvoiceStatus;
@@ -44,7 +44,7 @@ class MoneywaveCallbackController extends Controller
             $invoice->status = InvoiceStatus::PAID;
             $invoice->save();
 
-            event(new InvoiceCardPaymentSuccess($invoice, $payment));
+            event(new InvoicePaymentSuccess($invoice, $payment));
         } else {
             // update payment
             $payment->status = InvoicePaymentStatus::FAILED;

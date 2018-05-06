@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\InvoiceLineItem;
 use App\Models\InvoicePayment;
 use App\Models\OrgAccountSetting;
+use App\Models\OrgPayrunSetting;
 use App\Models\Payrun;
 use App\Models\Payslip;
 use App\Presenters\TransactionPresenter;
@@ -103,6 +104,16 @@ class TransactionRepositoryEloquent extends BaseRepository implements Transactio
         return OrgAccountSetting::where('org_id', $id)->first();
     }
 
+    /**
+     * Get org payrun settings
+     * @param string $id
+     * @return mixed
+     */
+    private function getPayrunSettings(string $id)
+    {
+        return OrgPayrunSetting::where('org_id', $id)->first();
+    }
+
     private function postInvoice(Invoice $invoice, Account $account, bool $tax = false)
     {
         // Create transaction
@@ -142,6 +153,24 @@ class TransactionRepositoryEloquent extends BaseRepository implements Transactio
             $transaction->debit = $invoice->total;
         } else {
             $transaction->credit = $invoice->total;
+        }
+
+        $transaction->save();
+    }
+
+    private function postPayslipPayment(Payslip $slip, Account $account, InvoicePayment $payment)
+    {
+        // Create transaction
+        $transaction = new Transaction();
+        $transaction->source_id = $payment->id;
+        $transaction->source_type = get_class($payment);
+        $transaction->org_id = $slip->payrun->org_id;
+        $transaction->account_id = $account->id;
+
+        if ($account->type->normal_balance === 'credit') {
+            $transaction->debit = $slip->net_pay;
+        } else {
+            $transaction->credit = $slip->net_pay;
         }
 
         $transaction->save();
@@ -294,12 +323,22 @@ class TransactionRepositoryEloquent extends BaseRepository implements Transactio
     public function commitInvoicePayment(Invoice $invoice, InvoicePayment $payment)
     {
         $settings = $this->getAccountSettings($invoice->org_id);
-        $account = $this->getAccount($settings->values->accounts_receivable);
+        $account = $invoice->type === "acc_rec"
+            ? $this->getAccount($settings->values->accounts_receivable)
+            : $this->getAccount($settings->values->accounts_payable);
         $this->postInvoicePayment($invoice, $account, $payment);
 
+        /*
         $invoice->items->each(function ($item) use ($invoice, $payment) {
            $account = $this->getAccount($item->account_id);
            $this->postInvoiceItemPayment($invoice, $item, $account, $payment);
-        });
+        });*/
+    }
+
+    public function commitPayslipPayment(Payslip $slip, InvoicePayment $payment)
+    {
+        $settings = $this->getPayrunSettings($slip->payrun->org_id);
+        $account = $this->getAccount($settings->values->wages_account);
+        $this->postPayslipPayment($slip, $account, $payment);
     }
 }

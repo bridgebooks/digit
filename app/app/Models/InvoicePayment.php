@@ -23,6 +23,7 @@ class InvoicePayment extends Model
 
     protected $fillable = [
     	'invoice_id',
+        'invoice_type',
         'medium',
     	'transaction_ref',
     	'processor_transaction_ref',
@@ -37,8 +38,11 @@ class InvoicePayment extends Model
         'paid_at'
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function invoice()
     {
-        return $this->belongsTo('App\Models\Invoice');
+        return $this->belongsTo($this->invoice_type, 'invoice_id');
     }
 }

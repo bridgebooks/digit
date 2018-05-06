@@ -59,6 +59,9 @@ class PaystackWebhookController extends Controller
             case 'subscription.disable':
                 event(new SubscriptionDisabled($data));
                 break;
+
+            case 'invoice.update':
+                break;
         }
 
         return response()->json(['status' => 'success'], 200);

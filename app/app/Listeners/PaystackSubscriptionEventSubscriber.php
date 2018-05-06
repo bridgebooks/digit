@@ -92,6 +92,14 @@ class PaystackSubscriptionEventSubscriber implements ShouldQueue
         $this->delete();
     }
 
+    /**
+     * @param $event
+     */
+    public function onInvoiceUpdated($event)
+    {
+
+    }
+
     public function subscribe($events)
     {
         $events->listen(
@@ -107,6 +115,11 @@ class PaystackSubscriptionEventSubscriber implements ShouldQueue
         $events->listen(
             'App\Events\Paystack\SubscriptionDisabled',
             'App\Listeners\PaystackSubscriptionEventSubscriber@onSubscriptionEnabled'
+        );
+
+        $events->listen(
+            'App\Events\Paystack\InvoiceUpdated',
+            'App\Listeners\PaystackSubscriptionEventSubscriber@onInvoiceUpdated'
         );
     }
 }

@@ -67,7 +67,7 @@ class AccountsTableSeeder extends Seeder
 			'description' => 'Fees charged by bank for transactions',
 		],
 		[
-			'name' => 'Consulting & Acccounting',
+			'name' => 'Consulting & Accounting',
 			'code' => '320',
 			'type' => 'Expense',
 			'tax_rate_id' => NULL,

@@ -40,8 +40,8 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\InvoiceCardPaymentVerifyFail' => [
             'App\Listeners\InvoiceCardPaymentVerifyFailListener'
         ],
-        'App\Events\InvoiceCardPaymentSuccess' => [
-            'App\Listeners\InvoiceCardPaymentSuccessListener'
+        'App\Events\InvoicePaymentSuccess' => [
+            'App\Listeners\InvoicePaymentSuccessListener'
         ],
         'App\Events\InvoiceSubmitted' => [
             'App\Listeners\InvoiceSubmittedListener'
@@ -54,6 +54,12 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\PayrunApproved' => [
             'App\Listeners\PayrunApprovedListener'
+        ],
+        'App\Events\PayrunPaid' => [
+            'App\Listeners\PayrunPaidListener'
+        ],
+        'App\Events\PayslipPaid' => [
+            'App\Listeners\PayslipPaidListener'
         ],
         'App\Events\CommitInvoice' => [
             'App\Listeners\CommitInvoiceListener'

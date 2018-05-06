@@ -60,6 +60,11 @@ class Invoice extends Model
       return $this->hasOne('App\Models\Currency', 'currency_id');
     }
 
+    public function payment()
+    {
+        return $this->hasOne('App\Models\InvoicePayment');
+    }
+
     public function scopeOfOrg($query, string $id)
     {
         return $query->where('org_id', $id);

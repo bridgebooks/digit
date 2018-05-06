@@ -45,7 +45,7 @@ class PayslipTransformer extends TransformerAbstract
 
     /**
      * @param Payslip $model
-     * @return \League\Fractal\Resource\Item
+     * @return \League\Fractal\Resource\Collection
      */
     public function includeItems(Payslip $model)
     {

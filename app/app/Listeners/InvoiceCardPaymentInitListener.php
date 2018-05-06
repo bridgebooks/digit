@@ -22,12 +22,6 @@ class InvoiceCardPaymentInitListener implements ShouldQueue
     {
         $this->paymentRepository = $paymentRepository;
     }
-
-    private function generateTransactionRef(string $id)
-    {
-        return $id.time().uniqid(mt_rand(), true);
-    }
-
     /**
      * Handle the event.
      *
@@ -43,7 +37,8 @@ class InvoiceCardPaymentInitListener implements ShouldQueue
 
             $attributes = [
                 'invoice_id' => $event->invoice->id,
-                'transaction_ref' => $this->generateTransactionRef($event->invoice->id),
+                'invoice_type' => get_class($event->invoice),
+                'transaction_ref' => str_random(13),
                 'processor_transaction_ref' => $response->transfer->flutterChargeReference,
                 'amount' => $event->invoice->total,
                 'processor_fee' => env('PAYMENT_PROCESSOR_FEE', 45),

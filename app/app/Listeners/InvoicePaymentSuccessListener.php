@@ -2,14 +2,14 @@
 
 namespace App\Listeners;
 
-use App\Events\InvoiceCardPaymentSuccess;
+use App\Events\InvoicePaymentSuccess;
 use App\Notifications\InvoicePaymentReceipt;
-use App\Notifications\InvoicePaymentSuccess;
+use App\Notifications\InvoicePaymentSuccess as InvoicePaymentSuccessNotification;
 use App\Repositories\TransactionRepository;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class InvoiceCardPaymentSuccessListener
+class InvoicePaymentSuccessListener
 {
     protected $transactions;
     /**
@@ -25,22 +25,23 @@ class InvoiceCardPaymentSuccessListener
     /**
      * Handle the event.
      *
-     * @param  InvoiceCardPaymentSuccess  $event
+     * @param  InvoicePaymentSuccess  $event
      * @return void
      */
-    public function handle(InvoiceCardPaymentSuccess $event)
+    public function handle(InvoicePaymentSuccess $event)
     {
         $contact = $event->invoice->contact;
         $org = $event->invoice->org;
         $advisers = $org->getUsersByRole('adviser');
 
         // send payment receipt
-        // if ($contact->email) $contact->notify(new InvoicePaymentReceipt($event->invoice));
+        if ($contact->email && $event->invoice->type !== "acc_rec")
+            $contact->notify(new InvoicePaymentReceipt($event->invoice));
 
         if (count($advisers) > 0) {
             $advisers->each(function ($adviser) use ($event) {
                 // notify org adviser
-                $adviser->notify(new InvoicePaymentSuccess($event->invoice));
+                $adviser->notify(new InvoicePaymentSuccessNotification($event->invoice));
             });
         }
 

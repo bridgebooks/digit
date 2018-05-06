@@ -16,6 +16,18 @@ class InvoicePaymentTransformer extends TransformerAbstract
 
     protected $defaultIncludes = [ 'invoice' ];
 
+    private function parseSourceType(string $type)
+    {
+        switch($type) {
+            case 'App\Models\Invoice':
+                return "Invoice";
+                break;
+            case 'App\Models\Payslip':
+                return "Payslip";
+                break;
+        }
+    }
+
     /**
      * @param InvoicePayment $model
      * @return \League\Fractal\Resource\Item
@@ -23,7 +35,14 @@ class InvoicePaymentTransformer extends TransformerAbstract
     public function includeInvoice(InvoicePayment $model)
     {
         $invoice = $model->invoice;
-        return $this->item($invoice, new InvoiceTransformer);
+        switch($model->invoice_type) {
+            case 'App\Models\Invoice':
+                return $this->item($invoice, new InvoiceTransformer);
+                break;
+            case 'App\Models\Payslip':
+                return $this->item($invoice, new PayslipTransformer);
+                break;
+        }
     }
     /**
      * Transform the InvoicePayment entity.
@@ -37,6 +56,7 @@ class InvoicePaymentTransformer extends TransformerAbstract
         return [
             'id'  => $model->id,
             'invoice_id' => $model->invoice_id,
+            'invoice_type' => $this->parseSourceType($model->invoice_type),
             'medium' => $model->medium,
             'transaction_ref' => $model->transaction_ref,
             'processor_ref' => $model->processor_ref,

@@ -45,6 +45,11 @@ class Payslip extends Model
         return $this->belongsTo('App\Models\Payrun', 'pay_run_id');
     }
 
+    public function payment()
+    {
+        return $this->hasOne('App\Models\InvoicePayment', 'invoice_id');
+    }
+
     /**
      * @return int
      */

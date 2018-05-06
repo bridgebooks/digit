@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\InvoiceCardPaymentSuccess;
+use App\Events\InvoicePaymentSuccess;
 use App\Repositories\InvoicePaymentRepository;
 use App\Events\InvoiceCardPaymentVerify;
 use Carbon\Carbon;
@@ -51,7 +51,7 @@ class InvoiceCardPaymentVerifyListener
             $event->invoice->status = 'paid';
             $event->invoice->save();
 
-            event(new InvoiceCardPaymentSuccess($event->invoice, $payment));
+            event(new InvoicePaymentSuccess($event->invoice, $payment));
         } else {
             // update payment;
             $payment->status = 'failed';
