@@ -25,7 +25,7 @@ class UpdatePayslipItem extends FormRequest
     {
         return [
             'pay_item_id' => 'exists:pay_items,id',
-            'amount' => 'numeric|min:1'
+            'amount' => 'numeric|min:0'
         ];
     }
 }
