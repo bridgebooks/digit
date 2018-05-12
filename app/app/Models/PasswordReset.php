@@ -47,7 +47,9 @@ class PasswordReset extends Model
             ->where('used', 0)
             ->first();
 
-        if(!$model) throw new ResetTokenNotFoundException("No password reset found for this account");
+        if (!isset($model)) {
+           throw new ResetTokenNotFoundException("No password reset found for this account");
+        }
 
         try {
             $ttl = config('auth.reset_token_ttl');
