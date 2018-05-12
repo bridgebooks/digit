@@ -19,7 +19,7 @@ class PasswordReset extends Model
     	// add expiration time
     	$current->addMinutes(config('auth.reset_token_ttl'));
 
-    	$tokenString = $email .".". $current->toDateTimeString();
+    	$tokenString = $email .".". $current->timestamp;
     	$resetToken = Crypt::encryptString($tokenString);
 
     	$this->email = $email;
@@ -42,12 +42,13 @@ class PasswordReset extends Model
         $tokenComponents = explode(".", $decryptedTokenString);
 
         $email = $tokenComponents[0];
-        $timestamp = new Carbon($model->created_at);
-
+        $expirationTimestamp = $tokenComponents[1];
         $now = new Carbon();
-        $resetTTL = config('auth.reset_token_ttl');
+        $currentTimestamp = $now->timestamp;
 
-        if ($timestamp->diffInMinutes($now, false) <= $resetTTL) {
+        if ($email !== $model->email) return false;
+
+        if ($currentTimestamp <= $expirationTimestamp) {
             $model->used = true;
             $model->save();
 
