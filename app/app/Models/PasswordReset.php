@@ -44,8 +44,7 @@ class PasswordReset extends Model
     {
         // Get reset record
         $model = $this->where('token', $token)
-            ->where('used', false)
-            ->orderBy('created_at', 'desc')
+            ->where('used', 0)
             ->first();
 
         if(!$model) throw new ResetTokenNotFoundException("No password reset found for this account");

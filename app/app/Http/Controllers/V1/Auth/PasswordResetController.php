@@ -61,7 +61,7 @@ class PasswordResetController extends Controller
 	public function create(PasswordCreate $request)
 	{
 		$reset = new UserPasswordReset();
-		$token = $request->input('token');
+		$token = $request->token;
 
 		try {
             $userEmail = $reset->verifyTokenRetrieveUserIdentifier($token);
