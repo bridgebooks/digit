@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use App\Exceptions\ResetTokenExpiredException;
+use App\Exceptions\ResetTokenNotFoundException;
+use Exception;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Crypt;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\Eloquent\Model;
 
 class PasswordReset extends Model
@@ -16,11 +19,11 @@ class PasswordReset extends Model
     {
     	// current time
     	$current = new Carbon();
-    	// add expiration time
-    	$current->addMinutes(config('auth.reset_token_ttl'));
+    	$ttl = config('auth.reset_token_ttl');
+    	$current = $current->addMinutes($ttl);
 
-    	$tokenString = $email .".". $current->timestamp;
-    	$resetToken = Crypt::encryptString($tokenString);
+    	$tokenString = sprintf("%s.%s", $email, $current->toDateTimeString());
+    	$resetToken = encrypt($tokenString);
 
     	$this->email = $email;
     	$this->token = $resetToken;
@@ -31,30 +34,36 @@ class PasswordReset extends Model
     	return false;
     }
 
+    /**
+     * @param String $token
+     * @throws ResetTokenNotFoundException
+     * @throws ResetTokenExpiredException
+     * @throws Exception
+     */
     public function verifyTokenRetrieveUserIdentifier(String $token)
     {
         // Get reset record
         $model = $this->where('token', $token)->where('used', false)->first();
 
-        if(!$model) return false;
+        if(!$model) throw new ResetTokenNotFoundException("No password reset found for this account");
 
-        $decryptedTokenString = Crypt::decryptString($model->token);
-        $tokenComponents = explode(".", $decryptedTokenString);
+        try {
+            $ttl = config('auth.reset_token_ttl');
 
-        $email = $tokenComponents[0];
-        $expirationTimestamp = $tokenComponents[1];
-        $now = new Carbon();
-        $currentTimestamp = $now->timestamp;
+            $now = new Carbon();
+            $expiry = new Carbon($model->created_at);
+            $expiry = $expiry->addMinutes($ttl);
 
-        if ($email !== $model->email) return false;
+            if ($now->diffInMinutes($expiry, true) <= $ttl) {
+                $model->used = true;
+                $model->save();
 
-        if ($currentTimestamp <= $expirationTimestamp) {
-            $model->used = true;
-            $model->save();
+                return $model->email;
+            }
 
-            return $model->email;
-        } else {
-            return false;
+            throw new ResetTokenExpiredException("Your password reset link has expired. Please request for another password reset");
+        } catch (DecryptException $e) {
+            throw new Exception($e->getMessage());
         }
     }
 }

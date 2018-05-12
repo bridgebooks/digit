@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\V1\Auth;
 
+use App\Exceptions\ResetTokenExpiredException;
+use App\Exceptions\ResetTokenNotFoundException;
+use Exception;
 use Notification;
 use Hash;
 use App\Http\Controllers\V1\Controller;
@@ -58,36 +61,47 @@ class PasswordResetController extends Controller
 	public function create(PasswordCreate $request)
 	{
 		$reset = new UserPasswordReset();
-		$userEmail = $reset->verifyTokenRetrieveUserIdentifier($request->token);
+		$token = $request->input('token');
 
-		if ($userEmail) {
-			// Get user
-			$user = $this->userRepository->skipPresenter()
-				->findWhere(['email' => $userEmail ])
-				->first();
+		try {
+            $userEmail = $reset->verifyTokenRetrieveUserIdentifier($token);
+            // Get user
+            $user = $this->userRepository->skipPresenter()
+                ->findWhere(['email' => $userEmail ])
+                ->first();
 
-			if($user) {
-				// Update password
-				$userUpdate = $this->userRepository->update([
-					'password' => Hash::make($request->password)
-				], $user->id);
+            if($user) {
+                // Update password
+                $userUpdate = $this->userRepository->update([
+                    'password' => Hash::make($request->password)
+                ], $user->id);
 
-				// TODO: Send password changed email
-				return response()->json([
-					'status' => 'success',
-					'message' => 'Password reset sucessfull, you can login with your new password'
-				]);
-			} else {
-				return response()->json([
-					'status' => 'error',
-					'message' => 'No valid user account found'
-				], 404);
-			}
-		} else {
-			return response()->json([
-				'status' => 'error',
-				'message' => 'This reset link is no longer valid. Please request another password reset'
-			], 400);
-		}
+                // TODO: Send password changed email
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Password reset sucessfull, you can login with your new password'
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'No valid user account found'
+                ], 404);
+            }
+        } catch (ResetTokenNotFoundException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 400);
+        } catch (ResetTokenExpiredException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 400);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 400);
+        }
 	}
 }
