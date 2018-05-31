@@ -4,6 +4,7 @@ namespace App\Http\Controllers\V1\Stats;
 
 use App\Http\Controllers\V1\Controller;
 use App\Services\Stats\InvoiceStatsService;
+use App\Services\Stats\SalesStatsService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class SalesStatsController extends Controller
     public function __construct()
     {
         $this->middleware('jwt.auth');
-        $this->stats = new InvoiceStatsService();
+        $this->stats = new SalesStatsService();
     }
 
     public function generate(Request $request, string $id)

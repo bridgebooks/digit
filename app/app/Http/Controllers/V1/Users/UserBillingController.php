@@ -11,6 +11,7 @@ use App\Repositories\SubscriptionRepository;
 use App\Traits\UserRequest;
 use Mrfoh\Mulla\Api\Transaction as PaystackTransaction;
 use Mrfoh\Mulla\Exceptions\InvalidRequestException;
+use Mrfoh\Mulla\Exceptions\InvalidResponseException;
 
 class UserBillingController extends Controller
 {
@@ -80,6 +81,11 @@ class UserBillingController extends Controller
 
                 return $this->repository->active($user);
             } catch (InvalidRequestException $e) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $e->getMessage()
+                ], 400);
+            } catch (InvalidResponseException $e) {
                 return response()->json([
                     'status' => 'error',
                     'message' => $e->getMessage()
