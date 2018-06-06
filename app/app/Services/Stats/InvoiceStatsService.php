@@ -28,7 +28,7 @@ class InvoiceStatsService
             $due_at = new Carbon($invoice->due_at);
             $now = new Carbon('now');
 
-            return !in_array($invoice->status, [InvoiceStatus::PAID, InvoiceStatus::VOIDED])
+            return in_array($invoice->status, [InvoiceStatus::AUTHORIZED, InvoiceStatus::SENT])
                 && $now->diffInDays($due_at) > 0;
 
         })->map(function ($invoice) {
