@@ -38,7 +38,7 @@ class InvoiceStatsService
         })->sum();
 
         $overdue = $invoices->filter(function ($invoice) {
-            return !in_array($invoice['status'], InvoiceStatus::PAID, InvoiceStatus::VOIDED) && $invoice['overdue'] > 0;
+            return !in_array($invoice['status'], [InvoiceStatus::PAID, InvoiceStatus::VOIDED]) && $invoice['overdue'] > 0;
         })->map(function ($invoice) {
             return $invoice['total'];
         })->sum();
