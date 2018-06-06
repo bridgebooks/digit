@@ -16,6 +16,7 @@ class InvoiceStatsService
             ->map(function ($invoice) {
                 $due_at = new Carbon($invoice->due_at);
                 $now = new Carbon('now');
+
                 return [
                     'total' => $invoice->total,
                     'status' => $invoice->status,
@@ -37,7 +38,7 @@ class InvoiceStatsService
         })->sum();
 
         $overdue = $invoices->filter(function ($invoice) {
-            return $invoice['overdue'] > 0;
+            return !in_array($invoice['status'], InvoiceStatus::PAID, InvoiceStatus::VOIDED) && $invoice['overdue'] > 0;
         })->map(function ($invoice) {
             return $invoice['total'];
         })->sum();
