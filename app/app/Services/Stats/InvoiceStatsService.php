@@ -14,6 +14,10 @@ class InvoiceStatsService
     {
         $invoices = $this->getAllInvoicesBetween($id, 'acc_rec', $start, $end);
 
+        $total = $invoices->map(function ($invoice) {
+            return $invoice->total;
+        })->sum();
+
         $paid = $invoices->filter(function ($invoice) {
             return in_array($invoice->status, [ InvoiceStatus::PAID ]);
         })->map(function ($invoice) {
@@ -38,18 +42,10 @@ class InvoiceStatsService
         })->sum();
 
         return [
-          [
-              "label" => "Unpaid",
-              "value" => $unpaid
-          ],
-            [
-                "label" => "Overdue",
-                "value" => $overdue
-            ],
-            [
-                "label" => "Paid",
-                "value" => $paid
-            ]
+          "paid" => $paid,
+          "unpaid" => $unpaid,
+          "overdue" => $overdue,
+          "total" => $total
         ];
     }
 }

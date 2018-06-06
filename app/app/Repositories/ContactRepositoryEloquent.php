@@ -62,9 +62,13 @@ class ContactRepositoryEloquent extends BaseRepository implements ContactReposit
     }
 
 
-    public function search(string $query, string $id = null)
+    public function search(string $query, string $id = null, $extra = [])
     {
-        if ($id) return Contact::search($query)->where('org_id', $id)->paginate(20);
+        if ($id) {
+            return Contact::search($query)
+                ->where('org_id', $id)
+                ->paginate(20);
+        }
 
         return Contact::search($query)->paginate(20);
     }
