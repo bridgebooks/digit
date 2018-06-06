@@ -12,33 +12,40 @@ class InvoiceStatsService
 
     public function fetch(string $id, Carbon $start, Carbon $end)
     {
-        $invoices = $this->getAllInvoicesBetween($id, 'acc_rec', $start, $end);
+        $invoices = $this->getAllInvoicesBetween($id, 'acc_rec', $start, $end)
+            ->map(function ($invoice) {
+                $due_at = new Carbon($invoice->due_at);
+                $now = new Carbon('now');
+                return [
+                    'total' => $invoice->total,
+                    'status' => $invoice->status,
+                    'overdue' => ($now->diffInDays($due_at) > 0 && !$due_at->isFuture())
+                        ? $now->diffInDays($due_at)
+                        : 0
+                ];
+            });
+
 
         $total = $invoices->map(function ($invoice) {
-            return $invoice->total;
+            return $invoice['total'];
         })->sum();
 
         $paid = $invoices->filter(function ($invoice) {
-            return in_array($invoice->status, [ InvoiceStatus::PAID ]);
+            return in_array($invoice['status'], [ InvoiceStatus::PAID ]);
         })->map(function ($invoice) {
-            return $invoice->total;
+            return $invoice['total'];
         })->sum();
 
         $overdue = $invoices->filter(function ($invoice) {
-            $due_at = new Carbon($invoice->due_at);
-            $now = new Carbon('now');
-
-            return in_array($invoice->status, [InvoiceStatus::AUTHORIZED, InvoiceStatus::SENT])
-                && $now->diffInDays($due_at) > 0;
-
+            return $invoice['overdue'] > 0;
         })->map(function ($invoice) {
-            return $invoice->total;
+            return $invoice['total'];
         })->sum();
 
         $unpaid = $invoices->filter(function ($invoice) {
-            return !in_array($invoice->status, [ InvoiceStatus::PAID, InvoiceStatus::VOIDED ]);
+            return !in_array($invoice['status'], [ InvoiceStatus::PAID, InvoiceStatus::VOIDED ]);
         })->map(function ($invoice) {
-            return $invoice->total;
+            return $invoice['total'];
         })->sum();
 
         return [
