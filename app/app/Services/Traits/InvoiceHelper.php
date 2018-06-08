@@ -29,7 +29,7 @@ trait InvoiceHelper
             ->where('invoices.contact_id', $id)
             ->where('invoices.type', $type)
             ->whereNotIn('invoices.status', [ 'paid', 'voided', 'submitted', 'draft' ])
-            ->whereBetween('invoices.created_at', [
+            ->whereBetween('invoices.raised_at', [
                 $start->toDateTimeString(),
                 $end->toDateTimeString()
             ])
@@ -40,7 +40,7 @@ trait InvoiceHelper
     {
         return Invoice::where('org_id', $id)
             ->where('type', $type)
-            ->whereBetween('invoices.created_at', [
+            ->whereBetween('raised_at', [
                 $start->startOfDay()->toDateTimeString(),
                 $end->endOfDay()->toDateTimeString()
             ])
