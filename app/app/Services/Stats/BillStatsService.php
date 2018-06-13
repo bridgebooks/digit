@@ -24,11 +24,22 @@ class BillStatsService
         })->values();
     }
 
+    public function getExpenseTotal($accounts, Carbon $start, Carbon $end)
+    {
+        return $accounts->map(function ($account) use ($start, $end) {
+            $balance = $account->getYTDbalance($start, $end);
+            return $balance;
+        })->sum();
+    }
+
     public function fetch(string $id, Carbon $start, Carbon $end)
     {
         $expenses = $this->getAccountTypesWithChildren(AccountType::EXPENSES);
         $expenseAccounts = $this->getAccounts($expenses, $id);
 
-        return $this->transform($expenseAccounts, $start, $end);
+        return [
+          "total" => $this->getExpenseTotal($expenseAccounts, $start, $end),
+          "expenses" => $this->transform($expenseAccounts, $start, $end)
+        ];
     }
 }
