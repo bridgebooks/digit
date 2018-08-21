@@ -42,8 +42,9 @@ class MigrateSubscriptions extends Command
                'paystack_customer_code' => null,
                'authorization_code' => null,
                'card_brand' => null,
+               'card_last_four' => null,
                'card_exp_month' => null,
-                'card_year_month' => null
+                'card_exp_year' => null
             ]);
     }
 
