@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Plan;
 use App\Models\Role;
 use Illuminate\Console\Command;
 use App\Models\User;
