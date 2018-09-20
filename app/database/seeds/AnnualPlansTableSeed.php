@@ -85,7 +85,7 @@ class AnnualPlansTableSeed extends Seeder
             $plan->status = 'active';
 
             if ($plan->save()) {
-                $plan->createPaystackPlan();
+                $plan->createPaystackPlan('annually');
                 $features = [];
 
                 foreach($attributes['features'] as $feature => $value) {

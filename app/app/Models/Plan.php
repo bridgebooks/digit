@@ -58,12 +58,12 @@ class Plan extends Model
       return $this->hasMany('App\Models\PlanFeature');
     }
 
-    public function createPaystackPlan()
+    public function createPaystackPlan(string $interval = null)
     {
         $planAttributes = [];
 
         $planAttributes['name'] = $this->name;
-        $planAttributes['interval'] = $this->setPaystackPlanInterval($this->invoice_interval);
+        $planAttributes['interval'] = !is_null($interval) ? $interval : $this->setPaystackPlanInterval($this->invoice_interval);
         $planAttributes['amount'] = $this->amount * 100;
         $planAttributes['description'] = $this->description ? $this->description : '';
         $planAttributes['currency'] = $this->currency ? $this->currency : 'NGN';
