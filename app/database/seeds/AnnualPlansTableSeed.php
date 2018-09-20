@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\Models\Plan;
 
-class MonthlyPlansTableSeed extends Seeder
+class AnnualPlansTableSeed extends Seeder
 {
     protected $plans = [
         [
