@@ -93,21 +93,21 @@ class MigrateSubscriptions extends Command
      */
     public function handle()
     {
-        //$this->info('Clearing paystack data');
+        $this->info('Clearing paystack data');
         // Clear user paystack data
-        //$this->clearUserPaystackData();
+        $this->clearUserPaystackData();
 
         $this->info('Truncate subscriptions');
         // Truncate subscription and subscription usages
         $this->truncateSubscriptions();
 
-        //$this->info('Seeding new plans');
+        $this->info('Seeding new plans');
         // Seed plans in production
-        //$this->seedPlans();
+        $this->seedPlans();
 
-        // $this->info('Creating paystack customers');
+        $this->info('Creating paystack customers');
         // Create paystack customers for each primary user
-        // $this->createPaystackCustomers();
+        $this->createPaystackCustomers();
 
         $this->info('Create new subscriptions');
         // Create trial subscription for each user pro plan

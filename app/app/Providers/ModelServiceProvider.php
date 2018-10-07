@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\InvoicePayment;
+use App\Models\OrgBankAccount;
 use App\Models\OrgPayrunSetting;
 use App\Models\PayslipItem;
 use App\Models\Subscription;
@@ -29,6 +30,7 @@ class ModelServiceProvider extends ServiceProvider
         Payslip::observe(\App\Models\Observers\PayslipObserver::class);
         PayslipItem::observe(\App\Models\Observers\PayslipItemObserver::class);
         OrgPayrunSetting::observe(\App\Models\Observers\OrgPayrunSettingObserver::class);
+        OrgBankAccount::observe(\App\Models\Observers\OrgBankAccountObserver::class);
         Subscription::observe(\App\Models\Observers\SubscriptionObserver::class);
         Transaction::observe(\App\Models\Observers\TransactionObserver::class);
         InvoicePayment::observe(\App\Models\Observers\InvoicePaymentObserver::class);

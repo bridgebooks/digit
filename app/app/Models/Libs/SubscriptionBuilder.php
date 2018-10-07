@@ -2,6 +2,7 @@
 
 namespace App\Models\Libs;
 
+use App\Models\Subscription;
 use App\Models\User;
 use App\Models\Plan;
 use Carbon\Carbon;
@@ -92,6 +93,23 @@ class SubscriptionBuilder
             'trial_ends_at' => $trial ? $trial->getEndDate() : null,
             'starts_at' => $trial ? $trial->getStartDate() : $period->getStartDate(),
             'ends_at' => $trial ? $trial->getEndDate() : $period->getEndDate()
+        ]);
+    }
+
+    public function extend(string $code)
+    {
+        $paystackSub = $this->paystackSubscriptions->fetch($code);
+
+        $period = new Period($this->plan->invoice_interval, $this->plan->invoice_period);
+
+        return $this->owner->subscriptions()->create([
+            'user_id' => $this->owner->id,
+            'plan_id' => $this->plan->id,
+            'paystack_subscription_code' => $paystackSub['subscription_code'],
+            'paystack_subscription_token' => $paystackSub['email_token'],
+            'quantity' => 1,
+            'starts_at' => $period->getStartDate(),
+            'ends_at' => $period->getEndDate()
         ]);
     }
 }

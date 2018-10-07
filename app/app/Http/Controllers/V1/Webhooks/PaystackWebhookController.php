@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1\Webhooks;
 
 
+use App\Events\Paystack\InvoiceUpdated;
 use App\Events\Paystack\SubscriptionCreated;
 use App\Events\Paystack\SubscriptionDisabled;
 use App\Events\Paystack\SubscriptionEnabled;
@@ -61,6 +62,7 @@ class PaystackWebhookController extends Controller
                 break;
 
             case 'invoice.update':
+                event(new InvoiceUpdated($data));
                 break;
         }
 

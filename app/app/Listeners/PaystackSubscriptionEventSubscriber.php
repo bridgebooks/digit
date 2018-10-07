@@ -97,7 +97,18 @@ class PaystackSubscriptionEventSubscriber implements ShouldQueue
      */
     public function onInvoiceUpdated($event)
     {
+        // get user
+        $user = $this->getUser($event->data['customer']['customer_code']);
+        // get active subscription
+        $subscription = $user->getLastActiveSubscription();;
 
+        if ($subscription) {
+            $code = $event->data['subscription']['subscription_code'];
+            $user->newSubscription($subscription->plan)
+                ->extend($code);
+        }
+
+        $this->delete();
     }
 
     public function subscribe($events)

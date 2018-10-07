@@ -9,7 +9,7 @@ use Illuminate\Database\Migrations\Migration;
 class CreateOrgAccountSettingsTable extends Migration
 {
 	protected $defaultValues = [
-        'accounts_recievable' => null,
+        'accounts_receivable' => null,
         'accounts_payable' => null,
         'sales_tax' => null
     ];

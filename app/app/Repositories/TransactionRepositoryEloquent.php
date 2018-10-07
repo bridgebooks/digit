@@ -222,7 +222,7 @@ class TransactionRepositoryEloquent extends BaseRepository implements Transactio
     }
 
 
-    /**
+    /**accounts_receivable
      * @param Invoice $invoice
      * @param OrgAccountSettingRepositoryEloquent $settingsRepository
      */

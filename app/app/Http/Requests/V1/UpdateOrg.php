@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\V1;
 
+use App\Rules\Website;
 use App\Traits\UserRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -27,7 +28,7 @@ class UpdateOrg extends FormRequest
     {
         return [
             'email' => 'email|unique:orgs,email',
-            'website' => 'url'
+            'website' => [new Website]
         ];
     }
 }

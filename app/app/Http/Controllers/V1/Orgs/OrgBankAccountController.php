@@ -51,7 +51,7 @@ class OrgBankAccountController extends Controller
 	{
 		$account = $this->repository->skipPresenter()->find($id);
 
-		$this->authorize('update', $acount);
+		$this->authorize('update', $account);
 
 		$attrs = $request->all();
 

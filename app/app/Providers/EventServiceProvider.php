@@ -69,6 +69,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\FeatureUsed' => [
             'App\Listeners\FeatureUsedListener'
+        ],
+        'App\Events\DefaultOrgBankAccountCreated' => [
+            'App\Listeners\DefaultOrgBankAccountCreatedListener'
         ]
     ];
 
