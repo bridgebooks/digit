@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use Carbon\Carbon;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Contracts\CacheableInterface;
 use Prettus\Repository\Traits\CacheableRepository;
@@ -48,7 +49,7 @@ class InvoiceRepositoryEloquent extends BaseRepository implements InvoiceReposit
         $this->pushCriteria(app(RequestCriteria::class));
     }
 
-    public function org(string $id, string $type = null, string $status = 'all')
+    public function org(string $id, string $type = null, string $status = 'all', Carbon $from, Carbon $to)
     {
         $this->applyCriteria();
         $this->applyScope();
@@ -57,6 +58,11 @@ class InvoiceRepositoryEloquent extends BaseRepository implements InvoiceReposit
 
         if (!is_null($type)) $results->where('type', $type);
         if ($status !== 'all') $results->where('status', $status);
+
+        $results->whereBetween('raised_at', [
+            $to->toDateTimeString(),
+            $from->toDateTimeString()
+        ]);
 
         $this->resetModel();
         $this->resetScope();
@@ -80,7 +86,7 @@ class InvoiceRepositoryEloquent extends BaseRepository implements InvoiceReposit
         return $this->parserResult($results->get());
     }
 
-    public function contact(string $id, string $type = null, string $status = 'all')
+    public function contact(string $id, string $type = null, string $status = 'all', Carbon $from, Carbon $to)
     {
         $this->applyCriteria();
         $this->applyScope();
@@ -89,6 +95,11 @@ class InvoiceRepositoryEloquent extends BaseRepository implements InvoiceReposit
 
         if (!is_null($type)) $results->where('type', $type);
         if ($status !== 'all') $results->where('status', $status);
+
+        $results->whereBetween('raised_at', [
+            $from->toDateTimeString(),
+            $to->toDateTimeString()
+        ]);
 
         $this->resetModel();
         $this->resetScope();

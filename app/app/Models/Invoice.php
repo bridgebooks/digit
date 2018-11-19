@@ -6,10 +6,11 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Traits\Uuids;
+use Laravel\Scout\Searchable;
 
 class Invoice extends Model
 {
-    use SoftDeletes, Uuids;
+    use SoftDeletes, Uuids, Searchable;
     /**
      * Indicates if the IDs are auto-incrementing.
      *
