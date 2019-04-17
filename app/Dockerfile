@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
 	mysql-client \
   && docker-php-ext-install -j$(nproc)  pdo_mysql bcmath gd
 
-RUN pecl install mcrypt-1.0.1
+RUN pecl install mcrypt-1.0.2
 
 RUN docker-php-source extract && \
     pecl install redis && \

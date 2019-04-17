@@ -31,7 +31,7 @@ class PaymentReceipt extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        $subject = 'Invoice #'.$this->invoice->invoce_no.' Payment successful';
+        $subject = 'Invoice #'.$this->invoice->invoice_no.' Payment successful';
         return $this->view('emails.invoices.receipt')
             ->subject($subject);
     }
